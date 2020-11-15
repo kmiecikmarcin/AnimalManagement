@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 
-const sequelize = require();
+const sequelize = require("../Database/connectionWithDatabase");
 
 const Gender = sequelize.define(
   "Gender",
