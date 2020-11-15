@@ -1,23 +1,22 @@
 const { Sequelize, DataTypes } = require("sequelize");
-
 const sequelize = require("../Database/connectionWithDatabase");
 
-const Gender = sequelize.define(
-  "Gender",
+const TypesOfUsersRoles = sequelize.define(
+  "TypesOfUsersRoles",
   {
     id: {
       type: DataTypes.UUID,
       defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
       unique: true,
-      allowNull: true,
-      field: "idGender",
+      allowNull: false,
+      field: "idTypeOfUserRole",
     },
-    nameOfGender: {
+    name: {
       type: DataTypes.STRING(20),
       unique: true,
       allowNull: false,
-      field: "nameOfGender",
+      field: "nameOfUserRole",
     },
   },
   {
@@ -25,4 +24,4 @@ const Gender = sequelize.define(
   }
 );
 
-module.exports = Gender;
+module.exports = TypesOfUsersRoles;

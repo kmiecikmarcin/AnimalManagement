@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const sequelize = require("./Database/connectionWithDatabase");
 const Gender = require("./Models/Gender");
+const TypesOfUsersRoles = require("./Models/TypesOfUsersRoles");
+const Users = require("./Models/Users");
 
 const app = express();
 app.use(bodyParser.json());
