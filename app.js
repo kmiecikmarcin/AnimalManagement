@@ -16,7 +16,7 @@ sequelize.sync({ force: true }).then(() => {
 
 const port = process.env.PORT || 3000;
 
-app.use("/api/v1/users", RoutesUsers);
+app.use("/herdpi/v1/users", RoutesUsers);
 
 app.listen(port);
 
