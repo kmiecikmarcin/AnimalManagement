@@ -11,6 +11,9 @@ const verifyToken = require("../Functions/Users/verifyJwtToken");
 const checkUserEmail = require("../Functions/Users/checkUserEmail");
 const findTypeOfUserRole = require("../Functions/Users/findTypeOfUserRole");
 const userRegistration = require("../Functions/Users/userRegistration");
+const checkInPasswordOneSpecialCharacterKey = require("../Functions/Others/checkInPasswordOneSpecialCharacterKey");
+const findGender = require("../Functions/Users/findGender");
+const checkUserGenderInRegister = require("../Functions/Others/checkUserGenderInRegister");
 
 router.post(
   "/register",
@@ -24,13 +27,34 @@ router.post(
       .withMessage("Wprowadzony adres e-mail jest za długi!")
       .isEmail()
       .withMessage("Adres e-mail został wprowadzony niepoprawnie!"),
+
     check("userPassword")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .isLength({ min: 6 })
       .withMessage("Hasło jest za krótkie!")
       .isLength({ max: 32 })
-      .withMessage("Hasło jest za długie!"),
+      .withMessage("Hasło jest za długie!")
+      .custom((value) => {
+        if (checkInPasswordOneSpecialCharacterKey(value) === false) {
+          throw new Error(
+            "Hasło nie zawiera minimum jednego znaku specjalnego!"
+          );
+        } else {
+          return value;
+        }
+      })
+      .custom((value) => {
+        const badSpecialKeys = /[\,\+\=\.\<\>\{\}\[\]\:\;\'\"\|\~\`\_\-]/.test(
+          value
+        );
+        if (badSpecialKeys === true) {
+          throw new Error("Hasło zawiera nieprawidłowy znak!");
+        } else {
+          return value;
+        }
+      }),
+
     check("confirmPassword")
       .exists()
       .withMessage("Brak wymaganych danych!")
@@ -41,6 +65,20 @@ router.post(
           return value;
         }
       }),
+
+    check("userGender")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .isLength({ min: 1 })
+      .withMessage("Nie wprowadzono danych!")
+      .custom((value) => {
+        if (checkUserGenderInRegister(value) === false) {
+          throw new Error("Podano błędną wartość!");
+        } else {
+          return value;
+        }
+      }),
+
     check("userVerification")
       .exists()
       .withMessage("Brak wymaganych danych!")
@@ -70,18 +108,17 @@ router.post(
           TypesOfUsersRoles,
           "hodowca"
         );
-
-        if (assignUserRole === null) {
+        const assignUserGender = await findGender(Gender, req.body.userGender);
+        if (assignUserRole === null || assignUserGender === null) {
           res.status(501).json({ Error: "Błąd systemu!" });
         } else {
           const registrationResult = await userRegistration(
-            res,
             Users,
             req.body.userEmail,
             req.body.userPassword,
-            assignUserRole.id
+            assignUserRole.id,
+            req.body.userGender
           );
-
           if (registrationResult) {
             res
               .status(201)
@@ -97,11 +134,11 @@ router.post(
 
 router.post("/login", async (req, res) => {});
 
-router.put("/changeAdressEmail", async (req, res) => {});
+router.put("/changeAdressEmail", verifyToken, (req, res) => {});
 
-router.put("changePassword", async (req, res) => {});
+router.put("changePassword", verifyToken, (req, res) => {});
 
-router.put("/deleteAccount", async (req, res) => {});
+router.put("/deleteAccount", verifyToken, (req, res) => {});
 
 router.put("/forgotPassword", async (req, res) => {});
 
