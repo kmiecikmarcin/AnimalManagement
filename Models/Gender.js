@@ -13,7 +13,7 @@ const Gender = sequelize.define(
       allowNull: true,
       field: "idGender",
     },
-    nameOfGender: {
+    name: {
       type: DataTypes.STRING(20),
       unique: true,
       allowNull: false,

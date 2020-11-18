@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const sequelize = require("./Database/connectionWithDatabase");
+const RoutesUsers = require("./Routes/users");
 const Gender = require("./Models/Gender");
 const TypesOfUsersRoles = require("./Models/TypesOfUsersRoles");
 const Users = require("./Models/Users");
@@ -14,6 +15,9 @@ sequelize.sync({ force: true }).then(() => {
 });
 
 const port = process.env.PORT || 3000;
+
+app.use("/herdpi/v1/users", RoutesUsers);
+
 app.listen(port);
 
 module.exports = app;
