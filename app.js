@@ -6,13 +6,15 @@ const Gender = require("./Models/Gender");
 const TypesOfUsersRoles = require("./Models/TypesOfUsersRoles");
 const Users = require("./Models/Users");
 const fillDataForGenderTable = require("./Functions/Database/fillDataForGenderTable");
+const fillDataForUsersTypesOfRolesInDatabase = require("./Functions/Database/fillDataForUsersTypesOfRolesInDatabase");
 
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-sequelize.sync({ force: true }).then(() => {
+sequelize.sync({ force: false }).then(() => {
   fillDataForGenderTable(Gender);
+  fillDataForUsersTypesOfRolesInDatabase(TypesOfUsersRoles);
   console.log("Database & tables created. Probably!");
 });
 

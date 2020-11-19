@@ -1,7 +1,6 @@
 const arrayWithGenderData = ["Kobieta", "Mężczyzna", "Inna"];
 
 function fillDataForGenderTable(Gender) {
-  // eslint-disable-next-line no-plusplus
   for (let i = 0; i < arrayWithGenderData.length; i++) {
     Gender.findOne({ where: { name: arrayWithGenderData[i] } }).then(
       (gender) => {
