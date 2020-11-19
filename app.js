@@ -11,13 +11,10 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-sequelize
-  .sync({ force: true })
-  .then(() => {
-    fillDataForGenderTable(Gender);
-    console.log("Database & tables created. Probably!");
-  })
-  .catch();
+sequelize.sync({ force: true }).then(() => {
+  fillDataForGenderTable(Gender);
+  console.log("Database & tables created. Probably!");
+});
 
 const port = process.env.PORT || 3000;
 
