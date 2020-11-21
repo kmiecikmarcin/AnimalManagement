@@ -2,15 +2,15 @@ const { Sequelize, DataTypes } = require("sequelize");
 
 const sequelize = require("../Functions/Database/connectionWithDatabase");
 
-const Gender = sequelize.define(
-  "Gender",
+const Genders = sequelize.define(
+  "Genders",
   {
     id: {
       type: DataTypes.UUID,
       defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
       unique: true,
-      allowNull: true,
+      allowNull: false,
       field: "idGender",
     },
     name: {
@@ -25,4 +25,4 @@ const Gender = sequelize.define(
   }
 );
 
-module.exports = Gender;
+module.exports = Genders;

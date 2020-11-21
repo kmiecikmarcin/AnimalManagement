@@ -2,9 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const sequelize = require("./Functions/Database/connectionWithDatabase");
 const RoutesUsers = require("./Routes/users");
-const Gender = require("./Models/Gender");
+const Genders = require("./Models/Genders");
 const TypesOfUsersRoles = require("./Models/TypesOfUsersRoles");
-const Users = require("./Models/Users");
 const fillDataForGenderTable = require("./Functions/Database/fillDataForGenderTable");
 const fillDataForUsersTypesOfRolesInDatabase = require("./Functions/Database/fillDataForUsersTypesOfRolesInDatabase");
 
@@ -12,10 +11,10 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-sequelize.sync({ force: false }).then(() => {
-  fillDataForGenderTable(Gender);
+sequelize.sync({ force: true }).then(() => {
+  fillDataForGenderTable(Genders);
   fillDataForUsersTypesOfRolesInDatabase(TypesOfUsersRoles);
-  console.log("Database & tables created. Probably!");
+  console.log("Database & tables created!");
 });
 
 const port = process.env.PORT || 3000;
