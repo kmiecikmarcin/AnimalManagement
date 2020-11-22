@@ -5,7 +5,7 @@ require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const { check, validationResult } = require("express-validator");
 const TypesOfUsersRoles = require("../Models/TypesOfUsersRoles");
-const Gender = require("../Models/Gender");
+const Genders = require("../Models/Genders");
 const Users = require("../Models/Users");
 const verifyToken = require("../Functions/Users/verifyJwtToken");
 const checkUserEmail = require("../Functions/Users/checkUserEmail");
@@ -106,9 +106,10 @@ router.post(
       } else {
         const assignUserRole = await findTypeOfUserRole(
           TypesOfUsersRoles,
-          "hodowca"
+          "Hodowca"
         );
-        const assignUserGender = await findGender(Gender, req.body.userGender);
+        const assignUserGender = await findGender(Genders, req.body.userGender);
+
         if (assignUserRole === null || assignUserGender === null) {
           res.status(501).json({ Error: "Błąd systemu!" });
         } else {
@@ -117,7 +118,7 @@ router.post(
             req.body.userEmail,
             req.body.userPassword,
             assignUserRole.id,
-            req.body.userGender
+            assignUserGender.id
           );
           if (registrationResult) {
             res

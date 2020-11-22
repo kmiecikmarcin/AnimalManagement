@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../Functions/Database/connectionWithDatabase");
 const TypesOfUsersRoles = require("./TypesOfUsersRoles");
-const Gender = require("./Gender");
+const Genders = require("./Genders");
 
 const Users = sequelize.define(
   "Users",
@@ -43,7 +43,7 @@ TypesOfUsersRoles.hasMany(Users, {
     name: "idTypeOfUserRole",
   },
 });
-Gender.hasMany(Users, {
+Genders.hasMany(Users, {
   foreignKey: {
     allowNull: false,
     name: "idGender",
