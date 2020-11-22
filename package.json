@@ -6,7 +6,7 @@
   "scripts": {
     "app-start": "node app.js",
     "nodemon-start": "nodemon app.js",
-    "test": "newman run Tests/Postman/AnimalManagement.postman_collection.json -e",
+    "test": "newman run Tests/Postman/AnimalManagement.postman_collection.json",
     "eslint-start": "eslint ./",
     "pre-commit": "npm run eslint-start",
     "pre-push": "npm run eslint-start && npm run test"
