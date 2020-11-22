@@ -2,12 +2,12 @@ const express = require("express");
 
 const router = express.Router();
 require("dotenv").config();
-const jwt = require("jsonwebtoken");
+// const jwt = require("jsonwebtoken");
 const { check, validationResult } = require("express-validator");
 const TypesOfUsersRoles = require("../Models/TypesOfUsersRoles");
 const Genders = require("../Models/Genders");
 const Users = require("../Models/Users");
-const verifyToken = require("../Functions/Users/verifyJwtToken");
+// const verifyToken = require("../Functions/Users/verifyJwtToken");
 const checkUserEmail = require("../Functions/Users/checkUserEmail");
 const findTypeOfUserRole = require("../Functions/Users/findTypeOfUserRole");
 const userRegistration = require("../Functions/Users/userRegistration");
@@ -45,6 +45,7 @@ router.post(
         }
       })
       .custom((value) => {
+        // eslint-disable-next-line no-useless-escape
         const badSpecialKeys = /[\,\+\=\.\<\>\{\}\[\]\:\;\'\"\|\~\`\_\-]/.test(
           value
         );
@@ -133,14 +134,14 @@ router.post(
   }
 );
 
-router.post("/login", async (req, res) => {});
+// router.post("/login", async (req, res) => {});
 
-router.put("/changeAdressEmail", verifyToken, (req, res) => {});
+// router.put("/changeAdressEmail", verifyToken, (req, res) => {});
 
-router.put("changePassword", verifyToken, (req, res) => {});
+// router.put("changePassword", verifyToken, (req, res) => {});
 
-router.put("/deleteAccount", verifyToken, (req, res) => {});
+// router.put("/deleteAccount", verifyToken, (req, res) => {});
 
-router.put("/forgotPassword", async (req, res) => {});
+// router.put("/forgotPassword", async (req, res) => {});
 
 module.exports = router;
