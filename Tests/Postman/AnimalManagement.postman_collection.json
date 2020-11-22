@@ -1,0 +1,40 @@
+{
+	"info": {
+		"_postman_id": "5bc30265-77c8-4b3c-a4ce-f7244d5d02ce",
+		"name": "AnimalManagement",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User registration",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userEmail\": \"sggp.kmiecik@gmail.com\",\r\n    \"userPassword\": \"mmmmmm@\",\r\n    \"confirmPassword\": \"mmmmmm@\",\r\n    \"userGender\": \"Kobieta\",\r\n    \"userVerification\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/herdpi/v1/users/register",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"herdpi",
+						"v1",
+						"users",
+						"register"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

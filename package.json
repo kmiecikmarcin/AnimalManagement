@@ -6,7 +6,10 @@
   "scripts": {
     "app-start": "node app.js",
     "nodemon-start": "nodemon app.js",
-    "eslint-start": "eslint ./"
+    "test": "newman run Tests/Postman/AnimalManagement.postman_collection.json",
+    "eslint-start": "eslint ./",
+    "pre-commit": "npm run eslint-start",
+    "pre-push": "npm run eslint-start && npm run test"
   },
   "repository": {
     "type": "git",
@@ -33,9 +36,16 @@
     "eslint": "^7.13.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.22.1",
+    "husky": "^4.3.0",
     "nodemon": "^2.0.6"
   },
   "nodemonConfig": {
     "delay": 1000
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run pre-commit",
+      "pre-push": "npm run pre-push"
+    }
   }
 }
