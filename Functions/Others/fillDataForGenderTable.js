@@ -8,7 +8,7 @@ function fillDataForGenderTable(Gender) {
           Gender.create({
             name: arrayWithGenderData[i],
           }).then(() => {
-            console.log("Dane zostały dodane popawnie!");
+            console.log("Pomyślnie wypełniono dane dotyczące płci!");
           });
         } else {
           console.log("Dane znajdują się już w bazie!");

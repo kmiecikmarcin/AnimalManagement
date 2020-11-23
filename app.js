@@ -5,9 +5,11 @@ const RoutesUsers = require("./Routes/users");
 const Genders = require("./Models/Genders");
 const TypesOfUsersRoles = require("./Models/TypesOfUsersRoles");
 const TypesOfAnimals = require("./Models/TypesOfAnimals");
+const KindOfAnimals = require("./Models/KindOfAnimals");
 const fillDataForGenderTable = require("./Functions/Others/fillDataForGenderTable");
 const fillDataForUsersTypesOfRolesInDatabase = require("./Functions/Database/fillDataForUsersTypesOfRolesInDatabase");
-const fillDataInTypesOfAnimalsTable = require("./Functions/Animals/fillDataInTypesOfAnimalsTable");
+const fillDataForTypesOfAnimalsTable = require("./Functions/Animals/FilingData/fillDataForTypesOfAnimalsTable");
+const fillDataForKindOfAnimalsTable = require("./Functions/Animals/FilingData/fillDataForKindOfAnimalsTable");
 
 const app = express();
 app.use(bodyParser.json());
@@ -16,8 +18,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 sequelize.sync({ force: true }).then(() => {
   fillDataForGenderTable(Genders);
   fillDataForUsersTypesOfRolesInDatabase(TypesOfUsersRoles);
-  fillDataInTypesOfAnimalsTable(TypesOfAnimals);
-  console.log("Database & tables created!");
+  fillDataForTypesOfAnimalsTable(TypesOfAnimals);
+  setTimeout(() => {
+    fillDataForKindOfAnimalsTable(KindOfAnimals, TypesOfAnimals);
+  }, 1000);
 });
 
 const port = process.env.PORT || 3000;
