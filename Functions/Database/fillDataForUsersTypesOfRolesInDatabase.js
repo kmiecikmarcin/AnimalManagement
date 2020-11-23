@@ -9,7 +9,9 @@ function fillDataForUsersTypesOfRolesInDatabase(TypesOfUsersRoles) {
         TypesOfUsersRoles.create({
           name: arrayWithTypesOfUsersRolesData[i],
         }).then(() => {
-          console.log("Dane zostały dodane popawnie!");
+          console.log(
+            "Pomyślnie wypełniono dane dotyczące rodzajów użytkowników!"
+          );
         });
       } else {
         console.log("Dane znajdują się już w bazie!");
