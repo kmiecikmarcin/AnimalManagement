@@ -20,7 +20,7 @@ const Herd = sequelize.define(
       field: "nameOfHerd",
     },
     creationDate: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
       dield: "creationDateOfHerd",
     },
