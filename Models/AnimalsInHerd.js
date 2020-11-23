@@ -3,7 +3,7 @@ const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../Functions/Database/connectionWithDatabase");
 const Herd = require("./Herd");
 const TypesOfJoinToTheHerd = require("./TypesOfJoinToTheHerd");
-const SpeciesOfAnimals = require("./SpeciesOfAnimals");
+const KindOfAnimals = require("./KindOfAnimals");
 const Genders = require("./Genders");
 
 const AnimalsInHerd = sequelize.define(
@@ -21,6 +21,11 @@ const AnimalsInHerd = sequelize.define(
       type: DataTypes.BIGINT,
       allowNull: false,
       field: "identityNumberOfAnimal",
+    },
+    breed: {
+      type: DataTypes.STRING(256),
+      allowNull: false,
+      field: "breedOfAnimal",
     },
     joinDate: {
       type: DataTypes.DATEONLY,
@@ -41,7 +46,7 @@ const AnimalsInHerd = sequelize.define(
   { timestamps: true }
 );
 
-Herd.hasMany(SpeciesOfAnimals, {
+Herd.hasMany(AnimalsInHerd, {
   foreignKey: {
     allowNull: false,
     field: "idHerd",
@@ -55,14 +60,14 @@ TypesOfJoinToTheHerd.hasMany(AnimalsInHerd, {
   },
 });
 
-SpeciesOfAnimals.hasMany(SpeciesOfAnimals, {
+KindOfAnimals.hasMany(AnimalsInHerd, {
   foreignKey: {
     allowNull: false,
-    field: "idSpeciesOfAnimal",
+    field: "idKindOfAnimals",
   },
 });
 
-Genders.hasMany(SpeciesOfAnimals, {
+Genders.hasMany(AnimalsInHerd, {
   foreignKey: {
     allowNull: false,
     field: "idGender",
