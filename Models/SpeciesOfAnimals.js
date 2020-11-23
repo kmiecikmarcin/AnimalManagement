@@ -1,10 +1,10 @@
 const { Sequelize, DataTypes } = require("sequelize");
 
 const sequelize = require("../Functions/Database/connectionWithDatabase");
-const Users = require("./Users");
+const TypesOfAnimals = require("./TypesOfAnimals");
 
-const Herd = sequelize.define(
-  "Herd",
+const SpeciesOfAnimals = sequelize.define(
+  "SpeciesOfAnimals",
   {
     id: {
       type: DataTypes.UUID,
@@ -12,27 +12,23 @@ const Herd = sequelize.define(
       primaryKey: true,
       unique: true,
       allowNull: false,
-      field: "idHerd",
+      field: "idSpeciesOfAnimals",
     },
     name: {
-      type: DataTypes.STRING(40),
+      type: DataTypes.STRING(256),
+      unique: true,
       allowNull: false,
-      field: "nameOfHerd",
-    },
-    creationDate: {
-      type: DataTypes.DATEONLY,
-      allowNull: false,
-      dield: "creationDateOfHerd",
+      field: "nameOfSpecies",
     },
   },
   { timestamps: true }
 );
 
-Users.hasMany(Herd, {
+TypesOfAnimals.hasMany(SpeciesOfAnimals, {
   foreignKey: {
     allowNull: false,
-    name: "idUser",
+    name: "idTypesOfAnimals",
   },
 });
 
-module.exports = Herd;
+module.exports = SpeciesOfAnimals;
