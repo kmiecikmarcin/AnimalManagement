@@ -9,9 +9,11 @@ const fillDataForCattleGenres = require("./fillDataForCattleGenres");
 // const arrayWithOthersGenres = ["Pozostałe"];
 
 function fillDataForKindOfAnimalsTable(KindOfAnimals, TypesOfAnimals) {
-  TypesOfAnimals.findAll({}).then(() => {
-    fillDataForCattleGenres(KindOfAnimals, TypesOfAnimals);
-  });
+  TypesOfAnimals.findAll({})
+    .then(() => {
+      fillDataForCattleGenres(KindOfAnimals, TypesOfAnimals);
+    })
+    .catch();
 }
 
 module.exports = fillDataForKindOfAnimalsTable;
