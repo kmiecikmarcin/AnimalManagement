@@ -1,4 +1,5 @@
 const fillDataForCattleGenres = require("./fillDataForCattleGenres");
+const fillDataForPigsGenres = require("./fillDataForPigsGenres");
 
 // const arrayWithPoultryGenres = [""];
 // const arrayWithFurryGenres = [""];
@@ -12,6 +13,7 @@ function fillDataForKindOfAnimalsTable(KindOfAnimals, TypesOfAnimals) {
   TypesOfAnimals.findAll({})
     .then(() => {
       fillDataForCattleGenres(KindOfAnimals, TypesOfAnimals);
+      fillDataForPigsGenres(KindOfAnimals, TypesOfAnimals);
     })
     .catch((error) => {
       throw new Error(error);
