@@ -17,7 +17,9 @@ function fillDataForCattleGenres(KindOfAnimals, TypesOfAnimals) {
               );
             });
           } else {
-            console.log("Dane znajdują się już w bazie!");
+            console.log(
+              "Dane dotyczące rodzajów zwierząt znajdują się już w bazie!"
+            );
           }
         });
       }

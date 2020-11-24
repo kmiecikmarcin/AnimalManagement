@@ -1,14 +1,12 @@
 const arrayWithTypesOfAnimals = [
   "Bydło",
-  "Trzoda chlewna",
+  "Świnie",
   "Drób",
   "Futerkowce",
   "Koniowate",
-  "Jeleniowate",
   "Owce",
   "Kozy",
   "Pszczoły",
-  "Ryby",
   "Inne",
 ];
 

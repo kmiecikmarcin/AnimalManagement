@@ -19,9 +19,7 @@ sequelize.sync({ force: true }).then(() => {
   fillDataForGenderTable(Genders);
   fillDataForUsersTypesOfRolesInDatabase(TypesOfUsersRoles);
   fillDataForTypesOfAnimalsTable(TypesOfAnimals);
-  setTimeout(() => {
-    fillDataForKindOfAnimalsTable(KindOfAnimals, TypesOfAnimals);
-  }, 1000);
+  fillDataForKindOfAnimalsTable(KindOfAnimals, TypesOfAnimals);
 });
 
 const port = process.env.PORT || 3000;
