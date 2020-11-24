@@ -19,20 +19,26 @@ function fillDataForCattleGenres(KindOfAnimals, TypesOfAnimals) {
                       "Pomyślnie wypełniono dane dotyczące rodzajów zwierząt!"
                     );
                   })
-                  .catch();
+                  .catch((error) => {
+                    throw new Error(error);
+                  });
               } else {
                 console.log(
                   "Dane dotyczące rodzajów zwierząt znajdują się już w bazie!"
                 );
               }
             })
-            .catch();
+            .catch((error) => {
+              throw new Error(error);
+            });
         }
       } else {
         console.log("Brak danych w bazie! Nie można uzupełnić tabeli!");
       }
     })
-    .catch();
+    .catch((error) => {
+      throw new Error(error);
+    });
 }
 
 module.exports = fillDataForCattleGenres;

@@ -23,12 +23,16 @@ function fillDataForTypesOfAnimalsTable(TypesOfAnimals) {
                 "Pomyślnie wypełniono dane dotyczące typów zwierząt!"
               );
             })
-            .catch();
+            .catch((error) => {
+              throw new Error(error);
+            });
         } else {
           console.log("Dane znajdują się już w bazie!");
         }
       })
-      .catch();
+      .catch((error) => {
+        throw new Error(error);
+      });
   }
 }
 

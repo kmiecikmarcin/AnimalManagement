@@ -16,14 +16,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 sequelize
-  .sync({ force: true })
+  .sync({ force: false })
   .then(() => {
     fillDataForGenderTable(Genders);
     fillDataForUsersTypesOfRolesInDatabase(TypesOfUsersRoles);
     fillDataForTypesOfAnimalsTable(TypesOfAnimals);
     fillDataForKindOfAnimalsTable(KindOfAnimals, TypesOfAnimals);
   })
-  .catch();
+  .catch((err) => {
+    throw new Error(err);
+  });
 
 const port = process.env.PORT || 3000;
 

@@ -15,12 +15,16 @@ function fillDataForUsersTypesOfRolesInDatabase(TypesOfUsersRoles) {
                 "Pomyślnie wypełniono dane dotyczące rodzajów użytkowników!"
               );
             })
-            .catch();
+            .catch((error) => {
+              throw new Error(error);
+            });
         } else {
           console.log("Dane znajdują się już w bazie!");
         }
       })
-      .catch();
+      .catch((error) => {
+        throw new Error(error);
+      });
   }
 }
 

@@ -13,7 +13,9 @@ function fillDataForKindOfAnimalsTable(KindOfAnimals, TypesOfAnimals) {
     .then(() => {
       fillDataForCattleGenres(KindOfAnimals, TypesOfAnimals);
     })
-    .catch();
+    .catch((error) => {
+      throw new Error(error);
+    });
 }
 
 module.exports = fillDataForKindOfAnimalsTable;

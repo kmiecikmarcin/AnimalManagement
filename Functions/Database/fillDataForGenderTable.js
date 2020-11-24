@@ -11,12 +11,16 @@ function fillDataForGenderTable(Gender) {
             .then(() => {
               console.log("Pomyślnie wypełniono dane dotyczące płci!");
             })
-            .catch();
+            .catch((error) => {
+              throw new Error(error);
+            });
         } else {
           console.log("Dane znajdują się już w bazie!");
         }
       })
-      .catch();
+      .catch((error) => {
+        throw new Error(error);
+      });
   }
 }
 
