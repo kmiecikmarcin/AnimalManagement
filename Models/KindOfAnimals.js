@@ -16,7 +16,6 @@ const KindOfAnimals = sequelize.define(
     },
     name: {
       type: DataTypes.STRING(256),
-      unique: true,
       allowNull: false,
       field: "nameKindOfAnimal",
     },
