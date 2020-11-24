@@ -23,8 +23,8 @@ sequelize
     fillDataForTypesOfAnimalsTable(TypesOfAnimals);
     fillDataForKindOfAnimalsTable(KindOfAnimals, TypesOfAnimals);
   })
-  .catch((err) => {
-    throw new Error(err);
+  .catch((error) => {
+    throw new Error(error);
   });
 
 const port = process.env.PORT || 3000;
