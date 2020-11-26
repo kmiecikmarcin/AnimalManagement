@@ -17,17 +17,11 @@ function fillDataForTypesOfAnimalsTable(TypesOfAnimals) {
     })
       .then((animalType) => {
         if (animalType === null) {
-          TypesOfAnimals.create({ name: arrayWithTypesOfAnimals[i] })
-            .then(() => {
-              console.log(
-                "Pomyślnie wypełniono dane dotyczące typów zwierząt!"
-              );
-            })
-            .catch((error) => {
+          TypesOfAnimals.create({ name: arrayWithTypesOfAnimals[i] }).catch(
+            (error) => {
               throw new Error(error);
-            });
-        } else {
-          console.log("Dane znajdują się już w bazie!");
+            }
+          );
         }
       })
       .catch((error) => {

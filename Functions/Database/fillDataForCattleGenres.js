@@ -1,39 +1,27 @@
 const arrayWithCattleGenres = ["Mleczne", "Mięsne", "Kombinowane"];
+const findTypesOfAnimalsByName = require("../Animals/findTypesOfAnimalsByName");
+const findKindOfAnimalsbyName = require("../Animals/findKindOfAnimalsByName");
 
 function fillDataForCattleGenres(KindOfAnimals, TypesOfAnimals) {
-  TypesOfAnimals.findOne({ where: { name: "Bydło" } })
-    .then((typeOfAnimal) => {
-      if (typeOfAnimal !== null) {
+  findTypesOfAnimalsByName(TypesOfAnimals, "Bydło")
+    .then((typesOfAnimals) => {
+      if (typesOfAnimals !== null) {
         for (let i = 0; i < arrayWithCattleGenres.length; i++) {
-          KindOfAnimals.findOne({
-            where: { name: arrayWithCattleGenres[i] },
-          })
+          findKindOfAnimalsbyName(KindOfAnimals, arrayWithCattleGenres[i])
             .then((kindOfAnimals) => {
               if (kindOfAnimals === null) {
                 KindOfAnimals.create({
                   name: arrayWithCattleGenres[i],
-                  idTypesOfAnimals: typeOfAnimal.id,
-                })
-                  .then(() => {
-                    console.log(
-                      "Pomyślnie wypełniono dane dotyczące rodzajów zwierząt!"
-                    );
-                  })
-                  .catch((error) => {
-                    throw new Error(error);
-                  });
-              } else {
-                console.log(
-                  "Dane dotyczące rodzajów zwierząt znajdują się już w bazie!"
-                );
+                  idTypesOfAnimals: typesOfAnimals.id,
+                }).catch((error) => {
+                  throw new Error(error);
+                });
               }
             })
             .catch((error) => {
               throw new Error(error);
             });
         }
-      } else {
-        console.log("Brak danych w bazie! Nie można uzupełnić tabeli!");
       }
     })
     .catch((error) => {
