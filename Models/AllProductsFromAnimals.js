@@ -28,7 +28,7 @@ const AllProductsFromAnimals = sequelize.define(
     date: {
       type: DataTypes.DATEONLY,
       allowNull: false,
-      dield: "dateOfAddedProduct",
+      field: "dateOfAddedProduct",
     },
   },
   { timestamps: true }
