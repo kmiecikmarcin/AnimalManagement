@@ -7,15 +7,9 @@ function fillDataForGenderTable(Gender) {
         if (gender === null) {
           Gender.create({
             name: arrayWithGenderData[i],
-          })
-            .then(() => {
-              console.log("Pomyślnie wypełniono dane dotyczące płci!");
-            })
-            .catch((error) => {
-              throw new Error(error);
-            });
-        } else {
-          console.log("Dane znajdują się już w bazie!");
+          }).catch((error) => {
+            throw new Error(error);
+          });
         }
       })
       .catch((error) => {

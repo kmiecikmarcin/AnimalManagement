@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 sequelize
-  .sync({ force: true })
+  .sync({ force: false })
   .then(() => {
     fillDataForGenderTable(Genders);
     fillDataForUsersTypesOfRolesInDatabase(TypesOfUsersRoles);

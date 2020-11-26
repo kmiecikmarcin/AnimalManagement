@@ -17,27 +17,15 @@ function fillDataForPigsGenres(KindOfAnimals, TypesOfAnimals) {
               KindOfAnimals.create({
                 name: arrayWithPigsGenres[i],
                 idTypesOfAnimals: typeOfAnimal.id,
-              })
-                .then(() => {
-                  console.log(
-                    "Pomyślnie wypełniono dane dotyczące rodzajów zwierząt!"
-                  );
-                })
-                .catch((error) => {
-                  throw new Error(error);
-                });
-            } else {
-              console.log(
-                "Dane dotyczące rodzajów zwierząt znajdują się już w bazie!"
-              );
+              }).catch((error) => {
+                throw new Error(error);
+              });
             }
           })
           .catch((error) => {
             throw new Error(error);
           });
       }
-    } else {
-      console.log("Brak danych w bazie! Nie można uzupełnić tabeli!");
     }
   });
 }
