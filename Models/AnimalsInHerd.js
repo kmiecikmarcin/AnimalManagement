@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes } = require("sequelize");
 
 const sequelize = require("../Functions/Database/connectionWithDatabase");
-const Herd = require("./Herd");
+const Herd = require("./Herds");
 const TypesOfJoinToTheHerd = require("./TypesOfJoinToTheHerd");
 const KindOfAnimals = require("./KindOfAnimals");
 const Genders = require("./Genders");

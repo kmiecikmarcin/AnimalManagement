@@ -3,8 +3,8 @@ const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../Functions/Database/connectionWithDatabase");
 const Users = require("./Users");
 
-const Herd = sequelize.define(
-  "Herd",
+const Herds = sequelize.define(
+  "Herds",
   {
     id: {
       type: DataTypes.UUID,
@@ -28,11 +28,11 @@ const Herd = sequelize.define(
   { timestamps: true }
 );
 
-Users.hasMany(Herd, {
+Users.hasMany(Herds, {
   foreignKey: {
     allowNull: false,
     name: "idUser",
   },
 });
 
-module.exports = Herd;
+module.exports = Herds;
