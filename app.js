@@ -5,6 +5,7 @@ const RoutesUsers = require("./Routes/users");
 const Genders = require("./Models/Genders");
 const TypesOfUsersRoles = require("./Models/TypesOfUsersRoles");
 const TypesOfAnimals = require("./Models/TypesOfAnimals");
+const TypesOfJoinToTheHerd = require("./Models/TypesOfJoinToTheHerd");
 const ReasonOfDeath = require("./Models/ReasonOfDeath");
 const TypesOfFeed = require("./Models/TypesOfFeed");
 const fillDataForGenderTable = require("./Functions/Database/fillDataForGenderTable");
@@ -12,6 +13,7 @@ const fillDataForUsersTypesOfRolesInDatabase = require("./Functions/Database/fil
 const fillDataForTypesOfAnimalsTable = require("./Functions/Database/fillDataForTypesOfAnimalsTable");
 const fillDataForTypesOfProducts = require("./Functions/Database/fillDataForTypesOfProducts");
 const fillDataForReasonOfDeath = require("./Functions/Database/fillDataForReasonOfDeath");
+const fillDataForTypesOfJoinToTheHerd = require("./Functions/Database/fillDataForTypesOfJoinToTheHerd");
 
 const app = express();
 app.use(bodyParser.json());
@@ -25,6 +27,7 @@ sequelize
     fillDataForTypesOfAnimalsTable(TypesOfAnimals);
     fillDataForReasonOfDeath(ReasonOfDeath);
     fillDataForTypesOfProducts(TypesOfFeed);
+    fillDataForTypesOfJoinToTheHerd(TypesOfJoinToTheHerd);
   })
   .catch((error) => {
     throw new Error(error);
