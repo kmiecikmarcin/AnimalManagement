@@ -14,6 +14,7 @@ const userRegistration = require("../Functions/Users/userRegistration");
 const checkInPasswordOneSpecialCharacterKey = require("../Functions/Others/checkInPasswordOneSpecialCharacterKey");
 const findGender = require("../Functions/Users/findGender");
 const checkUserGenderInRegister = require("../Functions/Others/checkUserGenderInRegister");
+const userLogin = require("../Functions/Users/userLogin");
 
 router.post(
   "/register",
@@ -134,7 +135,60 @@ router.post(
   }
 );
 
-// router.post("/login", async (req, res) => {});
+router.post(
+  "/login",
+  [
+    check("userEmail")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .isLength({ min: 6 })
+      .withMessage("Wprowadzony adres e-mail jest za krótki!")
+      .isLength({ max: 254 })
+      .withMessage("Wprowadzony adres e-mail jest za długi!")
+      .isEmail()
+      .withMessage("Adres e-mail został wprowadzony niepoprawnie!"),
+
+    check("userPassword")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .isLength({ min: 6 })
+      .withMessage("Hasło jest za krótkie!")
+      .isLength({ max: 32 })
+      .withMessage("Hasło jest za długie!"),
+  ],
+  async (req, res) => {
+    const error = validationResult(req);
+    console.log(error.mapped());
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      const userEmail = await checkUserEmail(Users, req.body.userEmail);
+      if (userEmail === null) {
+        res
+          .status(400)
+          .json({ Error: "Użytkownik o podanym adresie e-mail nie istnieje!" });
+      } else {
+        const userRole = await findTypeOfUserRole(
+          TypesOfUsersRoles,
+          userEmail.idTypeOfUserRole
+        );
+        if (userRole !== null) {
+          userLogin(
+            req.body.userPassword,
+            userEmail.password,
+            userEmail.id,
+            userEmail.password,
+            userRole.id
+          );
+        } else {
+          res
+            .status(400)
+            .json({ Error: "Brak dostepu do systemu dla użytkownika!" });
+        }
+      }
+    }
+  }
+);
 
 // router.put("/changeAdressEmail", verifyToken, (req, res) => {});
 
