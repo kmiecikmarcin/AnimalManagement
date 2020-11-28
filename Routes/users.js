@@ -181,9 +181,10 @@ router.post(
             userRole.id
           );
           if (checkEnteredDataFromUser === null) {
-            res.status(201).json({ checkEnteredDataFromUser });
+            console.log(checkEnteredDataFromUser);
+            res.status(201).json({ Token: checkEnteredDataFromUser });
           } else {
-            res.status(404).json({ checkEnteredDataFromUser });
+            res.status(404).json({ Error: checkEnteredDataFromUser });
           }
         } else {
           res
