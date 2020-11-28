@@ -7,7 +7,7 @@ const TypesOfProducts = sequelize.define(
   {
     id: {
       type: DataTypes.UUID,
-      defaultKey: Sequelize.UUIDV4,
+      defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
       unique: true,
       allowNull: false,
