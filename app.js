@@ -7,6 +7,7 @@ const TypesOfUsersRoles = require("./Models/TypesOfUsersRoles");
 const TypesOfAnimals = require("./Models/TypesOfAnimals");
 const TypesOfJoinToTheHerd = require("./Models/TypesOfJoinToTheHerd");
 const ReasonOfDeath = require("./Models/ReasonOfDeath");
+const TypesOfProducts = require("./Models/TypesOfProducts");
 const TypesOfFeed = require("./Models/TypesOfFeed");
 const fillDataForGenderTable = require("./Functions/Database/fillDataForGenderTable");
 const fillDataForUsersTypesOfRolesInDatabase = require("./Functions/Database/fillDataForUsersTypesOfRolesInDatabase");
@@ -14,6 +15,7 @@ const fillDataForTypesOfAnimalsTable = require("./Functions/Database/fillDataFor
 const fillDataForTypesOfFeed = require("./Functions/Database/fillDataForTypesOfFeed");
 const fillDataForReasonOfDeath = require("./Functions/Database/fillDataForReasonOfDeath");
 const fillDataForTypesOfJoinToTheHerd = require("./Functions/Database/fillDataForTypesOfJoinToTheHerd");
+const fillDataForTypesOfProducts = require("./Functions/Database/fillDataForTypesOfProducts");
 
 const app = express();
 app.use(bodyParser.json());
@@ -28,6 +30,7 @@ sequelize
     fillDataForReasonOfDeath(ReasonOfDeath);
     fillDataForTypesOfFeed(TypesOfFeed);
     fillDataForTypesOfJoinToTheHerd(TypesOfJoinToTheHerd);
+    fillDataForTypesOfProducts(TypesOfProducts);
   })
   .catch((error) => {
     throw new Error(error);
