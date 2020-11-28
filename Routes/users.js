@@ -173,13 +173,18 @@ router.post(
           userEmail.idTypeOfUserRole
         );
         if (userRole !== null) {
-          userLogin(
+          const checkEnteredDataFromUser = await userLogin(
             req.body.userPassword,
             userEmail.password,
             userEmail.id,
             userEmail.password,
             userRole.id
           );
+          if (checkEnteredDataFromUser === null) {
+            res.status(201).json({ checkEnteredDataFromUser });
+          } else {
+            res.status(404).json({ checkEnteredDataFromUser });
+          }
         } else {
           res
             .status(400)
