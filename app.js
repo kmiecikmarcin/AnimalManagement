@@ -11,7 +11,7 @@ const TypesOfFeed = require("./Models/TypesOfFeed");
 const fillDataForGenderTable = require("./Functions/Database/fillDataForGenderTable");
 const fillDataForUsersTypesOfRolesInDatabase = require("./Functions/Database/fillDataForUsersTypesOfRolesInDatabase");
 const fillDataForTypesOfAnimalsTable = require("./Functions/Database/fillDataForTypesOfAnimalsTable");
-const fillDataForTypesOfProducts = require("./Functions/Database/fillDataForTypesOfProducts");
+const fillDataForTypesOfFeed = require("./Functions/Database/fillDataForTypesOfFeed");
 const fillDataForReasonOfDeath = require("./Functions/Database/fillDataForReasonOfDeath");
 const fillDataForTypesOfJoinToTheHerd = require("./Functions/Database/fillDataForTypesOfJoinToTheHerd");
 
@@ -26,7 +26,7 @@ sequelize
     fillDataForUsersTypesOfRolesInDatabase(TypesOfUsersRoles);
     fillDataForTypesOfAnimalsTable(TypesOfAnimals);
     fillDataForReasonOfDeath(ReasonOfDeath);
-    fillDataForTypesOfProducts(TypesOfFeed);
+    fillDataForTypesOfFeed(TypesOfFeed);
     fillDataForTypesOfJoinToTheHerd(TypesOfJoinToTheHerd);
   })
   .catch((error) => {
