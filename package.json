@@ -4,7 +4,7 @@
   "description": "API for animal managment. ",
   "main": "app.js",
   "scripts": {
-    "app-start": "node app.js",
+    "start": "node app.js",
     "nodemon-start": "nodemon app.js",
     "test": "newman run Tests/Postman/AnimalManagement.postman_collection.json",
     "eslint-start": "eslint ./",
