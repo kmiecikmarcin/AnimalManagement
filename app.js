@@ -5,12 +5,10 @@ const RoutesUsers = require("./Routes/users");
 const Genders = require("./Models/Genders");
 const TypesOfUsersRoles = require("./Models/TypesOfUsersRoles");
 const TypesOfAnimals = require("./Models/TypesOfAnimals");
-const KindOfAnimals = require("./Models/KindOfAnimals");
 const TypesOfProducts = require("./Models/TypesOfProducts");
 const fillDataForGenderTable = require("./Functions/Database/fillDataForGenderTable");
 const fillDataForUsersTypesOfRolesInDatabase = require("./Functions/Database/fillDataForUsersTypesOfRolesInDatabase");
 const fillDataForTypesOfAnimalsTable = require("./Functions/Database/fillDataForTypesOfAnimalsTable");
-const fillDataForKindOfAnimalsTable = require("./Functions/Database/fillDataForKindOfAnimalsTable");
 const fillDataForTypesOfProducts = require("./Functions/Database/fillDataForTypesOfProducts");
 
 const app = express();
@@ -23,7 +21,6 @@ sequelize
     fillDataForGenderTable(Genders);
     fillDataForUsersTypesOfRolesInDatabase(TypesOfUsersRoles);
     fillDataForTypesOfAnimalsTable(TypesOfAnimals);
-    fillDataForKindOfAnimalsTable(KindOfAnimals, TypesOfAnimals);
     fillDataForTypesOfProducts(TypesOfProducts);
   })
   .catch((error) => {
