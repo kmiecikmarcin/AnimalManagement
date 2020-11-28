@@ -1,5 +1,4 @@
 const bcrypt = require("bcrypt");
-const { json } = require("body-parser");
 const jwt = require("jsonwebtoken");
 
 async function userLogin(
@@ -7,24 +6,22 @@ async function userLogin(
   userPassword,
   userId,
   userIdRole,
-  nameOfRole
+  nameOfUserRole
 ) {
   const match = await bcrypt.compare(enteredPasswordFromUser, userPassword);
   if (match) {
-    jwt.sign(
+    const token = jwt.sign(
       {
         id: userId,
         idTypeOfUserRole: userIdRole,
-        typeOfRole: nameOfRole,
+        name: nameOfUserRole,
       },
       process.env.S3_SECRETKEY,
-      { expiresIn: "36h" },
-      (token) => {
-        json({ token });
-      }
+      { expiresIn: "36h" }
     );
+    return token;
   }
-  return json({ Error: "User name or password is incorrect!" });
+  return "Hasło jest nieprawidłowe!";
 }
 
 module.exports = userLogin;
