@@ -205,7 +205,7 @@ router.put(
       .withMessage("Wprowadzony adres e-mail jest za krótki!")
       .isEmail()
       .withMessage("Adres e-mail został wprowadzony niepoprawnie!"),
-    check("newUserEmail")
+    check("newUserEmailAdress")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .isLength({ min: 1 })
@@ -214,6 +214,15 @@ router.put(
       .withMessage("Wprowadzony adres e-mail jest za długi!")
       .isEmail()
       .withMessage("Adres e-mail został wprowadzony niepoprawnie!"),
+    check("userPassword")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 6 })
+      .withMessage("Hasło jest za krótkie!")
+      .isLength({ max: 32 })
+      .withMessage("Hasło jest za długie!"),
   ],
   verifyToken,
   (req, res) => {
