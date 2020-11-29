@@ -15,6 +15,7 @@ const checkInPasswordOneSpecialCharacterKey = require("../Functions/Others/check
 const findGender = require("../Functions/Users/findGender");
 const checkUserGenderInRegister = require("../Functions/Others/checkUserGenderInRegister");
 const userLogin = require("../Functions/Users/userLogin");
+const findUserById = require("../Functions/Users/findUserById");
 
 router.post(
   "/register",
@@ -219,6 +220,21 @@ router.put(
     const error = validationResult(req);
     if (!error.isEmpty()) {
       res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.sendStatus(403).json({ Error: "Błąd uwierzytelniania! " });
+          } else {
+            const checkUserById = await findUserById(Users, authData);
+            if (checkUserById === null) {
+              res.sendStatus(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
     }
   }
 );
