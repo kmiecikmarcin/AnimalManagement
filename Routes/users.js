@@ -2,12 +2,12 @@ const express = require("express");
 
 const router = express.Router();
 require("dotenv").config();
-// const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 const { check, validationResult } = require("express-validator");
 const TypesOfUsersRoles = require("../Models/TypesOfUsersRoles");
 const Genders = require("../Models/Genders");
 const Users = require("../Models/Users");
-// const verifyToken = require("../Functions/Users/verifyJwtToken");
+const verifyToken = require("../Functions/Users/verifyJwtToken");
 const checkUserEmail = require("../Functions/Users/checkUserEmail");
 const findTypeOfUserRole = require("../Functions/Users/findTypeOfUserRole");
 const userRegistration = require("../Functions/Users/userRegistration");
@@ -15,6 +15,8 @@ const checkInPasswordOneSpecialCharacterKey = require("../Functions/Others/check
 const findGender = require("../Functions/Users/findGender");
 const checkUserGenderInRegister = require("../Functions/Others/checkUserGenderInRegister");
 const userLogin = require("../Functions/Users/userLogin");
+const findUserById = require("../Functions/Users/findUserById");
+const changeUserEmailAdress = require("../Functions/Users/changeUserEmailAdress");
 
 router.post(
   "/register",
@@ -22,7 +24,7 @@ router.post(
     check("userEmail")
       .exists()
       .withMessage("Brak wymaganych danych!")
-      .isLength({ min: 6 })
+      .isLength({ min: 1 })
       .withMessage("Wprowadzony adres e-mail jest za krótki!")
       .isLength({ max: 254 })
       .withMessage("Wprowadzony adres e-mail jest za długi!")
@@ -96,7 +98,6 @@ router.post(
   ],
   async (req, res) => {
     const error = validationResult(req);
-    console.log(error.mapped());
     if (!error.isEmpty()) {
       res.status(400).json(error.mapped());
     } else {
@@ -158,7 +159,6 @@ router.post(
   ],
   async (req, res) => {
     const error = validationResult(req);
-    console.log(error.mapped());
     if (!error.isEmpty()) {
       res.status(400).json(error.mapped());
     } else {
@@ -196,9 +196,74 @@ router.post(
   }
 );
 
-// router.put("/changeAdressEmail", verifyToken, (req, res) => {});
+router.put(
+  "/changeAdressEmail",
+  [
+    check("oldUserEmailAdress")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .isLength({ min: 1 })
+      .withMessage("Wprowadzony adres e-mail jest za krótki!")
+      .isEmail()
+      .withMessage("Adres e-mail został wprowadzony niepoprawnie!"),
+    check("newUserEmailAdress")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .isLength({ min: 1 })
+      .withMessage("Wprowadzony adres e-mail jest za krótki!")
+      .isLength({ max: 254 })
+      .withMessage("Wprowadzony adres e-mail jest za długi!")
+      .isEmail()
+      .withMessage("Adres e-mail został wprowadzony niepoprawnie!"),
+    check("userPassword")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 6 })
+      .withMessage("Hasło jest za krótkie!")
+      .isLength({ max: 32 })
+      .withMessage("Hasło jest za długie!"),
+  ],
+  verifyToken,
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania! " });
+          } else {
+            const checkUserById = await findUserById(Users, authData);
+            if (checkUserById === null) {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            } else {
+              const updateUserEmailAdress = await changeUserEmailAdress(
+                Users,
+                req.body.oldUserEmailAdress,
+                req.body.newUserEmailAdress,
+                req.body.userPassword
+              );
+              if (updateUserEmailAdress) {
+                res.status(201).json({
+                  Message: "Twój adress e-mail został zaktualizowany!",
+                });
+              } else {
+                res.status(400).json({ Error: "Błąd! Coś poszło nie tak!" });
+              }
+            }
+          }
+        }
+      );
+    }
+  }
+);
 
-// router.put("changePassword", verifyToken, (req, res) => {});
+// router.put("/changePassword", verifyToken, (req, res) => {});
 
 // router.put("/deleteAccount", verifyToken, (req, res) => {});
 
