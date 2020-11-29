@@ -2,12 +2,12 @@ const express = require("express");
 
 const router = express.Router();
 require("dotenv").config();
-// const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 const { check, validationResult } = require("express-validator");
 const TypesOfUsersRoles = require("../Models/TypesOfUsersRoles");
 const Genders = require("../Models/Genders");
 const Users = require("../Models/Users");
-// const verifyToken = require("../Functions/Users/verifyJwtToken");
+const verifyToken = require("../Functions/Users/verifyJwtToken");
 const checkUserEmail = require("../Functions/Users/checkUserEmail");
 const findTypeOfUserRole = require("../Functions/Users/findTypeOfUserRole");
 const userRegistration = require("../Functions/Users/userRegistration");
@@ -22,7 +22,7 @@ router.post(
     check("userEmail")
       .exists()
       .withMessage("Brak wymaganych danych!")
-      .isLength({ min: 6 })
+      .isLength({ min: 1 })
       .withMessage("Wprowadzony adres e-mail jest za krótki!")
       .isLength({ max: 254 })
       .withMessage("Wprowadzony adres e-mail jest za długi!")
@@ -96,7 +96,6 @@ router.post(
   ],
   async (req, res) => {
     const error = validationResult(req);
-    console.log(error.mapped());
     if (!error.isEmpty()) {
       res.status(400).json(error.mapped());
     } else {
@@ -158,7 +157,6 @@ router.post(
   ],
   async (req, res) => {
     const error = validationResult(req);
-    console.log(error.mapped());
     if (!error.isEmpty()) {
       res.status(400).json(error.mapped());
     } else {
@@ -196,7 +194,34 @@ router.post(
   }
 );
 
-// router.put("/changeAdressEmail", verifyToken, (req, res) => {});
+router.put(
+  "/changeAdressEmail",
+  [
+    check("oldUserEmailAdress")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .isLength({ min: 1 })
+      .withMessage("Wprowadzony adres e-mail jest za krótki!")
+      .isEmail()
+      .withMessage("Adres e-mail został wprowadzony niepoprawnie!"),
+    check("newUserEmail")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .isLength({ min: 1 })
+      .withMessage("Wprowadzony adres e-mail jest za krótki!")
+      .isLength({ max: 254 })
+      .withMessage("Wprowadzony adres e-mail jest za długi!")
+      .isEmail()
+      .withMessage("Adres e-mail został wprowadzony niepoprawnie!"),
+  ],
+  verifyToken,
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    }
+  }
+);
 
 // router.put("changePassword", verifyToken, (req, res) => {});
 
