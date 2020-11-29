@@ -236,11 +236,11 @@ router.put(
         process.env.S3_SECRETKEY,
         async (jwtError, authData) => {
           if (jwtError) {
-            res.sendStatus(403).json({ Error: "Błąd uwierzytelniania! " });
+            res.status(403).json({ Error: "Błąd uwierzytelniania! " });
           } else {
             const checkUserById = await findUserById(Users, authData);
             if (checkUserById === null) {
-              res.sendStatus(404).json({ Error: "Użytkownik nie istnieje!" });
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
             } else {
               const updateUserEmailAdress = await changeUserEmailAdress(
                 Users,
@@ -249,13 +249,11 @@ router.put(
                 req.body.userPassword
               );
               if (updateUserEmailAdress) {
-                res.sendStatus(201).json({
+                res.status(201).json({
                   Message: "Twój adress e-mail został zaktualizowany!",
                 });
               } else {
-                res
-                  .sendStatus(400)
-                  .json({ Error: "Błąd! Coś poszło nie tak!" });
+                res.status(400).json({ Error: "Błąd! Coś poszło nie tak!" });
               }
             }
           }
