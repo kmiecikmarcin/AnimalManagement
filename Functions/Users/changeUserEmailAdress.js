@@ -11,9 +11,10 @@ async function changeUserEmailAdress(
   if (checkUserEmailAdress !== null) {
     const checkPassword = await bcrypt.compare(
       userPassword,
-      checkUserEmailAdress.id
+      checkUserEmailAdress.password
     );
     if (checkPassword) {
+      console.log("Tu");
       const updateUserEmail = Users.update(
         { email: newUserEmailAdress },
         { where: { id: checkUserEmailAdress.id } }
