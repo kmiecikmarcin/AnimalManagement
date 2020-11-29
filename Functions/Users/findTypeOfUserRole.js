@@ -1,6 +1,6 @@
-async function checkTypeOfRole(TypesOfUsersRoles, idTypeOfUserRole) {
+async function checkTypeOfRole(TypesOfUsersRoles, typeName) {
   const findtypeOfRole = await TypesOfUsersRoles.findOne({
-    where: { id: idTypeOfUserRole },
+    where: { name: typeName },
   });
   if (findtypeOfRole === null) {
     return null;
