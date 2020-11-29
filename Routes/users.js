@@ -177,8 +177,8 @@ router.post(
             req.body.userPassword,
             userEmail.password,
             userEmail.id,
-            userEmail.password,
-            userRole.id
+            userEmail.idTypeOfUserRole,
+            userRole.name
           );
           if (checkEnteredDataFromUser === null) {
             console.log(checkEnteredDataFromUser);
