@@ -64,6 +64,42 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Change user e-mail adress",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRiZWQ2ODBmLTQ0Y2UtNDAxOS1iNDQxLThiMjVmYzJhYjkyNiIsImlkVHlwZU9mVXNlclJvbGUiOiIkMmIkMDgkZ0s3cDRyb2JnbGd0SlF4Qnh4QjFFdXF2aEw1T1VtdXN3SFZIeFpTY3daRHlOMTN4djN3MWEiLCJuYW1lIjoiY2VmODRmMGQtNDk5MS00YWZlLWIwZWItMDlmNDllNWM4ZTU2IiwiaWF0IjoxNjA2Njc2MDI2LCJleHAiOjE2MDY4MDU2MjZ9.6oh0J92mUfR6DJHraAEwbXzd7Xga3Nk4P9bSAmbJgKk",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"oldUserEmailAdress\": \"sggp.kmiecik@gmail.com\",\r\n    \"newUserEmailAdress\": \"sggp.kmiecik2@gmail.com\",\r\n    \"userPassword\": \"mmmmmm@\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/herdpi/v1/users/changeAdressEmail",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"herdpi",
+						"v1",
+						"users",
+						"changeAdressEmail"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"protocolProfileBehavior": {}
