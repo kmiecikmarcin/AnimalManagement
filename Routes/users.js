@@ -360,7 +360,34 @@ router.put(
   }
 );
 
-router.put("/deleteAccount", [], verifyToken, () => {});
+router.put(
+  "/deleteAccount",
+  [
+    check("userPassword")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 6 })
+      .withMessage("Hasło jest za krótkie!")
+      .isLength({ max: 32 })
+      .withMessage("Hasło jest za długie!"),
+    check("confirmPassword")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .custom((value, { req }) => {
+        if (value !== req.body.userPassword) {
+          throw new Error("Hasła sa różne!");
+        } else {
+          return value;
+        }
+      }),
+  ],
+  verifyToken,
+  () => {}
+);
 
 // router.put("/forgotPassword", async (req, res) => {});
 
