@@ -9,7 +9,8 @@ const Genders = require("../Models/Genders");
 const Users = require("../Models/Users");
 const verifyToken = require("../Functions/Users/verifyJwtToken");
 const checkUserEmail = require("../Functions/Users/checkUserEmail");
-const findTypeOfUserRole = require("../Functions/Users/findTypeOfUserRole");
+const findTypeOfUserRoleById = require("../Functions/Users/findTypeOfUserRoleById");
+const findTypeOfUserRoleByName = require("../Functions/Users/findTypeOfUserRoleByName");
 const userRegistration = require("../Functions/Users/userRegistration");
 const checkInPasswordOneSpecialCharacterKey = require("../Functions/Others/checkInPasswordOneSpecialCharacterKey");
 const findGender = require("../Functions/Users/findGender");
@@ -110,7 +111,7 @@ router.post(
           .json({ Error: "Użytkownik o podanym adresie e-mail już istnieje!" });
       } else {
         console.log(userEmail);
-        const assignUserRole = await findTypeOfUserRole(
+        const assignUserRole = await findTypeOfUserRoleByName(
           TypesOfUsersRoles,
           "Hodowca"
         );
@@ -171,7 +172,7 @@ router.post(
           .status(400)
           .json({ Error: "Użytkownik o podanym adresie e-mail nie istnieje!" });
       } else {
-        const userRole = await findTypeOfUserRole(
+        const userRole = await findTypeOfUserRoleById(
           TypesOfUsersRoles,
           userEmail.idTypeOfUserRole
         );
