@@ -263,7 +263,63 @@ router.put(
   }
 );
 
-router.put("/changePassword", [], verifyToken, () => {});
+router.put(
+  "/changePassword",
+  [
+    check("oldUserPassword")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 6 })
+      .withMessage("Hasło jest za krótkie!")
+      .isLength({ max: 32 })
+      .withMessage("Hasło jest za długie!"),
+    check("newUserPassword")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 6 })
+      .withMessage("Hasło jest za krótkie!")
+      .isLength({ max: 32 })
+      .withMessage("Hasło jest za długie!")
+      .custom((value) => {
+        if (checkInPasswordOneSpecialCharacterKey(value) === false) {
+          throw new Error(
+            "Hasło nie zawiera minimum jednego znaku specjalnego!"
+          );
+        } else {
+          return value;
+        }
+      })
+      .custom((value) => {
+        // eslint-disable-next-line no-useless-escape
+        const badSpecialKeys = /[\,\+\=\.\<\>\{\}\[\]\:\;\'\"\|\~\`\_\-]/.test(
+          value
+        );
+        if (badSpecialKeys === true) {
+          throw new Error("Hasło zawiera nieprawidłowy znak!");
+        } else {
+          return value;
+        }
+      }),
+    check("confirmNewPassword")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .custom((value, { req }) => {
+        if (value !== req.body.userPassword) {
+          throw new Error("Hasła sa różne!");
+        } else {
+          return value;
+        }
+      }),
+  ],
+  verifyToken,
+  () => {}
+);
 
 // router.put("/deleteAccount", verifyToken, (req, res) => {});
 
