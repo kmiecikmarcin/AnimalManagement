@@ -17,6 +17,7 @@ const checkUserGenderInRegister = require("../Functions/Others/checkUserGenderIn
 const userLogin = require("../Functions/Users/userLogin");
 const findUserById = require("../Functions/Users/findUserById");
 const changeUserEmailAdress = require("../Functions/Users/changeUserEmailAdress");
+const changeUserPassword = require("../Functions/Users/changeUserPassword");
 
 router.post(
   "/register",
@@ -107,6 +108,7 @@ router.post(
           .status(400)
           .json({ Error: "Użytkownik o podanym adresie e-mail już istnieje!" });
       } else {
+        console.log(userEmail);
         const assignUserRole = await findTypeOfUserRole(
           TypesOfUsersRoles,
           "Hodowca"
@@ -263,7 +265,100 @@ router.put(
   }
 );
 
-// router.put("/changePassword", verifyToken, (req, res) => {});
+router.put(
+  "/changePassword",
+  [
+    check("oldUserPassword")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 6 })
+      .withMessage("Hasło jest za krótkie!")
+      .isLength({ max: 32 })
+      .withMessage("Hasło jest za długie!"),
+    check("newUserPassword")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 6 })
+      .withMessage("Hasło jest za krótkie!")
+      .isLength({ max: 32 })
+      .withMessage("Hasło jest za długie!")
+      .custom((value) => {
+        if (checkInPasswordOneSpecialCharacterKey(value) === false) {
+          throw new Error(
+            "Hasło nie zawiera minimum jednego znaku specjalnego!"
+          );
+        } else {
+          return value;
+        }
+      })
+      .custom((value) => {
+        // eslint-disable-next-line no-useless-escape
+        const badSpecialKeys = /[\,\+\=\.\<\>\{\}\[\]\:\;\'\"\|\~\`\_\-]/.test(
+          value
+        );
+        if (badSpecialKeys === true) {
+          throw new Error("Hasło zawiera nieprawidłowy znak!");
+        } else {
+          return value;
+        }
+      }),
+    check("confirmNewPassword")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .custom((value, { req }) => {
+        if (value !== req.body.newUserPassword) {
+          throw new Error("Hasła sa różne!");
+        } else {
+          return value;
+        }
+      }),
+  ],
+  verifyToken,
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania! " });
+          } else {
+            const checkUserById = await findUserById(Users, authData);
+            if (checkUserById === null) {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            } else {
+              const updateUserPassword = await changeUserPassword(
+                Users,
+                req.body.oldUserPassword,
+                req.body.newUserPassword,
+                checkUserById.id,
+                checkUserById.password
+              );
+              if (updateUserPassword) {
+                res.status(201).json({
+                  Message: "Twoje hasło zostało zaktualizowane!",
+                });
+              } else {
+                res.status(400).json({
+                  Error: "Błąd! Coś poszło nie tak! Sprawdź wprowadzone dane!",
+                });
+              }
+            }
+          }
+        }
+      );
+    }
+  }
+);
 
 // router.put("/deleteAccount", verifyToken, (req, res) => {});
 
