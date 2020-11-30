@@ -4,21 +4,24 @@ async function changeUserPassword(
   Users,
   oldUserPassword,
   newUserPassword,
-  userId
+  userId,
+  userPassword
 ) {
   if (oldUserPassword !== newUserPassword) {
-    const checkPassword = await bcrypt.compare(
-      oldUserPassword,
-      userId.password
-    );
+    console.log(userId);
+    const checkPassword = await bcrypt.compare(oldUserPassword, userPassword);
     if (checkPassword) {
       const hash = await bcrypt.hash(newUserPassword, 8);
-      const changePasswordForUser = Users.update(
-        { password: hash },
-        { where: { id: userId } }
-      );
-      if (changePasswordForUser) {
-        return changePasswordForUser;
+      console.log(hash);
+      if (hash) {
+        const changePasswordForUser = Users.update(
+          { password: hash },
+          { where: { id: userId } }
+        );
+        if (changePasswordForUser) {
+          return changePasswordForUser;
+        }
+        return null;
       }
       return null;
     }
