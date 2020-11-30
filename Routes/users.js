@@ -323,11 +323,20 @@ router.put(
     if (!error.isEmpty()) {
       res.status(400).json(error.mapped());
     } else {
-      jwt.verify(req.token, process.env.S3_SECRETKEY, async (jwtError) => {
-        if (jwtError) {
-          res.status(403).json({ Error: "Błąd uwierzytelniania! " });
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania! " });
+          } else {
+            const checkUserById = await findUserById(Users, authData);
+            if (checkUserById === null) {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
         }
-      });
+      );
     }
   }
 );
