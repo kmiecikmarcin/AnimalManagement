@@ -107,6 +107,7 @@ router.post(
           .status(400)
           .json({ Error: "Użytkownik o podanym adresie e-mail już istnieje!" });
       } else {
+        console.log(userEmail);
         const assignUserRole = await findTypeOfUserRole(
           TypesOfUsersRoles,
           "Hodowca"
