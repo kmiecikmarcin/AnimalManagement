@@ -360,7 +360,7 @@ router.put(
   }
 );
 
-// router.put("/deleteAccount", verifyToken, (req, res) => {});
+router.put("/deleteAccount", [], verifyToken, () => {});
 
 // router.put("/forgotPassword", async (req, res) => {});
 
