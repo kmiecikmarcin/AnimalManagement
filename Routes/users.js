@@ -17,6 +17,7 @@ const checkUserGenderInRegister = require("../Functions/Others/checkUserGenderIn
 const userLogin = require("../Functions/Users/userLogin");
 const findUserById = require("../Functions/Users/findUserById");
 const changeUserEmailAdress = require("../Functions/Users/changeUserEmailAdress");
+const changeUserPassword = require("../Functions/Users/changeUserPassword");
 
 router.post(
   "/register",
@@ -334,6 +335,20 @@ router.put(
             const checkUserById = await findUserById(Users, authData);
             if (checkUserById === null) {
               res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            } else {
+              const updateUserPassword = await changeUserPassword(
+                Users,
+                req.body.oldUserPassword,
+                req.body.newUserPassword,
+                checkUserById.id
+              );
+              if (updateUserPassword) {
+                res.status(201).json({
+                  Message: "Twój adress e-mail został zaktualizowany!",
+                });
+              } else {
+                res.status(400).json({ Error: "Błąd! Coś poszło nie tak!" });
+              }
             }
           }
         }
