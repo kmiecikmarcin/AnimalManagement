@@ -9,7 +9,8 @@ const Genders = require("../Models/Genders");
 const Users = require("../Models/Users");
 const verifyToken = require("../Functions/Users/verifyJwtToken");
 const checkUserEmail = require("../Functions/Users/checkUserEmail");
-const findTypeOfUserRole = require("../Functions/Users/findTypeOfUserRole");
+const findTypeOfUserRoleById = require("../Functions/Users/findTypeOfUserRoleById");
+const findTypeOfUserRoleByName = require("../Functions/Users/findTypeOfUserRoleByName");
 const userRegistration = require("../Functions/Users/userRegistration");
 const checkInPasswordOneSpecialCharacterKey = require("../Functions/Others/checkInPasswordOneSpecialCharacterKey");
 const findGender = require("../Functions/Users/findGender");
@@ -18,6 +19,7 @@ const userLogin = require("../Functions/Users/userLogin");
 const findUserById = require("../Functions/Users/findUserById");
 const changeUserEmailAdress = require("../Functions/Users/changeUserEmailAdress");
 const changeUserPassword = require("../Functions/Users/changeUserPassword");
+const deleteUserAccount = require("../Functions/Users/deleteUserAccount");
 
 router.post(
   "/register",
@@ -109,7 +111,7 @@ router.post(
           .json({ Error: "Użytkownik o podanym adresie e-mail już istnieje!" });
       } else {
         console.log(userEmail);
-        const assignUserRole = await findTypeOfUserRole(
+        const assignUserRole = await findTypeOfUserRoleByName(
           TypesOfUsersRoles,
           "Hodowca"
         );
@@ -170,7 +172,7 @@ router.post(
           .status(400)
           .json({ Error: "Użytkownik o podanym adresie e-mail nie istnieje!" });
       } else {
-        const userRole = await findTypeOfUserRole(
+        const userRole = await findTypeOfUserRoleById(
           TypesOfUsersRoles,
           userEmail.idTypeOfUserRole
         );
@@ -360,8 +362,73 @@ router.put(
   }
 );
 
-// router.put("/deleteAccount", verifyToken, (req, res) => {});
+router.put(
+  "/deleteAccount",
+  [
+    check("userPassword")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 6 })
+      .withMessage("Hasło jest za krótkie!")
+      .isLength({ max: 32 })
+      .withMessage("Hasło jest za długie!"),
+    check("confirmPassword")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .custom((value, { req }) => {
+        if (value !== req.body.userPassword) {
+          throw new Error("Hasła sa różne!");
+        } else {
+          return value;
+        }
+      }),
+  ],
+  verifyToken,
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania! " });
+          } else {
+            const checkUserById = await findUserById(Users, authData);
+            if (checkUserById === null) {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            } else {
+              const deleteAccount = await deleteUserAccount(
+                Users,
+                req.body.userPassword,
+                checkUserById.id,
+                checkUserById.password,
+                checkUserById.accountDeletedStatus
+              );
+              if (deleteAccount) {
+                console.log(deleteAccount);
+                res.status(201).json({
+                  Message: "Twoje konto zostało usunięte!",
+                });
+              } else {
+                res.status(400).json({
+                  Error: "Błąd! Coś poszło nie tak! Sprawdź wprowadzone dane!",
+                });
+              }
+            }
+          }
+        }
+      );
+    }
+  }
+);
 
-// router.put("/forgotPassword", async (req, res) => {});
+// condition router.put("/forgotPassword", async (req, res) => {});
 
 module.exports = router;

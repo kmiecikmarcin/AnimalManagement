@@ -1,4 +1,4 @@
-async function checkTypeOfRole(TypesOfUsersRoles, idTypeOfUserRole) {
+async function findTypeOfUserRoleById(TypesOfUsersRoles, idTypeOfUserRole) {
   const findtypeOfRole = await TypesOfUsersRoles.findOne({
     where: { id: idTypeOfUserRole },
   });
@@ -8,4 +8,4 @@ async function checkTypeOfRole(TypesOfUsersRoles, idTypeOfUserRole) {
   return findtypeOfRole;
 }
 
-module.exports = checkTypeOfRole;
+module.exports = findTypeOfUserRoleById;

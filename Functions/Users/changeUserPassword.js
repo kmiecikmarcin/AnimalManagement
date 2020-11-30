@@ -8,11 +8,9 @@ async function changeUserPassword(
   userPassword
 ) {
   if (oldUserPassword !== newUserPassword) {
-    console.log(userId);
     const checkPassword = await bcrypt.compare(oldUserPassword, userPassword);
     if (checkPassword) {
       const hash = await bcrypt.hash(newUserPassword, 8);
-      console.log(hash);
       if (hash) {
         const changePasswordForUser = Users.update(
           { password: hash },
