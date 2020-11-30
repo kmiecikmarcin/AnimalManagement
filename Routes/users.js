@@ -18,6 +18,7 @@ const userLogin = require("../Functions/Users/userLogin");
 const findUserById = require("../Functions/Users/findUserById");
 const changeUserEmailAdress = require("../Functions/Users/changeUserEmailAdress");
 const changeUserPassword = require("../Functions/Users/changeUserPassword");
+const deleteUserAccount = require("../Functions/Users/deleteUserAccount");
 
 router.post(
   "/register",
@@ -401,6 +402,24 @@ router.put(
             const checkUserById = await findUserById(Users, authData);
             if (checkUserById === null) {
               res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            } else {
+              const deleteAccount = await deleteUserAccount(
+                Users,
+                req.body.userPassword,
+                checkUserById.id,
+                checkUserById.password,
+                checkUserById.accountDeletedStatus
+              );
+              if (deleteAccount) {
+                console.log(deleteAccount);
+                res.status(201).json({
+                  Message: "Twoje konto zostało usunięte!",
+                });
+              } else {
+                res.status(400).json({
+                  Error: "Błąd! Coś poszło nie tak! Sprawdź wprowadzone dane!",
+                });
+              }
             }
           }
         }
