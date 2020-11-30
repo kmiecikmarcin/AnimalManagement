@@ -263,7 +263,7 @@ router.put(
   }
 );
 
-// router.put("/changePassword", verifyToken, (req, res) => {});
+router.put("/changePassword", [], verifyToken, () => {});
 
 // router.put("/deleteAccount", verifyToken, (req, res) => {});
 
