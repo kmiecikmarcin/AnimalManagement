@@ -312,7 +312,7 @@ router.put(
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .custom((value, { req }) => {
-        if (value !== req.body.userPassword) {
+        if (value !== req.body.newUserPassword) {
           throw new Error("Hasła sa różne!");
         } else {
           return value;
@@ -340,14 +340,17 @@ router.put(
                 Users,
                 req.body.oldUserPassword,
                 req.body.newUserPassword,
-                checkUserById.id
+                checkUserById.id,
+                checkUserById.password
               );
               if (updateUserPassword) {
                 res.status(201).json({
-                  Message: "Twój adress e-mail został zaktualizowany!",
+                  Message: "Twoje hasło zostało zaktualizowane!",
                 });
               } else {
-                res.status(400).json({ Error: "Błąd! Coś poszło nie tak!" });
+                res.status(400).json({
+                  Error: "Błąd! Coś poszło nie tak! Sprawdź wprowadzone dane!",
+                });
               }
             }
           }
