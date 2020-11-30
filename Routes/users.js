@@ -386,9 +386,29 @@ router.put(
       }),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania! " });
+          } else {
+            const checkUserById = await findUserById(Users, authData);
+            if (checkUserById === null) {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
-// router.put("/forgotPassword", async (req, res) => {});
+// condition router.put("/forgotPassword", async (req, res) => {});
 
 module.exports = router;
