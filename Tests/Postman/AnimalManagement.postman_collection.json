@@ -136,6 +136,42 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Deleted user account",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJmYjUxODgyLWU0NmMtNDFhMC04ZDgzLTVlZjA1ZWVkZWRiNCIsImlkVHlwZU9mVXNlclJvbGUiOiIwYTc4NWJkZS01MDZmLTQ3ZTUtOGNlYy0xNTBhMTYyZThiZDkiLCJuYW1lIjoiSG9kb3djYSIsImlhdCI6MTYwNjc1NDMyMSwiZXhwIjoxNjA2ODgzOTIxfQ.CrrE-rQBp6wX3JfCyXQx5rtol70D4ndQg6dZqMThWck",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userPassword\":\"mmmmmm@\",\r\n    \"confirmPassword\":\"mmmmmm@\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/herdpi/v1/users/deleteAccount",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"herdpi",
+						"v1",
+						"users",
+						"deleteAccount"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"protocolProfileBehavior": {}
