@@ -20,13 +20,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/herdpi/v1/users/register",
+					"raw": "localhost:3000/herdapi/v1/users/register",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"herdpi",
+						"herdapi",
 						"v1",
 						"users",
 						"register"
@@ -50,13 +50,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/herdpi/v1/users/login",
+					"raw": "localhost:3000/herdapi/v1/users/login",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"herdpi",
+						"herdapi",
 						"v1",
 						"users",
 						"login"
@@ -86,13 +86,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/herdpi/v1/users/changeAdressEmail",
+					"raw": "localhost:3000/herdapi/v1/users/changeAdressEmail",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"herdpi",
+						"herdapi",
 						"v1",
 						"users",
 						"changeAdressEmail"
@@ -122,13 +122,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/herdpi/v1/users/changePassword",
+					"raw": "localhost:3000/herdapi/v1/users/changePassword",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"herdpi",
+						"herdapi",
 						"v1",
 						"users",
 						"changePassword"
@@ -158,13 +158,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/herdpi/v1/users/deleteAccount",
+					"raw": "localhost:3000/herdapi/v1/users/deleteAccount",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"herdpi",
+						"herdapi",
 						"v1",
 						"users",
 						"deleteAccount"
