@@ -29,7 +29,7 @@ async function createNewHerdForUser(
     }
     return null;
   }
-  return "Wprowadzony typ zwierząt w hodowli nie istnieje!";
+  return null;
 }
 
 module.exports = createNewHerdForUser;
