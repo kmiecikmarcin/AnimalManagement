@@ -18,7 +18,7 @@ router.post(
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
-      .length({ min: 3, max: 40 })
+      .isLength({ min: 3, max: 40 })
       .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
     check("creationDate")
       .exists()
