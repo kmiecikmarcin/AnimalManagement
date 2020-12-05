@@ -3,9 +3,9 @@ async function findHerdByName(Herds, herdType, userId) {
     where: { name: herdType, idUser: userId },
   });
   if (findHerd === null) {
-    return true;
+    return null;
   }
-  return false;
+  return findHerd;
 }
 
 module.exports = findHerdByName;
