@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
-const { check } = require("express-validator");
+const { check, validationResult } = require("express-validator");
 const Users = require("../Models/Users");
 const Herds = require("../Models/Herds");
 const verifyToken = require("../Functions/Users/verifyJwtToken");
@@ -31,7 +31,29 @@ router.post(
       ),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              res.status(200);
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 router.get("/takeAllHerds", verifyToken, (req, res) => {
