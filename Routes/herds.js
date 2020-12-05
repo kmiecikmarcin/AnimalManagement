@@ -9,6 +9,8 @@ const verifyToken = require("../Functions/Users/verifyJwtToken");
 const findUserById = require("../Functions/Users/findUserById");
 const findAllUserHerds = require("../Functions/Herds/findAllUserHerds");
 
+router.post("/addNewHerd", verifyToken, () => {});
+
 router.get("/takeAllHerds", verifyToken, (req, res) => {
   jwt.verify(req.token, process.env.S3_SECRETKEY, async (error, authData) => {
     if (error) {
