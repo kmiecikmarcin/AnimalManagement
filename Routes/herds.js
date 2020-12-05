@@ -9,6 +9,7 @@ const Herds = require("../Models/Herds");
 const verifyToken = require("../Functions/Users/verifyJwtToken");
 const findUserById = require("../Functions/Users/findUserById");
 const findAllUserHerds = require("../Functions/Herds/findAllUserHerds");
+const createNewHerdforUser = require("../Functions/Herds/createNewHerdForUser");
 
 router.post(
   "/addNewHerd",
@@ -19,6 +20,13 @@ router.post(
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 40 })
+      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+    check("herdType")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ max: 256 })
       .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
     check("creationDate")
       .exists()
@@ -41,11 +49,26 @@ router.post(
         process.env.S3_SECRETKEY,
         async (jwtError, authData) => {
           if (jwtError) {
-            res.status(403).json({ Error: "Błąd uwierytelniania!" });
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
           } else {
             const checkUser = await findUserById(Users, authData);
             if (checkUser !== null) {
-              res.status(200);
+              const addNewHerd = await createNewHerdforUser(
+                Herds,
+                req.body.herdName,
+                req.body.creationDate,
+                authData.id,
+                req.body.herdType
+              );
+              if (addNewHerd) {
+                res
+                  .status(201)
+                  .json({ Message: "Nowa hodowla została dodana!" });
+              } else {
+                res.status(400).json({
+                  Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
+                });
+              }
             } else {
               res.status(404).json({ Error: "Użytkownik nie istnieje!" });
             }
