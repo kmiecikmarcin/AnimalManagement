@@ -3,13 +3,36 @@ const express = require("express");
 const router = express.Router();
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
+const { check } = require("express-validator");
 const Users = require("../Models/Users");
 const Herds = require("../Models/Herds");
 const verifyToken = require("../Functions/Users/verifyJwtToken");
 const findUserById = require("../Functions/Users/findUserById");
 const findAllUserHerds = require("../Functions/Herds/findAllUserHerds");
 
-router.post("/addNewHerd", verifyToken, () => {});
+router.post(
+  "/addNewHerd",
+  [
+    check("herdName")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .length({ min: 3, max: 40 })
+      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+    check("creationDate")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isDate()
+      .withMessage(
+        "Wprowadzona wartość nie jest datą lub została wprowadzona niepoprawnie"
+      ),
+  ],
+  verifyToken,
+  () => {}
+);
 
 router.get("/takeAllHerds", verifyToken, (req, res) => {
   jwt.verify(req.token, process.env.S3_SECRETKEY, async (error, authData) => {
