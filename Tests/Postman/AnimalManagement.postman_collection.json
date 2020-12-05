@@ -172,6 +172,33 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Take all herds for user",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY4ZWI3M2Q0LTljNTMtNDI2ZS1iZGNkLTJkOWQzMmNmYjJiMiIsImlkVHlwZU9mVXNlclJvbGUiOiI3MWEyN2RhYi04NmFhLTQ1YjAtOWQyMS03ZDRkMTllOTZkNDQiLCJuYW1lIjoiSG9kb3djYSIsImlhdCI6MTYwNzE2OTk0NCwiZXhwIjoxNjA3Mjk5NTQ0fQ.OK4uCoZc7NZVkFF8bo-jj4_kP1LhQcRZCEQqfjLgURw",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/herdapi/v1/herds/takeAllHerds",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"herdapi",
+						"v1",
+						"herds",
+						"takeAllHerds"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"protocolProfileBehavior": {}
