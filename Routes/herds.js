@@ -101,4 +101,6 @@ router.get("/takeAllHerds", verifyToken, (req, res) => {
   });
 });
 
+router.get("/takeHerdByName/:name", verifyToken, () => {});
+
 module.exports = router;
