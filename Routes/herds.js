@@ -9,6 +9,7 @@ const Herds = require("../Models/Herds");
 const verifyToken = require("../Functions/Users/verifyJwtToken");
 const findUserById = require("../Functions/Users/findUserById");
 const findAllUserHerds = require("../Functions/Herds/findAllUserHerds");
+const findHerdByName = require("../Functions/Herds/findHerdByName");
 const createNewHerdforUser = require("../Functions/Herds/createNewHerdForUser");
 
 router.post(
@@ -80,27 +81,59 @@ router.post(
 );
 
 router.get("/takeAllHerds", verifyToken, (req, res) => {
-  jwt.verify(req.token, process.env.S3_SECRETKEY, async (error, authData) => {
-    if (error) {
-      res.status(403).json({ Error: "Błąd uwierytelniania!" });
-    } else {
-      const checkUser = await findUserById(Users, authData);
-      if (checkUser !== null) {
-        const findHerds = await findAllUserHerds(Herds);
-        if (findHerds !== null) {
-          res.status(201).json({ Herds: findHerds });
-        } else {
-          res.status(404).json({
-            Error: "Użytkownik nie posiada hodowli przypisanych do konta!",
-          });
-        }
+  jwt.verify(
+    req.token,
+    process.env.S3_SECRETKEY,
+    async (jwtError, authData) => {
+      if (jwtError) {
+        res.status(403).json({ Error: "Błąd uwierytelniania!" });
       } else {
-        res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+        const checkUser = await findUserById(Users, authData);
+        if (checkUser !== null) {
+          const findHerds = await findAllUserHerds(Herds);
+          if (findHerds !== null) {
+            res.status(201).json({ Herds: findHerds });
+          } else {
+            res.status(404).json({
+              Error: "Użytkownik nie posiada hodowli przypisanych do konta!",
+            });
+          }
+        } else {
+          res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+        }
       }
     }
-  });
+  );
 });
 
-router.get("/takeHerdByName/:name", verifyToken, () => {});
+router.get("/takeHerdByName/:name", verifyToken, (req, res) => {
+  jwt.verify(
+    req.token,
+    process.env.S3_SECRETKEY,
+    async (jwtError, authData) => {
+      if (jwtError) {
+        res.status(403).json({ Error: "Błąd uwierytelniania!" });
+      } else {
+        const checkUser = await findUserById(Users, authData);
+        if (checkUser !== null) {
+          const findHerd = await findHerdByName(
+            Herds,
+            req.params.name,
+            authData.id
+          );
+          if (findHerd) {
+            res.status(201).json({ Herds: findHerd });
+          } else {
+            res.status(404).json({
+              Error: "Użytkownik nie posiada hodowli z podaną nazwą!",
+            });
+          }
+        } else {
+          res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+        }
+      }
+    }
+  );
+});
 
 module.exports = router;
