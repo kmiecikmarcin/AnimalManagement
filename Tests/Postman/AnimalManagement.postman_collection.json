@@ -235,6 +235,40 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Find herd by name",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI1ZTE1ODFhLTcxYjktNDA1NC05NGUzLWFlMWQwNzU1NGRkZiIsImlkVHlwZU9mVXNlclJvbGUiOiIwM2M4OGRlZC1mOGFjLTRkMjgtYjcwOS04MTAzNGRhMDc0OTQiLCJuYW1lIjoiSG9kb3djYSIsImlhdCI6MTYwNzM2Mjc4MCwiZXhwIjoxNjA3NDkyMzgwfQ.newnAnmB0ejvOknC0XC91KQMuFNi0psSYna-BOae1mE",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/herdapi/v1/herds/takeHerdByName/:name",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"herdapi",
+						"v1",
+						"herds",
+						"takeHerdByName",
+						":name"
+					],
+					"variable": [
+						{
+							"key": "name",
+							"value": "Elo"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"protocolProfileBehavior": {}
