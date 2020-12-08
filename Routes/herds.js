@@ -163,7 +163,25 @@ router.put(
   }
 );
 
-router.put("/changeHerdType", [], verifyToken, () => {});
+router.put(
+  "/changeHerdType",
+  [
+    check("newTypeOfHerd")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ max: 256 })
+      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+  ],
+  verifyToken,
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    }
+  }
+);
 
 router.delete("/deleteHerd", [], verifyToken, () => {});
 
