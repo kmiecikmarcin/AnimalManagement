@@ -6,12 +6,15 @@ const jwt = require("jsonwebtoken");
 const { check, validationResult } = require("express-validator");
 const Users = require("../Models/Users");
 const Herds = require("../Models/Herds");
+const KindOfAnimals = require("../Models/KindOfAnimals");
 const verifyToken = require("../Functions/Users/verifyJwtToken");
 const findUserById = require("../Functions/Users/findUserById");
 const findAllUserHerds = require("../Functions/Herds/findAllUserHerds");
 const findHerdByName = require("../Functions/Herds/findHerdByName");
 const createNewHerdforUser = require("../Functions/Herds/createNewHerdForUser");
 const changeHerdName = require("../Functions/Herds/changeHerdName");
+const findKindOfAnimalsByName = require("../Functions/Animals/findKindOfAnimalsByName");
+const changeTypeOfHerd = require("../Functions/Herds/changeTypeOfHerd");
 
 router.post(
   "/addNewHerd",
@@ -219,6 +222,46 @@ router.put(
     const error = validationResult(req);
     if (!error.isEmpty()) {
       res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkEnteredHerdTypeFromUser = await findKindOfAnimalsByName(
+                KindOfAnimals,
+                req.body.newTypeOfHerd
+              );
+              if (checkEnteredHerdTypeFromUser) {
+                const updateType = await changeTypeOfHerd(
+                  Herds,
+                  req.body.newHerdName,
+                  authData.id
+                );
+                if (updateType) {
+                  res.status(201).json({
+                    Message: "Pomyślnie zaktualizowano typ zwierząt w hodowli!",
+                  });
+                } else {
+                  res.status(400).json({
+                    Error: "Coś poszło nie tak! Sprawdź wprowadozne dane!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error: "Nie odnaleziono wprowadzonego typu zwierząt w bazie!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
     }
   }
 );
