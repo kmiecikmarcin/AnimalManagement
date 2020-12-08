@@ -15,6 +15,7 @@ const createNewHerdforUser = require("../Functions/Herds/createNewHerdForUser");
 const changeHerdName = require("../Functions/Herds/changeHerdName");
 const findKindOfAnimalsByName = require("../Functions/Animals/findKindOfAnimalsByName");
 const changeTypeOfHerd = require("../Functions/Herds/changeTypeOfHerd");
+const deleteHerdByUser = require("../Functions/Herds/deleteHerdByUser");
 
 router.post(
   "/addNewHerd",
@@ -269,6 +270,13 @@ router.put(
 router.delete(
   "/deleteHerd",
   [
+    check("herdName")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 3, max: 40 })
+      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
     check("userPassword")
       .exists()
       .withMessage("Brak wymaganych danych!")
@@ -296,6 +304,49 @@ router.delete(
     const error = validationResult(req);
     if (!error.isEmpty()) {
       res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const findHerd = await findHerdByName(
+                Herds,
+                req.body.herdName,
+                authData.id
+              );
+              if (findHerd) {
+                const deleteHerd = await deleteHerdByUser(
+                  Herds,
+                  req.body.userPassword,
+                  req.body.herdName,
+                  authData.id,
+                  checkUser.password
+                );
+                if (deleteHerd) {
+                  res
+                    .status(200)
+                    .json({ Message: "Hodowla została usunięta pomyślnie!" });
+                } else {
+                  res.status(400).json({
+                    Error: "Coś poszło nie tak! Sprawdź wprowadozne dane!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error: "Użytkownik nie posiada hodowli z podaną nazwą!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
     }
   }
 );
