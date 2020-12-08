@@ -21,7 +21,7 @@ async function userLogin(
     );
     return token;
   }
-  return "Hasło jest nieprawidłowe!";
+  return null;
 }
 
 module.exports = userLogin;
