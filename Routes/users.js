@@ -184,11 +184,12 @@ router.post(
             userEmail.idTypeOfUserRole,
             userRole.name
           );
-          if (checkEnteredDataFromUser === null) {
-            console.log(checkEnteredDataFromUser);
+          if (checkEnteredDataFromUser !== null) {
             res.status(201).json({ Token: checkEnteredDataFromUser });
           } else {
-            res.status(404).json({ Error: checkEnteredDataFromUser });
+            res
+              .status(404)
+              .json({ Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!" });
           }
         } else {
           res
@@ -398,7 +399,7 @@ router.put(
         process.env.S3_SECRETKEY,
         async (jwtError, authData) => {
           if (jwtError) {
-            res.status(403).json({ Error: "Błąd uwierzytelniania! " });
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
           } else {
             const checkUserById = await findUserById(Users, authData);
             if (checkUserById === null) {
