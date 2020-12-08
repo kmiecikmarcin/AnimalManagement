@@ -11,6 +11,7 @@ const findUserById = require("../Functions/Users/findUserById");
 const findAllUserHerds = require("../Functions/Herds/findAllUserHerds");
 const findHerdByName = require("../Functions/Herds/findHerdByName");
 const createNewHerdforUser = require("../Functions/Herds/createNewHerdForUser");
+const changeHerdName = require("../Functions/Herds/changeHerdName");
 
 router.post(
   "/addNewHerd",
@@ -146,7 +147,7 @@ router.put(
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 40 })
       .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
-    check("oldHerdName")
+    check("newHerdName")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
@@ -159,6 +160,45 @@ router.put(
     const error = validationResult(req);
     if (!error.isEmpty()) {
       res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const findHerd = await findHerdByName(
+                Herds,
+                req.body.oldHerdName,
+                authData.id
+              );
+              if (findHerd) {
+                const updateHerdName = await changeHerdName(
+                  Herds,
+                  req.body.newHerdName,
+                  authData.id
+                );
+                if (updateHerdName) {
+                  res
+                    .status(201)
+                    .json({ Message: "Nazwa hodowli została zaktualizowana!" });
+                } else {
+                  res.status(400).json({ Error: "Coś poszło nie tak" });
+                }
+              } else {
+                res.status(404).json({
+                  Error: "Użytkownik nie posiada hodowli z podaną nazwą!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
     }
   }
 );
