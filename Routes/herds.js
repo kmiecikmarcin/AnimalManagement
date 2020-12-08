@@ -136,4 +136,10 @@ router.get("/takeHerdByName/:name", verifyToken, (req, res) => {
   );
 });
 
+router.put("/editHerdName", [], verifyToken, () => {});
+
+router.put("/editHerdType", [], verifyToken, () => {});
+
+router.delete("/deleteHerd", [], verifyToken, () => {});
+
 module.exports = router;
