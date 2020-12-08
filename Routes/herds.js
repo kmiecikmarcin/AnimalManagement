@@ -136,9 +136,34 @@ router.get("/takeHerdByName/:name", verifyToken, (req, res) => {
   );
 });
 
-router.put("/editHerdName", [], verifyToken, () => {});
+router.put(
+  "/changeHerdName",
+  [
+    check("oldHerdName")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 3, max: 40 })
+      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+    check("oldHerdName")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 3, max: 40 })
+      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+  ],
+  verifyToken,
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    }
+  }
+);
 
-router.put("/editHerdType", [], verifyToken, () => {});
+router.put("/changeHerdType", [], verifyToken, () => {});
 
 router.delete("/deleteHerd", [], verifyToken, () => {});
 
