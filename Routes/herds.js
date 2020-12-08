@@ -207,7 +207,7 @@ router.put(
 );
 
 router.put(
-  "/changeHerdType",
+  "/changeTypeofHerd",
   [
     check("newTypeOfHerd")
       .exists()
