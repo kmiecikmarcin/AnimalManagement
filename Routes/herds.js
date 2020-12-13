@@ -80,7 +80,7 @@ router.post(
   }
 );
 
-router.get("/takeAllHerds", verifyToken, (req, res) => {
+router.get("/findAllHerds", verifyToken, (req, res) => {
   jwt.verify(
     req.token,
     process.env.S3_SECRETKEY,
@@ -106,34 +106,38 @@ router.get("/takeAllHerds", verifyToken, (req, res) => {
   );
 });
 
-router.get("/takeHerdByName/:name", verifyToken, (req, res) => {
-  jwt.verify(
-    req.token,
-    process.env.S3_SECRETKEY,
-    async (jwtError, authData) => {
-      if (jwtError) {
-        res.status(403).json({ Error: "Błąd uwierytelniania!" });
-      } else {
-        const checkUser = await findUserById(Users, authData);
-        if (checkUser !== null) {
-          const findHerd = await findHerdByName(
-            Herds,
-            req.params.name,
-            authData.id
-          );
-          if (findHerd) {
-            res.status(201).json({ Herds: findHerd });
-          } else {
-            res.status(404).json({
-              Error: "Użytkownik nie posiada hodowli z podaną nazwą!",
-            });
-          }
+router.get("/findHerdByName/:name", verifyToken, (req, res) => {
+  if (!req.params.name) {
+    jwt.verify(
+      req.token,
+      process.env.S3_SECRETKEY,
+      async (jwtError, authData) => {
+        if (jwtError) {
+          res.status(403).json({ Error: "Błąd uwierytelniania!" });
         } else {
-          res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+          const checkUser = await findUserById(Users, authData);
+          if (checkUser !== null) {
+            const findHerd = await findHerdByName(
+              Herds,
+              req.params.name,
+              authData.id
+            );
+            if (findHerd) {
+              res.status(201).json({ Herds: findHerd });
+            } else {
+              res.status(404).json({
+                Error: "Użytkownik nie posiada hodowli z podaną nazwą!",
+              });
+            }
+          } else {
+            res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+          }
         }
       }
-    }
-  );
+    );
+  } else {
+    res.status(400).json({ Error: "Nie wprowadzono wymaganych danych!" });
+  }
 });
 
 module.exports = router;
