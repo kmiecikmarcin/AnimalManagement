@@ -145,6 +145,14 @@ router.get("/findHerdByName/:name", verifyToken, (req, res) => {
   }
 });
 
+router.get("/findHerdByAnimalType/:typeOfAnimal", verifyToken, (req, res) => {
+  if (!req.params.typeOfAnimal) {
+    res.status(201);
+  } else {
+    res.status(400).json({ Error: "Nie wprowadzono danych!" });
+  }
+});
+
 router.put(
   "/changeHerdName",
   [
