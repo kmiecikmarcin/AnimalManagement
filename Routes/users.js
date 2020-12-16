@@ -21,6 +21,40 @@ const changeUserEmailAdress = require("../Functions/Users/changeUserEmailAdress"
 const changeUserPassword = require("../Functions/Users/changeUserPassword");
 const deleteUserAccount = require("../Functions/Users/deleteUserAccount");
 
+/**
+ * @swagger
+ * /herdapi/v1/users/register:
+ *    post:
+ *      description: Register in system
+ *      parameters:
+ *        - name: userEmail
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: userPassword
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: confirmPassword
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: userGender
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: userVerification
+ *          in: formData
+ *          required: true
+ *          type: boolean
+ *      responses:
+ *        201:
+ *          description: Successfully registered!
+ *        400:
+ *          description: Something went wrong!
+ *        500:
+ *          description: System error!
+ */
 router.post(
   "/register",
   [
