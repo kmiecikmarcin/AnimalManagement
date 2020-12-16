@@ -1,5 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const swaggerUI = require("swagger-ui-express");
+const swaggerJsDoc = require("swagger-jsdoc");
 const sequelize = require("./Functions/Database/connectionWithDatabase");
 const RoutesUsers = require("./Routes/users");
 const RoutesHerds = require("./Routes/herds");
@@ -19,6 +21,19 @@ const fillDataForTypesOfJoinToTheHerd = require("./Functions/Database/fillDataFo
 const fillDataForTypesOfProducts = require("./Functions/Database/fillDataForTypesOfProducts");
 
 const app = express();
+
+const swaggerOptions = {
+  swaggerDefinition: {
+    info: {
+      title: "Zarządzanie hodowlą zwierząt - API",
+      version: "0.2.0",
+    },
+  },
+  apis: ["./Routes/*.js"],
+};
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
