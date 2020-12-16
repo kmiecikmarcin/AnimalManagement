@@ -16,6 +16,7 @@ const changeHerdName = require("../Functions/Herds/changeHerdName");
 const findKindOfAnimalsByName = require("../Functions/Animals/findKindOfAnimalsByName");
 const changeTypeOfHerd = require("../Functions/Herds/changeTypeOfHerd");
 const deleteHerdByUser = require("../Functions/Herds/deleteHerdByUser");
+const findHerdByAnimalType = require("../Functions/Herds/findHerdByAnimalType");
 
 router.post(
   "/addNewHerd",
@@ -142,6 +143,40 @@ router.get("/findHerdByName/:name", verifyToken, (req, res) => {
     );
   } else {
     res.status(400).json({ Error: "Nie wprowadzono wymaganych danych!" });
+  }
+});
+
+router.get("/findHerdByAnimalType/:typeOfAnimal", verifyToken, (req, res) => {
+  if (!req.params.typeOfAnimal) {
+    jwt.verify(
+      req.token,
+      process.env.S3_SECRETKEY,
+      async (jwtError, authData) => {
+        if (jwtError) {
+          res.status(403).json({ Error: "Błąd uwierytelniania!" });
+        } else {
+          const checkUser = await findUserById(Users, authData);
+          if (checkUser !== null) {
+            const findHerd = await findHerdByAnimalType(
+              Herds,
+              req.params.typeOfAnimal,
+              authData.id
+            );
+            if (findHerd) {
+              res.status(201).json({ Herds: findHerd });
+            } else {
+              res.status(404).json({
+                Error: "Użytkownik nie posiada tego typu hodowli!",
+              });
+            }
+          } else {
+            res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+          }
+        }
+      }
+    );
+  } else {
+    res.status(400).json({ Error: "Nie wprowadzono danych!" });
   }
 });
 
