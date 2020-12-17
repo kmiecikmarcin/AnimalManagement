@@ -2,8 +2,8 @@ const { Sequelize, DataTypes } = require("sequelize");
 
 const sequelize = require("../Functions/Database/connectionWithDatabase");
 
-const GenderOfAnimals = sequelize.define(
-  "GenderOfAnimals",
+const GenderOfAnimal = sequelize.define(
+  "GenderOfAnimal",
   {
     id: {
       type: DataTypes.UUID,
@@ -23,4 +23,4 @@ const GenderOfAnimals = sequelize.define(
   { timestamps: true }
 );
 
-module.exports = GenderOfAnimals;
+module.exports = GenderOfAnimal;
