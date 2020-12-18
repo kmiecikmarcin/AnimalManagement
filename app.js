@@ -23,11 +23,25 @@ const fillDataForTypesOfProducts = require("./Functions/Database/fillDataForType
 const app = express();
 
 const swaggerOptions = {
+  openapi: "3.0.3",
   swaggerDefinition: {
     info: {
-      title: "Zarządzanie hodowlą zwierząt - API",
+      title: "Animal herds management - API",
+      description:
+        "API for easy work with documentation which describe data based on life of animals.",
       version: "0.2.0",
     },
+    host: "localhost:3000",
+    basePath: "/herdapi/v1",
+    securityDefinitions: {
+      bearerAuth: {
+        type: "apiKey",
+        name: "Authorization",
+        scheme: "bearer",
+        in: "header",
+      },
+    },
+    security: [{ bearerAuth: [] }],
   },
   apis: ["./Routes/*.js"],
 };
