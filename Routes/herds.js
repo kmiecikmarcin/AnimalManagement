@@ -18,6 +18,36 @@ const changeTypeOfHerd = require("../Functions/Herds/changeTypeOfHerd");
 const deleteHerdByUser = require("../Functions/Herds/deleteHerdByUser");
 const findHerdByAnimalType = require("../Functions/Herds/findHerdByAnimalType");
 
+/**
+ * @swagger
+ * /herds/addNewHerd:
+ *    post:
+ *      tags:
+ *      - name: Herds
+ *      summary: Add new herd by user
+ *      parameters:
+ *        - name: herdName
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: herdType
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: creationDate
+ *          in: formData
+ *          required: true
+ *          type: date
+ *      responses:
+ *        201:
+ *          description: New herd has been added!
+ *        400:
+ *          description: Something went wrong!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: User doesn't exist!
+ */
 router.post(
   "/addNewHerd",
   [
@@ -86,13 +116,28 @@ router.post(
   }
 );
 
+/**
+ * @swagger
+ * /herds/findAllHerds:
+ *    get:
+ *      tags:
+ *      - name: Herds
+ *      summary: Take all herds for user
+ *      responses:
+ *        201:
+ *          description: List of all herds!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: User doesn't exist!
+ */
 router.get("/findAllHerds", verifyToken, (req, res) => {
   jwt.verify(
     req.token,
     process.env.S3_SECRETKEY,
     async (jwtError, authData) => {
       if (jwtError) {
-        res.status(403).json({ Error: "Błąd uwierytelniania!" });
+        res.status(403).json({ Error: "Błąd uwierzytelniania!" });
       } else {
         const checkUser = await findUserById(Users, authData);
         if (checkUser !== null) {
@@ -112,14 +157,33 @@ router.get("/findAllHerds", verifyToken, (req, res) => {
   );
 });
 
+/**
+ * @swagger
+ * /herds/findHerdByName/{name}:
+ *    get:
+ *      tags:
+ *      - name: Herds
+ *      summary: Take herd by name for user
+ *      parameters:
+ *        - name: name
+ *          in: path
+ *          type: string
+ *      responses:
+ *        201:
+ *          description: Data about herd!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: User doesn't exist!
+ */
 router.get("/findHerdByName/:name", verifyToken, (req, res) => {
-  if (!req.params.name) {
+  if (req.params.name) {
     jwt.verify(
       req.token,
       process.env.S3_SECRETKEY,
       async (jwtError, authData) => {
         if (jwtError) {
-          res.status(403).json({ Error: "Błąd uwierytelniania!" });
+          res.status(403).json({ Error: "Błąd uwierzytelniania!" });
         } else {
           const checkUser = await findUserById(Users, authData);
           if (checkUser !== null) {
@@ -146,14 +210,33 @@ router.get("/findHerdByName/:name", verifyToken, (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /herds/findHerdByAnimalType/{typeOfAnimal}:
+ *    get:
+ *      tags:
+ *      - name: Herds
+ *      summary: Take herd by type of animal
+ *      parameters:
+ *        - name: typeOfAnimal
+ *          in: path
+ *          type: string
+ *      responses:
+ *        201:
+ *          description: Data about herd!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: User doesn't exist!
+ */
 router.get("/findHerdByAnimalType/:typeOfAnimal", verifyToken, (req, res) => {
-  if (!req.params.typeOfAnimal) {
+  if (req.params.typeOfAnimal) {
     jwt.verify(
       req.token,
       process.env.S3_SECRETKEY,
       async (jwtError, authData) => {
         if (jwtError) {
-          res.status(403).json({ Error: "Błąd uwierytelniania!" });
+          res.status(403).json({ Error: "Błąd uwierzytelniania!" });
         } else {
           const checkUser = await findUserById(Users, authData);
           if (checkUser !== null) {
@@ -180,6 +263,30 @@ router.get("/findHerdByAnimalType/:typeOfAnimal", verifyToken, (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /herds/changeHerdName:
+ *    put:
+ *      tags:
+ *      - name: Herds
+ *      summary: Change name of herd
+ *      parameters:
+ *        - name: oldHerdName
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: newHerdName
+ *          in: formData
+ *          required: true
+ *          type: string
+ *      responses:
+ *        201:
+ *          description: Name of herd changed successfully!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: User doesn't exist or herd with entered name doesn't exist!
+ */
 router.put(
   "/changeHerdName",
   [
@@ -209,7 +316,7 @@ router.put(
         process.env.S3_SECRETKEY,
         async (jwtError, authData) => {
           if (jwtError) {
-            res.status(403).json({ Error: "Błąd uwierytelniania!" });
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
           } else {
             const checkUser = await findUserById(Users, authData);
             if (checkUser !== null) {
@@ -246,6 +353,26 @@ router.put(
   }
 );
 
+/**
+ * @swagger
+ * /herds/changeTypeofHerd:
+ *    put:
+ *      tags:
+ *      - name: Herds
+ *      summary: Change type of herd
+ *      parameters:
+ *        - name: newTypeOfHerd
+ *          in: formData
+ *          required: true
+ *          type: string
+ *      responses:
+ *        201:
+ *          description: Type of herd changed successfully!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: User doesn't exist or entered type doesn't exist!
+ */
 router.put(
   "/changeTypeofHerd",
   [
@@ -268,7 +395,7 @@ router.put(
         process.env.S3_SECRETKEY,
         async (jwtError, authData) => {
           if (jwtError) {
-            res.status(403).json({ Error: "Błąd uwierytelniania!" });
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
           } else {
             const checkUser = await findUserById(Users, authData);
             if (checkUser !== null) {
@@ -306,6 +433,34 @@ router.put(
   }
 );
 
+/**
+ * @swagger
+ * /herds/deleteHerd:
+ *    delete:
+ *      tags:
+ *      - name: Herds
+ *      summary: Delete the herd
+ *      parameters:
+ *        - name: herdName
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: userPassword
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: confirmPassword
+ *          in: formData
+ *          required: true
+ *          type: string
+ *      responses:
+ *        201:
+ *          description: The herd deleted successfully!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: User doesn't exist or herd with entered name doesn't exist!
+ */
 router.delete(
   "/deleteHerd",
   [
@@ -349,7 +504,7 @@ router.delete(
         process.env.S3_SECRETKEY,
         async (jwtError, authData) => {
           if (jwtError) {
-            res.status(403).json({ Error: "Błąd uwierytelniania!" });
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
           } else {
             const checkUser = await findUserById(Users, authData);
             if (checkUser !== null) {
