@@ -21,6 +21,43 @@ const changeUserEmailAdress = require("../Functions/Users/changeUserEmailAdress"
 const changeUserPassword = require("../Functions/Users/changeUserPassword");
 const deleteUserAccount = require("../Functions/Users/deleteUserAccount");
 
+/**
+ * @swagger
+ * /users/register:
+ *    post:
+ *      tags:
+ *      - name: Users
+ *      summary: Register in system
+ *      parameters:
+ *        - name: userEmail
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: userPassword
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: confirmPassword
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: userGender
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: userVerification
+ *          in: formData
+ *          required: true
+ *          type: boolean
+ *      responses:
+ *        201:
+ *          description: Successfully registered!
+ *        400:
+ *          description: Two errors - user with entered adress e-mail exists in system
+ *                        or registration failed!
+ *        500:
+ *          description: System error - user role doesn't exist!
+ */
 router.post(
   "/register",
   [
@@ -140,6 +177,31 @@ router.post(
   }
 );
 
+/**
+ * @swagger
+ * /users/login:
+ *    post:
+ *      tags:
+ *      - name: Users
+ *      summary: Login in system
+ *      parameters:
+ *        - name: userEmail
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: userPassword
+ *          in: formData
+ *          required: true
+ *          type: string
+ *      responses:
+ *        201:
+ *          description: System will return token!
+ *        400:
+ *          description: Check your entered data!
+ *        404:
+ *          description: User with entered adress e-mail doesn't exist in system!
+ */
+
 router.post(
   "/login",
   [
@@ -169,7 +231,7 @@ router.post(
       const userEmail = await checkUserEmail(Users, req.body.userEmail);
       if (userEmail === null) {
         res
-          .status(400)
+          .status(404)
           .json({ Error: "Użytkownik o podanym adresie e-mail nie istnieje!" });
       } else {
         const userRole = await findTypeOfUserRoleById(
@@ -188,7 +250,7 @@ router.post(
             res.status(201).json({ Token: checkEnteredDataFromUser });
           } else {
             res
-              .status(404)
+              .status(400)
               .json({ Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!" });
           }
         } else {
@@ -201,6 +263,36 @@ router.post(
   }
 );
 
+/**
+ * @swagger
+ * /users/changeAdressEmail:
+ *    put:
+ *      tags:
+ *      - name: Users
+ *      summary: Change adress e-mail by user
+ *      parameters:
+ *        - name: oldUserEmailAdress
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: newUserEmailAdress
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: userPassword
+ *          in: formData
+ *          required: true
+ *          type: string
+ *      responses:
+ *        201:
+ *          description: Adress e-mail will be updated!
+ *        400:
+ *          description: Something went wrong!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: User doesn't exist!
+ */
 router.put(
   "/changeAdressEmail",
   [
@@ -268,6 +360,36 @@ router.put(
   }
 );
 
+/**
+ * @swagger
+ * /users/changePassword:
+ *    put:
+ *      tags:
+ *      - name: Users
+ *      summary: Change password by user
+ *      parameters:
+ *        - name: oldUserPassword
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: newUserPassword
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: confirmNewPassword
+ *          in: formData
+ *          required: true
+ *          type: string
+ *      responses:
+ *        201:
+ *          description: Password will be updated!
+ *        400:
+ *          description: Something went wrong!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: User doesn't exist!
+ */
 router.put(
   "/changePassword",
   [
@@ -363,6 +485,32 @@ router.put(
   }
 );
 
+/**
+ * @swagger
+ * /users/deleteAccount:
+ *    put:
+ *      tags:
+ *      - name: Users
+ *      summary: Delete account by user
+ *      parameters:
+ *        - name: userPassword
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: confirmPassword
+ *          in: formData
+ *          required: true
+ *          type: string
+ *      responses:
+ *        201:
+ *          description: Account deleted!
+ *        400:
+ *          description: Something went wrong!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: User doesn't exist!
+ */
 router.put(
   "/deleteAccount",
   [

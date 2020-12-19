@@ -1,5 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const swaggerUI = require("swagger-ui-express");
+const swaggerJsDoc = require("swagger-jsdoc");
 const sequelize = require("./Functions/Database/connectionWithDatabase");
 const RoutesUsers = require("./Routes/users");
 const RoutesHerds = require("./Routes/herds");
@@ -21,6 +23,33 @@ const fillDataForTypesOfJoinToTheHerd = require("./Functions/Database/fillDataFo
 const fillDataForTypesOfProducts = require("./Functions/Database/fillDataForTypesOfProducts");
 
 const app = express();
+
+const swaggerOptions = {
+  openapi: "3.0.3",
+  swaggerDefinition: {
+    info: {
+      title: "Animal herds management - API",
+      description:
+        "API for easy work with documentation which describe data based on life of animals.",
+      version: "0.2.0",
+    },
+    host: "localhost:3000",
+    basePath: "/herdapi/v1",
+    securityDefinitions: {
+      bearerAuth: {
+        type: "apiKey",
+        name: "Authorization",
+        scheme: "bearer",
+        in: "header",
+      },
+    },
+    security: [{ bearerAuth: [] }],
+  },
+  apis: ["./Routes/*.js"],
+};
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
