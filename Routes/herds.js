@@ -241,6 +241,7 @@ router.get("/findHerdByAnimalType/:typeOfAnimal", verifyToken, (req, res) => {
           const checkUser = await findUserById(Users, authData);
           if (checkUser !== null) {
             const findHerd = await findHerdByAnimalType(
+              KindOfAnimals,
               Herds,
               req.params.typeOfAnimal,
               authData.id
