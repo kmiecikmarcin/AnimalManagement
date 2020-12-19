@@ -4,6 +4,7 @@ const sequelize = require("./Functions/Database/connectionWithDatabase");
 const RoutesUsers = require("./Routes/users");
 const RoutesHerds = require("./Routes/herds");
 const Genders = require("./Models/Genders");
+const GenderOfAnimal = require("./Models/GenderOfAnimal");
 const TypesOfUsersRoles = require("./Models/TypesOfUsersRoles");
 const TypesOfAnimals = require("./Models/TypesOfAnimals");
 const TypesOfJoinToTheHerd = require("./Models/TypesOfJoinToTheHerd");
@@ -11,6 +12,7 @@ const ReasonOfDeath = require("./Models/ReasonOfDeath");
 const TypesOfProducts = require("./Models/TypesOfProducts");
 const TypesOfFeed = require("./Models/TypesOfFeed");
 const fillDataForGenderTable = require("./Functions/Database/fillDataForGenderTable");
+const fillDataForAnimalGender = require("./Functions/Database/fillDataForAnimalGender");
 const fillDataForUsersTypesOfRolesInDatabase = require("./Functions/Database/fillDataForUsersTypesOfRolesInDatabase");
 const fillDataForTypesOfAnimalsTable = require("./Functions/Database/fillDataForTypesOfAnimalsTable");
 const fillDataForTypesOfFeed = require("./Functions/Database/fillDataForTypesOfFeed");
@@ -26,6 +28,7 @@ sequelize
   .sync({ force: false })
   .then(() => {
     fillDataForGenderTable(Genders);
+    fillDataForAnimalGender(GenderOfAnimal);
     fillDataForUsersTypesOfRolesInDatabase(TypesOfUsersRoles);
     fillDataForTypesOfAnimalsTable(TypesOfAnimals);
     fillDataForReasonOfDeath(ReasonOfDeath);
