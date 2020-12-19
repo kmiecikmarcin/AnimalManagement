@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "7fdcd5ff-3edd-4bca-ae33-30b0dc23f106",
-		"name": "AnimalManagement",
+		"_postman_id": "933e06a8-2b27-4f71-ab9c-e1a5c6092b9a",
+		"name": "AnimalManagement - Users",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -172,104 +172,6 @@
 				}
 			},
 			"response": []
-		},
-		{
-			"name": "Take all herds for user",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY4ZWI3M2Q0LTljNTMtNDI2ZS1iZGNkLTJkOWQzMmNmYjJiMiIsImlkVHlwZU9mVXNlclJvbGUiOiI3MWEyN2RhYi04NmFhLTQ1YjAtOWQyMS03ZDRkMTllOTZkNDQiLCJuYW1lIjoiSG9kb3djYSIsImlhdCI6MTYwNzE2OTk0NCwiZXhwIjoxNjA3Mjk5NTQ0fQ.OK4uCoZc7NZVkFF8bo-jj4_kP1LhQcRZCEQqfjLgURw",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "localhost:3000/herdapi/v1/herds/takeAllHerds",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"herdapi",
-						"v1",
-						"herds",
-						"takeAllHerds"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Add new herd",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY4ZWI3M2Q0LTljNTMtNDI2ZS1iZGNkLTJkOWQzMmNmYjJiMiIsImlkVHlwZU9mVXNlclJvbGUiOiI3MWEyN2RhYi04NmFhLTQ1YjAtOWQyMS03ZDRkMTllOTZkNDQiLCJuYW1lIjoiSG9kb3djYSIsImlhdCI6MTYwNzE3NTk3MCwiZXhwIjoxNjA3MzA1NTcwfQ._wWJWo25yvb70-6EB73TZfHiDjSIFVANy2WxP7_GSeM",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"herdName\": \"fajnaHodowla\", \r\n    \"herdType\": \"Kury\",\r\n    \"creationDate\": \"2020-12-05\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:3000/herdapi/v1/herds/addNewHerd",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"herdapi",
-						"v1",
-						"herds",
-						"addNewHerd"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Find herd by name",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI1ZTE1ODFhLTcxYjktNDA1NC05NGUzLWFlMWQwNzU1NGRkZiIsImlkVHlwZU9mVXNlclJvbGUiOiIwM2M4OGRlZC1mOGFjLTRkMjgtYjcwOS04MTAzNGRhMDc0OTQiLCJuYW1lIjoiSG9kb3djYSIsImlhdCI6MTYwNzM2Mjc4MCwiZXhwIjoxNjA3NDkyMzgwfQ.newnAnmB0ejvOknC0XC91KQMuFNi0psSYna-BOae1mE",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "localhost:3000/herdapi/v1/herds/takeHerdByName/:name",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"herdapi",
-						"v1",
-						"herds",
-						"takeHerdByName",
-						":name"
-					],
-					"variable": [
-						{
-							"key": "name",
-							"value": "Elo"
-						}
-					]
-				}
-			},
-			"response": []
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
