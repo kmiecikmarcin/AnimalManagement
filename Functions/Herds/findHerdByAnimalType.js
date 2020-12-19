@@ -1,11 +1,17 @@
-async function findHerdByAnimalType(Herds, herdType, userId) {
-  const findHerd = await Herds.findOne({
-    where: { idKindOfAnimals: herdType, idUser: userId },
+async function findHerdByAnimalType(KindOfAnimals, Herds, herdType, userId) {
+  const findHerdType = await KindOfAnimals.findOne({
+    where: { name: herdType },
   });
-  if (findHerd === null) {
-    return null;
+  if (findHerdType != null) {
+    const findHerd = await Herds.findOne({
+      where: { idKindOfAnimals: findHerdType.id, idUser: userId },
+    });
+    if (findHerd === null) {
+      return null;
+    }
+    return findHerd;
   }
-  return findHerd;
+  return null;
 }
 
 module.exports = findHerdByAnimalType;
