@@ -5,6 +5,7 @@ const swaggerJsDoc = require("swagger-jsdoc");
 const sequelize = require("./Functions/Database/connectionWithDatabase");
 const RoutesUsers = require("./Routes/users");
 const RoutesHerds = require("./Routes/herds");
+const RouterAnimals = require("./Routes/animals");
 const Genders = require("./Models/Genders");
 const GenderOfAnimal = require("./Models/GenderOfAnimal");
 const TypesOfUsersRoles = require("./Models/TypesOfUsersRoles");
@@ -73,6 +74,7 @@ const port = process.env.PORT || 3000;
 
 app.use("/herdapi/v1/users", RoutesUsers);
 app.use("/herdapi/v1/herds", RoutesHerds);
+app.use("/herdapi/v1/animals", RouterAnimals);
 
 app.listen(port);
 
