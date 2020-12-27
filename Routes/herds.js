@@ -72,7 +72,7 @@ router.post(
       .withMessage("Wymagane pole jest puste!")
       .isDate()
       .withMessage(
-        "Wprowadzona wartość nie jest datą lub została wprowadzona niepoprawnie"
+        "Wprowadzona wartość nie jest datą! Spróbuj według schematu: YYYY-MM-DD"
       ),
   ],
   verifyToken,
