@@ -342,9 +342,60 @@ router.delete(
   () => {}
 );
 
-router.delete("/deleteDeadAnimal", [], verifyToken, () => {});
+router.delete(
+  "/deleteDeadAnimal",
+  [
+    check("identityNumberOfAnimal")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isInt()
+      .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
+    check("userPassword")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 6 })
+      .withMessage("Hasło jest za krótkie!")
+      .isLength({ max: 32 })
+      .withMessage("Hasło jest za długie!"),
+  ],
+  verifyToken,
+  () => {}
+);
 
-router.delete("/deleteNewBornAnimal", [], verifyToken, () => {});
+router.delete(
+  "/deleteNewBornAnimal",
+  [
+    check("temporaryIdentityNumberOfAnimal")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isInt()
+      .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
+    check("confirmTemporaryIdentityNumberOfAnimal")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isInt()
+      .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
+    check("userPassword")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 6 })
+      .withMessage("Hasło jest za krótkie!")
+      .isLength({ max: 32 })
+      .withMessage("Hasło jest za długie!"),
+  ],
+  verifyToken,
+  () => {}
+);
 
 router.get("/takeAllReasonDeath", [], verifyToken, () => {});
 
