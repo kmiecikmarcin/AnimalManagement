@@ -253,6 +253,10 @@ router.post(
   () => {}
 );
 
+router.put("/editNewBornAnimalBirthDate", [], verifyToken, () => {});
+
+router.put("/editNewDeadAnimalIdentityNumber", [], verifyToken, () => {});
+
 router.get("/takeAllNewBornAnimals", [], verifyToken, () => {});
 
 router.get("/takeNewBornAnimalsInHerd", [], verifyToken, () => {});
@@ -295,6 +299,12 @@ router.post(
   () => {}
 );
 
+router.put("/editNewDeadAnimalDateOfDeath", [], verifyToken, () => {});
+
+router.put("/editNewDeadAnimalReasonOfDeath", [], verifyToken, () => {});
+
+router.put("/editNewDeadAnimalDescription", [], verifyToken, () => {});
+
 router.get("/takeAllReasonDeath", [], verifyToken, () => {});
 
 router.get("/takeAllDeadAnimals", [], verifyToken, () => {});
@@ -331,6 +341,10 @@ router.delete(
   verifyToken,
   () => {}
 );
+
+router.delete("/deleteDeadAnimal", [], verifyToken, () => {});
+
+router.delete("/deleteNewBornAnimal", [], verifyToken, () => {});
 
 router.get("/takeAllReasonDeath", [], verifyToken, () => {});
 
