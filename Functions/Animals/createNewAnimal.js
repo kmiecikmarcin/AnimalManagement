@@ -1,6 +1,6 @@
 const Herds = require("../../Models/Herds");
 const TypesOfJoinToTheHerd = require("../../Models/TypesOfJoinToTheHerd");
-const KindOfAnimals = require("../../Models/KindOfAnimals");
+const KindsOfAnimals = require("../../Models/KindsOfAnimals");
 const GenderOfAnimal = require("../../Models/GenderOfAnimal");
 const findHerdByName = require("../Herds/findHerdByName");
 const findTypesOfJoinToTheHerd = require("./findTypesOfJoinToTheHerd");
@@ -29,7 +29,7 @@ async function createNewAnimal(
     );
     if (checkJoinType) {
       const checkKindOfAnimal = await findKindOfAnimalsByName(
-        KindOfAnimals,
+        KindsOfAnimals,
         kindOfAnimalName
       );
       if (checkKindOfAnimal) {

@@ -129,7 +129,7 @@ router.post(
 
 router.get("/takeAllAnimalGender", [], verifyToken, () => {});
 
-router.get("/takeAllKindOfAnimals", [], verifyToken, () => {});
+router.get("/takeAllKindsOfAnimals", [], verifyToken, () => {});
 
 router.get("/takeAllJoinTypeToTheHerd", [], verifyToken, () => {});
 

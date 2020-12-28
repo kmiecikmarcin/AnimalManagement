@@ -1,4 +1,4 @@
-const KindOfAnimals = require("../../Models/KindOfAnimals");
+const KindsOfAnimals = require("../../Models/KindsOfAnimals");
 const findKindOfAnimalsByName = require("../Animals/findKindOfAnimalsByName");
 const findHerdByName = require("./findHerdByName");
 
@@ -10,7 +10,7 @@ async function createNewHerdForUser(
   herdType
 ) {
   const checkEnteredHerdTypeFromUser = await findKindOfAnimalsByName(
-    KindOfAnimals,
+    KindsOfAnimals,
     herdType
   );
   if (checkEnteredHerdTypeFromUser !== null) {

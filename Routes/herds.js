@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const { check, validationResult } = require("express-validator");
 const Users = require("../Models/Users");
 const Herds = require("../Models/Herds");
-const KindOfAnimals = require("../Models/KindOfAnimals");
+const KindsOfAnimals = require("../Models/KindsOfAnimals");
 const verifyToken = require("../Functions/Users/verifyJwtToken");
 const findUserById = require("../Functions/Users/findUserById");
 const findAllUserHerds = require("../Functions/Herds/findAllUserHerds");
@@ -241,7 +241,7 @@ router.get("/findHerdByAnimalType/:typeOfAnimal", verifyToken, (req, res) => {
           const checkUser = await findUserById(Users, authData);
           if (checkUser !== null) {
             const findHerd = await findHerdByAnimalType(
-              KindOfAnimals,
+              KindsOfAnimals,
               Herds,
               req.params.typeOfAnimal,
               authData.id
@@ -401,7 +401,7 @@ router.put(
             const checkUser = await findUserById(Users, authData);
             if (checkUser !== null) {
               const checkEnteredHerdTypeFromUser = await findKindOfAnimalsByName(
-                KindOfAnimals,
+                KindsOfAnimals,
                 req.body.newTypeOfHerd
               );
               if (checkEnteredHerdTypeFromUser) {
