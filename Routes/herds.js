@@ -141,7 +141,7 @@ router.get("/findAllHerds", verifyToken, (req, res) => {
       } else {
         const checkUser = await findUserById(Users, authData);
         if (checkUser !== null) {
-          const findHerds = await findAllUserHerds(Herds);
+          const findHerds = await findAllUserHerds(Herds, authData.id);
           if (findHerds !== null) {
             res.status(201).json({ Herds: findHerds });
           } else {
