@@ -10,6 +10,7 @@ const AnimalsInHerd = require("../Models/AnimalsInHerd");
 const GenderOfAnimal = require("../Models/GenderOfAnimal");
 const KindsOfAnimals = require("../Models/KindsOfAnimals");
 const TypesOfJoinToTheHerd = require("../Models/TypesOfJoinToTheHerd");
+const Herds = require("../Models/Herds");
 const findUserById = require("../Functions/Users/findUserById");
 const createNewAnimal = require("../Functions/Animals/createNewAnimal");
 const findAllAnimalsGenders = require("../Functions/Animals/findAllAnimalsGenders");
@@ -17,6 +18,7 @@ const findAllKindsOfAnimals = require("../Functions/Animals/findAllKindsOfAnimal
 const findAllJoinTypeToTheHerd = require("../Functions/Animals/findAllJoinTypeToTheHerd");
 const findAllAnimalsInHerds = require("../Functions/Animals/findAllAnimalsInHerds");
 const findAnimalByKindName = require("../Functions/Animals/findAnimalByKindName");
+const findAllUserHerds = require("../Functions/Herds/findAllUserHerds");
 
 router.get("/takeAllAnimalsGenders", verifyToken, (req, res) => {
   jwt.verify(
@@ -29,7 +31,8 @@ router.get("/takeAllAnimalsGenders", verifyToken, (req, res) => {
         const checkUser = await findUserById(Users, authData);
         if (checkUser !== null) {
           const findAnimalsGenders = await findAllAnimalsGenders(
-            GenderOfAnimal
+            GenderOfAnimal,
+            authData.id
           );
           if (findAnimalsGenders !== null) {
             res.status(201).json({ Genders: findAnimalsGenders });
@@ -230,14 +233,21 @@ router.get("/findAllAnimalsInHerds", verifyToken, (req, res) => {
       } else {
         const checkUser = await findUserById(Users, authData);
         if (checkUser !== null) {
-          const findAnimalsInHerd = await findAllAnimalsInHerds(AnimalsInHerd);
-          if (findAnimalsInHerd !== null) {
-            res.status(201).json({ AnimalsInHerd: findAnimalsInHerd });
+          const findHerd = await findAllUserHerds(Herds);
+          if (findHerd) {
+            const findAnimalsInHerd = await findAllAnimalsInHerds(
+              AnimalsInHerd
+            );
+            if (findAnimalsInHerd !== null) {
+              res.status(201).json({ AnimalsInHerd: findAnimalsInHerd });
+            } else {
+              res.status(404).json({
+                Error:
+                  "Użytkownik nie posiada zwierząt przypisanych do jakiejkolwiek hodowli!",
+              });
+            }
           } else {
-            res.status(404).json({
-              Error:
-                "Użytkownik nie posiada zwierząt przypisanych do jakiejkolwiek hodowli!",
-            });
+            res.status(404).json({ Error: "Użytkownik nie posiada hodowli!" });
           }
         } else {
           res.status(404).json({ Error: "Użytkownik nie istnieje!" });
@@ -247,7 +257,7 @@ router.get("/findAllAnimalsInHerds", verifyToken, (req, res) => {
   );
 });
 
-router.get("/findAnimalByKindName/:name", verifyToken, (req, res) => {
+router.get("/findAnimalByTheirKindName/:name", verifyToken, (req, res) => {
   if (req.params.name) {
     jwt.verify(
       req.token,
