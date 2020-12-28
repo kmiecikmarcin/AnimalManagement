@@ -11,7 +11,7 @@ const verifyToken = require("../Functions/Users/verifyJwtToken");
 const findUserById = require("../Functions/Users/findUserById");
 const findAllUserHerds = require("../Functions/Herds/findAllUserHerds");
 const findHerdByName = require("../Functions/Herds/findHerdByName");
-const createNewHerdforUser = require("../Functions/Herds/createNewHerdForUser");
+const createNewHerdForUser = require("../Functions/Herds/createNewHerdForUser");
 const changeHerdName = require("../Functions/Herds/changeHerdName");
 const findKindOfAnimalsByName = require("../Functions/Animals/findKindOfAnimalsByName");
 const changeTypeOfHerd = require("../Functions/Herds/changeTypeOfHerd");
@@ -90,7 +90,7 @@ router.post(
           } else {
             const checkUser = await findUserById(Users, authData);
             if (checkUser !== null) {
-              const addNewHerd = await createNewHerdforUser(
+              const addNewHerd = await createNewHerdForUser(
                 Herds,
                 req.body.herdName,
                 req.body.creationDate,
