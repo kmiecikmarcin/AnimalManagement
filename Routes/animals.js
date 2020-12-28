@@ -9,11 +9,11 @@ const Users = require("../Models/Users");
 const AnimalsInHerd = require("../Models/AnimalsInHerd");
 const GenderOfAnimal = require("../Models/GenderOfAnimal");
 const KindsOfAnimals = require("../Models/KindsOfAnimals");
+const TypesOfJoinToTheHerd = require("../Models/TypesOfJoinToTheHerd");
 const findUserById = require("../Functions/Users/findUserById");
 const createNewAnimal = require("../Functions/Animals/createNewAnimal");
 const findAllAnimalsGenders = require("../Functions/Animals/findAllAnimalsGenders");
 const findAllKindsOfAnimals = require("../Functions/Animals/findAllKindsOfAnimals");
-const TypesOfJoinToTheHerd = require("../Models/TypesOfJoinToTheHerd");
 const findAllJoinTypeToTheHerd = require("../Functions/Animals/findAllJoinTypeToTheHerd");
 const findAllAnimalsInHerds = require("../Functions/Animals/findAllAnimalsInHerds");
 
