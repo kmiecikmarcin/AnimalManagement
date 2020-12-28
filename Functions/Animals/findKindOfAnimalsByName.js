@@ -1,4 +1,4 @@
-async function findKindOfAnimalsbyName(KindOfAnimals, kindOfAnimalName) {
+async function findKindOfAnimalsByName(KindOfAnimals, kindOfAnimalName) {
   const search = await KindOfAnimals.findOne({
     where: { name: kindOfAnimalName },
   });
@@ -8,4 +8,4 @@ async function findKindOfAnimalsbyName(KindOfAnimals, kindOfAnimalName) {
   return null;
 }
 
-module.exports = findKindOfAnimalsbyName;
+module.exports = findKindOfAnimalsByName;
