@@ -11,6 +11,7 @@ const GenderOfAnimal = require("../Models/GenderOfAnimal");
 const KindsOfAnimals = require("../Models/KindsOfAnimals");
 const TypesOfJoinToTheHerd = require("../Models/TypesOfJoinToTheHerd");
 const Herds = require("../Models/Herds");
+const ReasonOfDeath = require("../Models/ReasonOfDeath");
 const findUserById = require("../Functions/Users/findUserById");
 const createNewAnimal = require("../Functions/Animals/createNewAnimal");
 const findAllAnimalsGenders = require("../Functions/Animals/findAllAnimalsGenders");
@@ -18,6 +19,7 @@ const findAllKindsOfAnimals = require("../Functions/Animals/findAllKindsOfAnimal
 const findAllJoinTypeToTheHerd = require("../Functions/Animals/findAllJoinTypeToTheHerd");
 const findAllAnimalsInHerds = require("../Functions/Animals/findAllAnimalsInHerds");
 const findHerdByName = require("../Functions/Herds/findHerdByName");
+const findAllReasonDeath = require("../Functions/Animals/findAllReasonDeath");
 
 router.get("/takeAllAnimalsGenders", verifyToken, (req, res) => {
   jwt.verify(
@@ -432,7 +434,31 @@ router.put("/editNewDeadAnimalIdentityNumber", [], verifyToken, () => {});
 
 router.get("/takeNewBornAnimalsInHerd", verifyToken, () => {});
 
-router.get("/takeAllReasonDeath", verifyToken, () => {});
+router.get("/takeAllReasonDeath", verifyToken, (req, res) => {
+  jwt.verify(
+    req.token,
+    process.env.S3_SECRETKEY,
+    async (jwtError, authData) => {
+      if (jwtError) {
+        res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+      } else {
+        const checkUser = await findUserById(Users, authData);
+        if (checkUser !== null) {
+          const findReasonDeath = await findAllReasonDeath(ReasonOfDeath);
+          if (findReasonDeath !== null) {
+            res.status(200).json({ ReasonOfDeath: findReasonDeath });
+          } else {
+            res.status(404).json({
+              Error: "System nie posiada przypisanych płci zwierząt!",
+            });
+          }
+        } else {
+          res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+        }
+      }
+    }
+  );
+});
 
 router.post(
   "/addNewDeadAnimal",
@@ -472,7 +498,7 @@ router.post(
   () => {}
 );
 
-router.get("/takeAllDeadAnimals", verifyToken, () => {});
+router.get("/takeAllDeadAnimalsInHerd", verifyToken, () => {});
 
 router.put("/editNewDeadAnimalDateOfDeath", [], verifyToken, () => {});
 
