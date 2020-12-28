@@ -17,7 +17,6 @@ const findAllAnimalsGenders = require("../Functions/Animals/findAllAnimalsGender
 const findAllKindsOfAnimals = require("../Functions/Animals/findAllKindsOfAnimals");
 const findAllJoinTypeToTheHerd = require("../Functions/Animals/findAllJoinTypeToTheHerd");
 const findAllAnimalsInHerds = require("../Functions/Animals/findAllAnimalsInHerds");
-const findAnimalByKindName = require("../Functions/Animals/findAnimalByKindName");
 const findHerdByName = require("../Functions/Herds/findHerdByName");
 
 router.get("/takeAllAnimalsGenders", verifyToken, (req, res) => {
@@ -268,44 +267,6 @@ router.get("/findAllAnimalsInHerd/:herdName", verifyToken, (req, res) => {
   }
 });
 
-router.get("/findAnimalByTheirKindName/:name", verifyToken, (req, res) => {
-  if (req.params.name) {
-    jwt.verify(
-      req.token,
-      process.env.S3_SECRETKEY,
-      async (jwtError, authData) => {
-        if (jwtError) {
-          res.status(403).json({ Error: "Błąd uwierzytelniania!" });
-        } else {
-          const checkUser = await findUserById(Users, authData);
-          if (checkUser !== null) {
-            const findAnimal = await findAnimalByKindName(
-              AnimalsInHerd,
-              KindsOfAnimals,
-              req.params.name
-            );
-            if (findAnimal) {
-              res.status(201).json({ Animals: findAnimal });
-            } else {
-              res.status(404).json({
-                Error: "Użytkownik nie posiada zwierząt tego rodzaju!",
-              });
-            }
-          } else {
-            res.status(404).json({ Error: "Użytkownik nie istnieje!" });
-          }
-        }
-      }
-    );
-  } else {
-    res.status(400).json({ Error: "Nie wprowadzono danych!" });
-  }
-});
-
-router.get("/findAnimalByJoinType/:joinTypeName", verifyToken, () => {});
-
-router.get("/findAnimalByHerdName/:name", verifyToken, () => {});
-
 router.put(
   "/editIdentityNumberOfAnimal",
   [
@@ -469,9 +430,9 @@ router.put("/editNewBornAnimalBirthDate", [], verifyToken, () => {});
 
 router.put("/editNewDeadAnimalIdentityNumber", [], verifyToken, () => {});
 
-router.get("/takeAllNewBornAnimals", [], verifyToken, () => {});
+router.get("/takeNewBornAnimalsInHerd", verifyToken, () => {});
 
-router.get("/takeNewBornAnimalsInHerd", [], verifyToken, () => {});
+router.get("/takeAllReasonDeath", verifyToken, () => {});
 
 router.post(
   "/addNewDeadAnimal",
@@ -511,17 +472,17 @@ router.post(
   () => {}
 );
 
+router.get("/takeAllDeadAnimals", verifyToken, () => {});
+
+router.get("/takeAllDeadAnimalsinHerd", verifyToken, () => {});
+
 router.put("/editNewDeadAnimalDateOfDeath", [], verifyToken, () => {});
 
 router.put("/editNewDeadAnimalReasonOfDeath", [], verifyToken, () => {});
 
 router.put("/editNewDeadAnimalDescription", [], verifyToken, () => {});
 
-router.get("/takeAllReasonDeath", [], verifyToken, () => {});
-
-router.get("/takeAllDeadAnimals", [], verifyToken, () => {});
-
-router.get("/takeDeadAnimalsByReasonDeath", [], verifyToken, () => {});
+router.get("/takeDeadAnimalsByReasonDeath", verifyToken, () => {});
 
 router.delete(
   "/deleteAnimal",
@@ -608,7 +569,5 @@ router.delete(
   verifyToken,
   () => {}
 );
-
-router.get("/takeAllReasonDeath", [], verifyToken, () => {});
 
 module.exports = router;
