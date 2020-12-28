@@ -1,9 +1,14 @@
 const express = require("express");
 
 const router = express.Router();
+const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const { check } = require("express-validator");
+const { check, validationResult } = require("express-validator");
 const verifyToken = require("../Functions/Users/verifyJwtToken");
+const Users = require("../Models/Users");
+const findUserById = require("../Functions/Users/findUserById");
+const createNewAnimal = require("../Functions/Animals/createNewAnimal");
+const AnimalsInHerd = require("../Models/AnimalsInHerd");
 
 router.post(
   "/addNewAnimal",
@@ -22,6 +27,19 @@ router.post(
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 256 })
       .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+    check("kindOfAnimalName")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 2, max: 256 })
+      .withMessage("Nie spełniono wymagań co do wielkości wprowadzonej nazwy!"),
+    check("animalGender")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 2, max: 20 }),
     check("identityNumberOfAnimal")
       .exists()
       .withMessage("Brak wymaganych danych!")
@@ -35,20 +53,6 @@ router.post(
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 2, max: 256 })
-      .withMessage("Nie spełniono wymagań co do wielkości wprowadzonej nazwy!"),
-    check("kindOfAnimalName")
-      .exists()
-      .withMessage("Brak wymaganych danych!")
-      .notEmpty()
-      .withMessage("Wymagane pole jest puste!")
-      .isLength({ min: 2, max: 256 })
-      .withMessage("Nie spełniono wymagań co do wielkości wprowadzonej nazwy!"),
-    check("animalGender")
-      .exists()
-      .withMessage("Brak wymaganych danych!")
-      .notEmpty()
-      .withMessage("Wymagane pole jest puste!")
-      .isLength({ min: 2, max: 20 })
       .withMessage("Nie spełniono wymagań co do wielkości wprowadzonej nazwy!"),
     check("dateOfJoinToTheHerd")
       .exists()
@@ -77,7 +81,50 @@ router.post(
       .withMessage("Wprowadzona wartość nie jest wartością liczbową!"),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          }
+          const checkUser = await findUserById(Users, authData);
+          if (checkUser !== null) {
+            const addNewAnimal = await createNewAnimal(
+              res,
+              AnimalsInHerd,
+              authData.id,
+              req.body.herdName,
+              req.body.joinTypeName,
+              req.body.kindOfAnimalName,
+              req.body.animalGender,
+              req.body.identityNumberOfAnimal,
+              req.body.breedOfAnimal,
+              req.body.dateOfJoinToTheHerd,
+              req.body.birthDate,
+              req.body.animalWeight
+            );
+            if (addNewAnimal) {
+              res
+                .status(201)
+                .json({ Message: "Zwierzę zostało dodane pomyślnie!" });
+            } else {
+              res.status(400).json({
+                Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
+              });
+            }
+          } else {
+            res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+          }
+        }
+      );
+    }
+  }
 );
 
 router.get("/takeAllAnimalGender", [], verifyToken, () => {});

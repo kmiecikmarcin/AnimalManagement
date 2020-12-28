@@ -14,6 +14,7 @@
 						{
 							"listen": "test",
 							"script": {
+								"id": "46530c08-b5af-4e7b-a5d3-9550d241fd69",
 								"exec": [
 									"pm.test(\"Response is correct\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
@@ -29,6 +30,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
+								"id": "d37a3889-68d9-4f05-86c7-58b2fec6491b",
 								"exec": [
 									"const random_number = _.random(1000, 9000);\r",
 									"const email = \"user\" + random_number + \"@example.com\";\r",
@@ -83,6 +85,7 @@
 						{
 							"listen": "test",
 							"script": {
+								"id": "e7527617-0dd9-4449-8a5d-90084f8ce2fd",
 								"exec": [
 									"pm.test(\"Response is correct\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
@@ -103,6 +106,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
+								"id": "7dbbb51a-c3b3-44cd-8393-75520df43009",
 								"exec": [
 									""
 								],
@@ -144,6 +148,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
+								"id": "fa22a61a-4718-4e95-9c44-a2244a21ec8f",
 								"exec": [
 									"const random_number = _.random(1000, 9000);\r",
 									"const new_email = \"user\" + random_number + \"@example.com\";\r",
@@ -156,6 +161,7 @@
 						{
 							"listen": "test",
 							"script": {
+								"id": "dcf59a7c-4781-4d9d-898c-f50c0735dc56",
 								"exec": [
 									"pm.test(\"Response is correct\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
@@ -220,6 +226,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
+								"id": "37e02389-bf18-4c65-9a35-7eae324aad31",
 								"exec": [
 									""
 								],
@@ -229,6 +236,7 @@
 						{
 							"listen": "test",
 							"script": {
+								"id": "e30add7d-e6f9-4dd5-ad4f-89a1e9ef9f49",
 								"exec": [
 									"pm.test(\"Successful PUT request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
@@ -289,6 +297,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
+								"id": "5d3da6db-7ed8-4f9d-9f8e-6fec64178fc9",
 								"exec": [
 									"const random_password = _.random(100000,9000000);\r",
 									"const new_password = random_password + \"@\";\r",
@@ -351,6 +360,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
+						"id": "bf493943-cf9d-4028-bc74-2e5356fb3335",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -360,13 +370,15 @@
 				{
 					"listen": "test",
 					"script": {
+						"id": "177443e5-6be1-4138-91c5-d90215505a85",
 						"type": "text/javascript",
 						"exec": [
 							""
 						]
 					}
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Herds - scenario 1",
@@ -377,6 +389,7 @@
 						{
 							"listen": "test",
 							"script": {
+								"id": "2a86e2c2-a610-4e91-af82-20f1c8aaa091",
 								"exec": [
 									"pm.test(\"Response is correct\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
@@ -392,6 +405,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
+								"id": "53aaa353-25f2-4bb5-8810-d57a6c3c9a46",
 								"exec": [
 									"const random_number = _.random(1, 9000);\r",
 									"const name_of_herd = \"herd\" + random_number + \"example\";\r",
@@ -462,6 +476,7 @@
 						{
 							"listen": "test",
 							"script": {
+								"id": "75b7b6c5-3e74-4a7d-921c-4ffd5c737f5b",
 								"exec": [
 									"pm.test(\"Response is correct\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
@@ -516,6 +531,7 @@
 						{
 							"listen": "test",
 							"script": {
+								"id": "9aed53f9-2829-46ea-aacb-817487b4a601",
 								"exec": [
 									"pm.test(\"Successful GET request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
@@ -565,7 +581,8 @@
 							"variable": [
 								{
 									"key": "name",
-									"value": "{{name_of_herd}}"
+									"value": "{{name_of_herd}}",
+									"type": "string"
 								}
 							]
 						}
@@ -578,6 +595,7 @@
 						{
 							"listen": "test",
 							"script": {
+								"id": "0ae92035-062a-41ef-b030-cf8b9b0de0b3",
 								"exec": [
 									"pm.test(\"Successful GET request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
@@ -627,7 +645,8 @@
 							"variable": [
 								{
 									"key": "typeOfAnimal",
-									"value": "{{type_of_herd}}"
+									"value": "{{type_of_herd}}",
+									"type": "string"
 								}
 							]
 						}
@@ -640,6 +659,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
+								"id": "9b9fba6a-b1ce-4760-b68e-0eeb663b1f48",
 								"exec": [
 									"const random_number = _.random(1, 9000);\r",
 									"const new_name_of_herd = \"herd\" + random_number + \"example\";\r",
@@ -652,6 +672,7 @@
 						{
 							"listen": "test",
 							"script": {
+								"id": "19f2cefc-c5d7-43e7-b54c-9f4c21ed71d0",
 								"exec": [
 									"pm.test(\"Response is correct\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
@@ -716,6 +737,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
+								"id": "c098749b-b7d7-4401-ba22-6309fe8a593c",
 								"exec": [
 									"const herds_type = [\"Kury\",\"Króliki\",\"Świnie\"]\r",
 									"const random_number_for_type_of_herd = _.random(1, 2);\r",
@@ -729,6 +751,7 @@
 						{
 							"listen": "test",
 							"script": {
+								"id": "0a08afd4-a674-46e1-8515-6b89a2c5e63e",
 								"exec": [
 									"pm.test(\"Response is correct\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
@@ -793,6 +816,7 @@
 						{
 							"listen": "test",
 							"script": {
+								"id": "1fccd9f6-fa74-4dbe-bb2e-fe6ac131917b",
 								"exec": [
 									"pm.test(\"Response is correct\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
@@ -856,6 +880,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
+						"id": "c4b7990f-7b3a-4433-aa59-083e9f3f9f00",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -865,19 +890,86 @@
 				{
 					"listen": "test",
 					"script": {
+						"id": "a8530047-d76f-468c-a701-914aaac2781e",
 						"type": "text/javascript",
 						"exec": [
 							""
 						]
 					}
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Animals - scenario 1",
+			"item": [
+				{
+					"name": "Add new animal",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3d180a65-f082-4b24-8af8-01ace1f29ea9",
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Zwierzę zostało dodane pomyślnie!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"herdName\": \"Nowe stado\",\r\n    \"joinTypeName\": \"Urodzony w hodowli\",\r\n    \"kindOfAnimalName\": \"Królik\",\r\n    \"animalGender\": \"Samiec\",\r\n    \"identityNumberOfAnimal\": \"1\",\r\n    \"breedOfAnimal\": \"Kalifornijski\",\r\n    \"dateOfJoinToTheHerd\": \"2020-12-21\",\r\n    \"birthDate\": \"2020-12-01\",\r\n    \"animalWeight\": \"10\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/v1/animals/addNewAnimal",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v1",
+								"animals",
+								"addNewAnimal"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
 		}
 	],
 	"event": [
 		{
 			"listen": "prerequest",
 			"script": {
+				"id": "a4d6f7dc-8b39-4a86-819f-75a12f91c147",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -887,6 +979,7 @@
 		{
 			"listen": "test",
 			"script": {
+				"id": "09a20c09-3de0-4a64-92c2-0f1685e98c74",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -896,32 +989,40 @@
 	],
 	"variable": [
 		{
+			"id": "4c2c4938-54d3-402c-99c1-1786ecdb1cf9",
 			"key": "token",
 			"value": ""
 		},
 		{
+			"id": "c543cfc4-7e7a-4b62-aabe-52d55dfd9046",
 			"key": "email",
 			"value": ""
 		},
 		{
+			"id": "62481d5d-1d18-4f7c-91e3-360dc29df405",
 			"key": "password",
 			"value": ""
 		},
 		{
+			"id": "7755d912-cd12-43a8-96e0-276c8e90e81c",
 			"key": "date",
 			"value": ""
 		},
 		{
+			"id": "ee560da0-7c5f-44dd-a46d-52cc20c3cec7",
 			"key": "name_of_herd",
 			"value": ""
 		},
 		{
+			"id": "829dfb3b-07f0-46e8-8ca6-0456931c6694",
 			"key": "type_of_herd",
 			"value": ""
 		},
 		{
+			"id": "4f793097-4fb0-4e1a-8e80-756b508a3249",
 			"key": "dateWithoutTime",
 			"value": ""
 		}
-	]
+	],
+	"protocolProfileBehavior": {}
 }
