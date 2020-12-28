@@ -1,6 +1,7 @@
-async function findAllUserHerds(Herds) {
+async function findAllUserHerds(Herds, userId) {
   const findHerds = await Herds.findAll({
-    attributes: ["name"],
+    where: { idUser: userId },
+    attributes: ["id", "name"],
   });
   if (findHerds !== null) {
     return findHerds;
