@@ -1,4 +1,4 @@
-const arrayWithReasonsOfDeath = ["Ubój", "Choroba", "Przycyzna naturalna"];
+const arrayWithReasonsOfDeath = ["Ubój", "Choroba", "Przyczyna naturalna"];
 
 const findReasonOfDeathByName = require("../Animals/findReasonOfDeathByName");
 
