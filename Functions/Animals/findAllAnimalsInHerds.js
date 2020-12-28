@@ -1,5 +1,6 @@
-async function findAllAnimalsInHerds(AnimalsInHerd) {
+async function findAllAnimalsInHerds(AnimalsInHerd, herdId) {
   const search = await AnimalsInHerd.findAll({
+    where: { idHerd: herdId },
     attributes: [
       "identityNumberOfAnimal",
       "breedOfAnimal",
@@ -8,7 +9,7 @@ async function findAllAnimalsInHerds(AnimalsInHerd) {
       "animalWeight",
     ],
   });
-  if (search !== null) {
+  if (search !== null && Object.keys(search).length !== 0) {
     return search;
   }
   return null;
