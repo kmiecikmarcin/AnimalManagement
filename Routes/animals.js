@@ -16,6 +16,7 @@ const findAllAnimalsGenders = require("../Functions/Animals/findAllAnimalsGender
 const findAllKindsOfAnimals = require("../Functions/Animals/findAllKindsOfAnimals");
 const findAllJoinTypeToTheHerd = require("../Functions/Animals/findAllJoinTypeToTheHerd");
 const findAllAnimalsInHerds = require("../Functions/Animals/findAllAnimalsInHerds");
+const findAnimalByKindName = require("../Functions/Animals/findAnimalByKindName");
 
 router.get("/takeAllAnimalsGenders", verifyToken, (req, res) => {
   jwt.verify(
@@ -246,11 +247,43 @@ router.get("/findAllAnimalsInHerds", verifyToken, (req, res) => {
   );
 });
 
-router.get("/findAnimalByKind", verifyToken, () => {});
+router.get("/findAnimalByKindName/:name", verifyToken, (req, res) => {
+  if (req.params.name) {
+    jwt.verify(
+      req.token,
+      process.env.S3_SECRETKEY,
+      async (jwtError, authData) => {
+        if (jwtError) {
+          res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+        } else {
+          const checkUser = await findUserById(Users, authData);
+          if (checkUser !== null) {
+            const findAnimal = await findAnimalByKindName(
+              AnimalsInHerd,
+              KindsOfAnimals,
+              req.params.name
+            );
+            if (findAnimal) {
+              res.status(201).json({ Animals: findAnimal });
+            } else {
+              res.status(404).json({
+                Error: "Użytkownik nie posiada zwierząt tego rodzaju!",
+              });
+            }
+          } else {
+            res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+          }
+        }
+      }
+    );
+  } else {
+    res.status(400).json({ Error: "Nie wprowadzono danych!" });
+  }
+});
 
-router.get("/findAnimalByJoinType", verifyToken, () => {});
+router.get("/findAnimalByJoinType/:joinTypeName", verifyToken, () => {});
 
-router.get("/findAnimalByHerd", verifyToken, () => {});
+router.get("/findAnimalByHerdName/:name", verifyToken, () => {});
 
 router.put(
   "/editIdentityNumberOfAnimal",
