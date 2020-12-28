@@ -15,6 +15,7 @@ const findAllAnimalsGenders = require("../Functions/Animals/findAllAnimalsGender
 const findAllKindsOfAnimals = require("../Functions/Animals/findAllKindsOfAnimals");
 const TypesOfJoinToTheHerd = require("../Models/TypesOfJoinToTheHerd");
 const findAllJoinTypeToTheHerd = require("../Functions/Animals/findAllJoinTypeToTheHerd");
+const findAllAnimalsInHerds = require("../Functions/Animals/findAllAnimalsInHerds");
 
 router.get("/takeAllAnimalsGenders", verifyToken, (req, res) => {
   jwt.verify(
@@ -218,6 +219,39 @@ router.post(
   }
 );
 
+router.get("/findAllAnimalsInHerds", verifyToken, (req, res) => {
+  jwt.verify(
+    req.token,
+    process.env.S3_SECRETKEY,
+    async (jwtError, authData) => {
+      if (jwtError) {
+        res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+      } else {
+        const checkUser = await findUserById(Users, authData);
+        if (checkUser !== null) {
+          const findAnimalsInHerd = await findAllAnimalsInHerds(AnimalsInHerd);
+          if (findAnimalsInHerd !== null) {
+            res.status(201).json({ AnimalsInHerd: findAnimalsInHerd });
+          } else {
+            res.status(404).json({
+              Error:
+                "Użytkownik nie posiada zwierząt przypisanych do jakiejkolwiek hodowli!",
+            });
+          }
+        } else {
+          res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+        }
+      }
+    }
+  );
+});
+
+router.get("/findAnimalByKind", verifyToken, () => {});
+
+router.get("/findAnimalByJoinType", verifyToken, () => {});
+
+router.get("/findAnimalByHerd", verifyToken, () => {});
+
 router.put(
   "/editIdentityNumberOfAnimal",
   [
@@ -331,14 +365,6 @@ router.put(
   verifyToken,
   () => {}
 );
-
-router.get("/findAllAnimalsInHerds", [], verifyToken, () => {});
-
-router.get("/findAnimalByKind", [], verifyToken, () => {});
-
-router.get("/findAnimalByJoinType", [], verifyToken, () => {});
-
-router.get("/findAnimalByHerd", [], verifyToken, () => {});
 
 router.post(
   "/addNewBornAnimal",
