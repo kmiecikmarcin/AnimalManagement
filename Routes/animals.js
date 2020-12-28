@@ -6,9 +6,11 @@ require("dotenv").config();
 const { check, validationResult } = require("express-validator");
 const verifyToken = require("../Functions/Users/verifyJwtToken");
 const Users = require("../Models/Users");
+const AnimalsInHerd = require("../Models/AnimalsInHerd");
+const GenderOfAnimal = require("../Models/GenderOfAnimal");
 const findUserById = require("../Functions/Users/findUserById");
 const createNewAnimal = require("../Functions/Animals/createNewAnimal");
-const AnimalsInHerd = require("../Models/AnimalsInHerd");
+const findAllAnimalsGenders = require("../Functions/Animals/findAllAnimalsGenders");
 
 router.post(
   "/addNewAnimal",
@@ -127,11 +129,63 @@ router.post(
   }
 );
 
-router.get("/takeAllAnimalGender", [], verifyToken, () => {});
+router.get("/takeAllAnimalsGenders", verifyToken, (req, res) => {
+  jwt.verify(
+    req.token,
+    process.env.S3_SECRETKEY,
+    async (jwtError, authData) => {
+      if (jwtError) {
+        res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+      } else {
+        const checkUser = await findUserById(Users, authData);
+        if (checkUser !== null) {
+          const findAnimalsGenders = await findAllAnimalsGenders(
+            GenderOfAnimal
+          );
+          if (findAnimalsGenders !== null) {
+            res.status(201).json({ Genders: findAnimalsGenders });
+          } else {
+            res.status(404).json({
+              Error: "System nie posiada przypisanych płci zwierząt!",
+            });
+          }
+        } else {
+          res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+        }
+      }
+    }
+  );
+});
 
-router.get("/takeAllKindsOfAnimals", [], verifyToken, () => {});
+router.get("/takeAllKindsOfAnimals", verifyToken, (req, res) => {
+  jwt.verify(
+    req.token,
+    process.env.S3_SECRETKEY,
+    async (jwtError, authData) => {
+      if (jwtError) {
+        res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+      } else {
+        const checkUser = await findUserById(Users, authData);
+        if (checkUser !== null) {
+          const findAnimalsGenders = await findAllAnimalsGenders(
+            GenderOfAnimal
+          );
+          if (findAnimalsGenders !== null) {
+            res.status(201).json({ Genders: findAnimalsGenders });
+          } else {
+            res.status(404).json({
+              Error: "System nie posiada przypisanych płci zwierząt!",
+            });
+          }
+        } else {
+          res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+        }
+      }
+    }
+  );
+});
 
-router.get("/takeAllJoinTypeToTheHerd", [], verifyToken, () => {});
+router.get("/takeAllJoinTypeToTheHerd", verifyToken, () => {});
 
 router.put(
   "/editIdentityNumberOfAnimal",
