@@ -2,7 +2,7 @@ async function findAllJoinTypeToTheHerd(TypesOfJoinToTheHerd) {
   const search = await TypesOfJoinToTheHerd.findAll({
     attributes: ["name"],
   });
-  if (search !== null) {
+  if (search !== null && Object.keys(search) !== 0) {
     return search;
   }
   return null;
