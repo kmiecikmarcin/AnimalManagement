@@ -720,7 +720,7 @@
 									"const herds_type = [\"Kura\",\"Królik\",\"Świnia\"]\r",
 									"const random_number_for_type_of_herd = _.random(0, 2);\r",
 									"const new_type_of_herd = herds_type[random_number_for_type_of_herd];\r",
-									"\r",
+									"console.log(new_type_of_herd)\r",
 									"pm.environment.set(\"new_type_of_herd\",new_type_of_herd)"
 								],
 								"type": "text/javascript"
@@ -796,11 +796,23 @@
 								"exec": [
 									"pm.test(\"Response is correct\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.Message).to.eql(\"Hodowla została usunięta pomyślnie!\");\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
 									"});\r",
-									"pm.test(\"Successful PUT request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
 									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const random_number = _.random(1,100);\r",
+									"const random_name = \"herd\" + random_number + \"example\";\r",
+									"\r",
+									"pm.environment.set(\"random_name\", random_name);"
 								],
 								"type": "text/javascript"
 							}
@@ -828,7 +840,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"userPassword\": \"{{password}}\",\r\n    \"confirmPassword\": \"{{password}}\"\r\n}",
+							"raw": "{\r\n    \"herdName\": \"{{random_name}}\",\r\n    \"userPassword\": \"{{password}}\",\r\n    \"confirmPassword\": \"{{password}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1091,7 +1103,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"herdName\": \"{{name_of_herd}}\",\r\n    \"joinTypeName\": \"{{join_type}}\",\r\n    \"kindOfAnimalName\": \"{{kinds_of_animal_array}}\",\r\n    \"animalGender\": \"{{animal_gender}}\",\r\n    \"identityNumberOfAnimal\": \"{{identityNumberOfAnimal}}\",\r\n    \"breedOfAnimal\": \"{{breeds_of_animal_array}}\",\r\n    \"dateOfJoinToTheHerd\": \"{{date}}\",\r\n    \"birthDate\": \"{{date}}\",\r\n    \"animalWeight\": \"{{animal_weight}}\"\r\n}",
+							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"joinTypeName\": \"{{join_type}}\",\r\n    \"kindOfAnimalName\": \"{{kinds_of_animal_array}}\",\r\n    \"animalGender\": \"{{animal_gender}}\",\r\n    \"identityNumberOfAnimal\": \"{{identityNumberOfAnimal}}\",\r\n    \"breedOfAnimal\": \"{{breeds_of_animal_array}}\",\r\n    \"dateOfJoinToTheHerd\": \"{{date}}\",\r\n    \"birthDate\": \"{{date}}\",\r\n    \"animalWeight\": \"{{animal_weight}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1162,7 +1174,7 @@
 							"variable": [
 								{
 									"key": "herdName",
-									"value": "{{name_of_herd}}"
+									"value": "{{new_name_of_herd}}"
 								}
 							]
 						}
@@ -1180,7 +1192,7 @@
 									"    var jsonData = pm.response.json();\r",
 									"    pm.expect(jsonData.Message).not.eql(null);\r",
 									"});\r",
-									"pm.test(\"Successful GET request\", function () {\r",
+									"pm.test(\"Successful PUT request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
 									"});"
 								],
@@ -1216,7 +1228,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"herdName\": \"{{name_of_herd}}\",\r\n    \"oldIdentityNumberOfAnimal\": \"{{identityNumberOfAnimal}}\",\r\n    \"newIdentityNumberOfAnimal\": \"{{new_identityNumberOfAnimal}}\"\r\n}",
+							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"oldIdentityNumberOfAnimal\": \"{{identityNumberOfAnimal}}\",\r\n    \"newIdentityNumberOfAnimal\": \"{{new_identityNumberOfAnimal}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
