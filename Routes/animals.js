@@ -34,7 +34,7 @@ router.get("/takeAllAnimalsGenders", verifyToken, (req, res) => {
             authData.id
           );
           if (findAnimalsGenders !== null) {
-            res.status(201).json({ Genders: findAnimalsGenders });
+            res.status(200).json({ Genders: findAnimalsGenders });
           } else {
             res.status(404).json({
               Error: "System nie posiada przypisanych płci zwierząt!",
@@ -62,7 +62,7 @@ router.get("/takeAllKindsOfAnimals", verifyToken, (req, res) => {
             KindsOfAnimals
           );
           if (findKindsOfAnimals !== null) {
-            res.status(201).json({ Genders: findKindsOfAnimals });
+            res.status(200).json({ Genders: findKindsOfAnimals });
           } else {
             res.status(404).json({
               Error: "System nie posiada przypisanych rodzajów zwierząt!",
@@ -90,7 +90,7 @@ router.get("/takeAllJoinTypeToTheHerd", verifyToken, (req, res) => {
             TypesOfJoinToTheHerd
           );
           if (findTypesOfJoinToTheHerd !== null) {
-            res.status(201).json({ TypesOfJoin: findTypesOfJoinToTheHerd });
+            res.status(200).json({ TypesOfJoin: findTypesOfJoinToTheHerd });
           } else {
             res.status(404).json({
               Error:
@@ -244,7 +244,7 @@ router.get("/findAllAnimalsInHerd/:herdName", verifyToken, (req, res) => {
                 findHerd.id
               );
               if (findAnimalsInHerd !== null) {
-                res.status(201).json({ AnimalsInHerd: findAnimalsInHerd });
+                res.status(200).json({ AnimalsInHerd: findAnimalsInHerd });
               } else {
                 res.status(404).json({
                   Error:
@@ -474,15 +474,11 @@ router.post(
 
 router.get("/takeAllDeadAnimals", verifyToken, () => {});
 
-router.get("/takeAllDeadAnimalsinHerd", verifyToken, () => {});
-
 router.put("/editNewDeadAnimalDateOfDeath", [], verifyToken, () => {});
 
 router.put("/editNewDeadAnimalReasonOfDeath", [], verifyToken, () => {});
 
 router.put("/editNewDeadAnimalDescription", [], verifyToken, () => {});
-
-router.get("/takeDeadAnimalsByReasonDeath", verifyToken, () => {});
 
 router.delete(
   "/deleteAnimal",
