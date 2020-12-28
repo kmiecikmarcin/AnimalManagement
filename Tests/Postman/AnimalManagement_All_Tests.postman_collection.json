@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "933e06a8-2b27-4f71-ab9c-e1a5c6092b9a",
+		"_postman_id": "920a6f91-e711-413d-b9a3-74b84460cfe7",
 		"name": "AnimalManagement_All_Tests",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -14,7 +14,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "46530c08-b5af-4e7b-a5d3-9550d241fd69",
 								"exec": [
 									"pm.test(\"Response is correct\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
@@ -30,7 +29,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "d37a3889-68d9-4f05-86c7-58b2fec6491b",
 								"exec": [
 									"const random_number = _.random(1000, 9000);\r",
 									"const email = \"user\" + random_number + \"@example.com\";\r",
@@ -85,7 +83,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "e7527617-0dd9-4449-8a5d-90084f8ce2fd",
 								"exec": [
 									"pm.test(\"Response is correct\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
@@ -106,7 +103,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "7dbbb51a-c3b3-44cd-8393-75520df43009",
 								"exec": [
 									""
 								],
@@ -148,7 +144,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "fa22a61a-4718-4e95-9c44-a2244a21ec8f",
 								"exec": [
 									"const random_number = _.random(1000, 9000);\r",
 									"const new_email = \"user\" + random_number + \"@example.com\";\r",
@@ -161,7 +156,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "dcf59a7c-4781-4d9d-898c-f50c0735dc56",
 								"exec": [
 									"pm.test(\"Response is correct\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
@@ -226,7 +220,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "37e02389-bf18-4c65-9a35-7eae324aad31",
 								"exec": [
 									""
 								],
@@ -236,7 +229,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "e30add7d-e6f9-4dd5-ad4f-89a1e9ef9f49",
 								"exec": [
 									"pm.test(\"Successful PUT request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
@@ -297,7 +289,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "5d3da6db-7ed8-4f9d-9f8e-6fec64178fc9",
 								"exec": [
 									"const random_password = _.random(100000,9000000);\r",
 									"const new_password = random_password + \"@\";\r",
@@ -360,7 +351,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "bf493943-cf9d-4028-bc74-2e5356fb3335",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -370,15 +360,13 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "177443e5-6be1-4138-91c5-d90215505a85",
 						"type": "text/javascript",
 						"exec": [
 							""
 						]
 					}
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Herds - scenario 1",
@@ -389,7 +377,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "2a86e2c2-a610-4e91-af82-20f1c8aaa091",
 								"exec": [
 									"pm.test(\"Response is correct\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
@@ -405,12 +392,11 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "53aaa353-25f2-4bb5-8810-d57a6c3c9a46",
 								"exec": [
 									"const random_number = _.random(1, 9000);\r",
 									"const name_of_herd = \"herd\" + random_number + \"example\";\r",
 									"\r",
-									"const herds_type = [\"Kury\",\"Króliki\",\"Świnie\"]\r",
+									"const herds_type = [\"Kura\",\"Królik\",\"Świnia\"]\r",
 									"const random_number_for_type_of_herd = _.random(1, 2);\r",
 									"const type_of_herd = herds_type[random_number_for_type_of_herd];\r",
 									"\r",
@@ -476,7 +462,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "75b7b6c5-3e74-4a7d-921c-4ffd5c737f5b",
 								"exec": [
 									"pm.test(\"Response is correct\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
@@ -531,7 +516,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "9aed53f9-2829-46ea-aacb-817487b4a601",
 								"exec": [
 									"pm.test(\"Successful GET request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
@@ -581,8 +565,7 @@
 							"variable": [
 								{
 									"key": "name",
-									"value": "{{name_of_herd}}",
-									"type": "string"
+									"value": "{{name_of_herd}}"
 								}
 							]
 						}
@@ -595,7 +578,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "0ae92035-062a-41ef-b030-cf8b9b0de0b3",
 								"exec": [
 									"pm.test(\"Successful GET request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
@@ -645,8 +627,7 @@
 							"variable": [
 								{
 									"key": "typeOfAnimal",
-									"value": "{{type_of_herd}}",
-									"type": "string"
+									"value": "{{type_of_herd}}"
 								}
 							]
 						}
@@ -659,12 +640,11 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "9b9fba6a-b1ce-4760-b68e-0eeb663b1f48",
 								"exec": [
 									"const random_number = _.random(1, 9000);\r",
 									"const new_name_of_herd = \"herd\" + random_number + \"example\";\r",
 									"\r",
-									"pm.environment.set(\"new_name_of_herd\", new_name_of_herd);"
+									"pm.collectionVariables.set(\"new_name_of_herd\", new_name_of_herd);"
 								],
 								"type": "text/javascript"
 							}
@@ -672,7 +652,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "19f2cefc-c5d7-43e7-b54c-9f4c21ed71d0",
 								"exec": [
 									"pm.test(\"Response is correct\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
@@ -737,10 +716,9 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "c098749b-b7d7-4401-ba22-6309fe8a593c",
 								"exec": [
-									"const herds_type = [\"Kury\",\"Króliki\",\"Świnie\"]\r",
-									"const random_number_for_type_of_herd = _.random(1, 2);\r",
+									"const herds_type = [\"Kura\",\"Królik\",\"Świnia\"]\r",
+									"const random_number_for_type_of_herd = _.random(0, 2);\r",
 									"const new_type_of_herd = herds_type[random_number_for_type_of_herd];\r",
 									"\r",
 									"pm.environment.set(\"new_type_of_herd\",new_type_of_herd)"
@@ -751,7 +729,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "0a08afd4-a674-46e1-8515-6b89a2c5e63e",
 								"exec": [
 									"pm.test(\"Response is correct\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
@@ -816,14 +793,13 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "1fccd9f6-fa74-4dbe-bb2e-fe6ac131917b",
 								"exec": [
 									"pm.test(\"Response is correct\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
 									"    pm.expect(jsonData.Message).to.eql(\"Hodowla została usunięta pomyślnie!\");\r",
 									"});\r",
 									"pm.test(\"Successful PUT request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -852,7 +828,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"herdName\": \"{{name_of_herd}}\",\r\n    \"userPassword\": \"{{password}}\",\r\n    \"confirmPassword\": \"{{password}}\"\r\n}",
+							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"userPassword\": \"{{password}}\",\r\n    \"confirmPassword\": \"{{password}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -880,7 +856,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "c4b7990f-7b3a-4433-aa59-083e9f3f9f00",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -890,26 +865,167 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "a8530047-d76f-468c-a701-914aaac2781e",
 						"type": "text/javascript",
 						"exec": [
 							""
 						]
 					}
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Animals - scenario 1",
 			"item": [
+				{
+					"name": "Take all genders of animals",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/v1/animals/takeAllAnimalsGenders",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v1",
+								"animals",
+								"takeAllAnimalsGenders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Take all kinds of animals",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/v1/animals/takeAllKindsOfAnimals",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v1",
+								"animals",
+								"takeAllKindsOfAnimals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Take all join type to the herd",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/v1/animals/takeAllJoinTypeToTheHerd",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v1",
+								"animals",
+								"takeAllJoinTypeToTheHerd"
+							]
+						}
+					},
+					"response": []
+				},
 				{
 					"name": "Add new animal",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
-								"id": "3d180a65-f082-4b24-8af8-01ace1f29ea9",
 								"exec": [
 									"pm.test(\"Response is correct\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
@@ -918,6 +1034,43 @@
 									"pm.test(\"Successful POST request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
 									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const random_number = _.random(0,10000);\r",
+									"\r",
+									"const join_type_name_array = [\"Inny\", \"Urodzony w hodowli\", \"Kupiony\"]\r",
+									"const random_number_for_join_type_name = _.random(0, 2);\r",
+									"\r",
+									"const kinds_of_animal_array = [\"Kura\"]\r",
+									"\r",
+									"const animal_genders_array = [\"Samiec\", \"Samica\"];\r",
+									"const random_gender = _.random(0,1);\r",
+									"\r",
+									"const identityNumberOfAnimal = random_number;\r",
+									"\r",
+									"const breeds_of_animal_array = [\"Nioska\"];\r",
+									"\r",
+									"const take_date = new Date();\r",
+									"const date = take_date.getFullYear() + \"-\" + (take_date.getMonth() + 1) + \"-\" + take_date.getDate();\r",
+									"\r",
+									"const animal_weight = _.random(1, 20);\r",
+									"\r",
+									"const join_type = join_type_name_array[random_number_for_join_type_name];\r",
+									"const animal_gender = animal_genders_array[random_gender];\r",
+									"\r",
+									"pm.collectionVariables.set(\"join_type\", join_type);\r",
+									"pm.collectionVariables.set(\"kinds_of_animal_array\", kinds_of_animal_array);\r",
+									"pm.collectionVariables.set(\"animal_gender\", animal_gender);\r",
+									"pm.collectionVariables.set(\"identityNumberOfAnimal\", identityNumberOfAnimal);\r",
+									"pm.collectionVariables.set(\"breeds_of_animal_array\", breeds_of_animal_array);\r",
+									"pm.collectionVariables.set(\"date\", date);\r",
+									"pm.collectionVariables.set(\"animal_weight\", animal_weight);"
 								],
 								"type": "text/javascript"
 							}
@@ -938,7 +1091,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"herdName\": \"Nowe stado\",\r\n    \"joinTypeName\": \"Urodzony w hodowli\",\r\n    \"kindOfAnimalName\": \"Królik\",\r\n    \"animalGender\": \"Samiec\",\r\n    \"identityNumberOfAnimal\": \"1\",\r\n    \"breedOfAnimal\": \"Kalifornijski\",\r\n    \"dateOfJoinToTheHerd\": \"2020-12-21\",\r\n    \"birthDate\": \"2020-12-01\",\r\n    \"animalWeight\": \"10\"\r\n}",
+							"raw": "{\r\n    \"herdName\": \"{{name_of_herd}}\",\r\n    \"joinTypeName\": \"{{join_type}}\",\r\n    \"kindOfAnimalName\": \"{{kinds_of_animal_array}}\",\r\n    \"animalGender\": \"{{animal_gender}}\",\r\n    \"identityNumberOfAnimal\": \"{{identityNumberOfAnimal}}\",\r\n    \"breedOfAnimal\": \"{{breeds_of_animal_array}}\",\r\n    \"dateOfJoinToTheHerd\": \"{{date}}\",\r\n    \"birthDate\": \"{{date}}\",\r\n    \"animalWeight\": \"{{animal_weight}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -960,16 +1113,187 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Find all animals in herd",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/v1/animals/findAllAnimalsInHerd/:herdName",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v1",
+								"animals",
+								"findAllAnimalsInHerd",
+								":herdName"
+							],
+							"variable": [
+								{
+									"key": "herdName",
+									"value": "{{name_of_herd}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit identity number of animal",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const random_number = _.random(0,10000);\r",
+									"\r",
+									"const new_identityNumberOfAnimal = random_number;\r",
+									"\r",
+									"pm.collectionVariables.set(\"new_identityNumberOfAnimal\", new_identityNumberOfAnimal);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"herdName\": \"{{name_of_herd}}\",\r\n    \"oldIdentityNumberOfAnimal\": \"{{identityNumberOfAnimal}}\",\r\n    \"newIdentityNumberOfAnimal\": \"{{new_identityNumberOfAnimal}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/v1/animals/editIdentityNumberOfAnimal",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v1",
+								"animals",
+								"editIdentityNumberOfAnimal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Take all reason of death",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/v1/animals/takeAllReasonDeath",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v1",
+								"animals",
+								"takeAllReasonDeath"
+							]
+						}
+					},
+					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		}
 	],
 	"event": [
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "a4d6f7dc-8b39-4a86-819f-75a12f91c147",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -979,7 +1303,6 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "09a20c09-3de0-4a64-92c2-0f1685e98c74",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -989,40 +1312,64 @@
 	],
 	"variable": [
 		{
-			"id": "4c2c4938-54d3-402c-99c1-1786ecdb1cf9",
 			"key": "token",
 			"value": ""
 		},
 		{
-			"id": "c543cfc4-7e7a-4b62-aabe-52d55dfd9046",
 			"key": "email",
 			"value": ""
 		},
 		{
-			"id": "62481d5d-1d18-4f7c-91e3-360dc29df405",
 			"key": "password",
 			"value": ""
 		},
 		{
-			"id": "7755d912-cd12-43a8-96e0-276c8e90e81c",
 			"key": "date",
 			"value": ""
 		},
 		{
-			"id": "ee560da0-7c5f-44dd-a46d-52cc20c3cec7",
 			"key": "name_of_herd",
 			"value": ""
 		},
 		{
-			"id": "829dfb3b-07f0-46e8-8ca6-0456931c6694",
 			"key": "type_of_herd",
 			"value": ""
 		},
 		{
-			"id": "4f793097-4fb0-4e1a-8e80-756b508a3249",
-			"key": "dateWithoutTime",
+			"key": "animal_gender",
+			"value": ""
+		},
+		{
+			"key": "animal_weight",
+			"value": ""
+		},
+		{
+			"key": "breed_of_animal",
+			"value": ""
+		},
+		{
+			"key": "identityNumberOfAnimal",
+			"value": ""
+		},
+		{
+			"key": "join_type",
+			"value": ""
+		},
+		{
+			"key": "kinds_of_animal_array",
+			"value": ""
+		},
+		{
+			"key": "breeds_of_animal_array",
+			"value": ""
+		},
+		{
+			"key": "new_name_of_herd",
+			"value": ""
+		},
+		{
+			"key": "new_identityNumberOfAnimal",
 			"value": ""
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
