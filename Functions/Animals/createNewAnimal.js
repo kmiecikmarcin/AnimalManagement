@@ -44,10 +44,10 @@ async function createNewAnimal(
             joinDate: dateOfJoinToTheHerd,
             birthDate: animalBirthDate,
             weight: animalWeight,
-            idHerd: checkHerdName.id,
-            idJoinType: checkJoinType.id,
-            idKindOfAnimal: checkKindOfAnimal.id,
-            idAnimalGender: checkAnimalGender.id,
+            HerdId: checkHerdName.id,
+            TypesOfJoinToTheHerdId: checkJoinType.id,
+            KindsOfAnimalId: checkKindOfAnimal.id,
+            GenderOfAnimalId: checkAnimalGender.id,
           });
           if (addNewAnimal) {
             return addNewAnimal;
