@@ -8,9 +8,11 @@ const verifyToken = require("../Functions/Users/verifyJwtToken");
 const Users = require("../Models/Users");
 const AnimalsInHerd = require("../Models/AnimalsInHerd");
 const GenderOfAnimal = require("../Models/GenderOfAnimal");
+const KindsOfAnimals = require("../Models/KindsOfAnimals");
 const findUserById = require("../Functions/Users/findUserById");
 const createNewAnimal = require("../Functions/Animals/createNewAnimal");
 const findAllAnimalsGenders = require("../Functions/Animals/findAllAnimalsGenders");
+const findAllKindsOfAnimals = require("../Functions/Animals/findAllKindsOfAnimals");
 
 router.post(
   "/addNewAnimal",
@@ -167,11 +169,11 @@ router.get("/takeAllKindsOfAnimals", verifyToken, (req, res) => {
       } else {
         const checkUser = await findUserById(Users, authData);
         if (checkUser !== null) {
-          const findAnimalsGenders = await findAllAnimalsGenders(
-            GenderOfAnimal
+          const findKindsOfAnimals = await findAllKindsOfAnimals(
+            KindsOfAnimals
           );
-          if (findAnimalsGenders !== null) {
-            res.status(201).json({ Genders: findAnimalsGenders });
+          if (findKindsOfAnimals !== null) {
+            res.status(201).json({ Genders: findKindsOfAnimals });
           } else {
             res.status(404).json({
               Error: "System nie posiada przypisanych płci zwierząt!",
