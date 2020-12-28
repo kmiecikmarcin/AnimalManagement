@@ -407,7 +407,7 @@ router.put(
               if (checkEnteredHerdTypeFromUser) {
                 const updateType = await changeTypeOfHerd(
                   Herds,
-                  req.body.newHerdName,
+                  checkEnteredHerdTypeFromUser.id,
                   authData.id
                 );
                 if (updateType) {
