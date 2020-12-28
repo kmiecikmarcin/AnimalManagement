@@ -18,7 +18,7 @@ const findAllKindsOfAnimals = require("../Functions/Animals/findAllKindsOfAnimal
 const findAllJoinTypeToTheHerd = require("../Functions/Animals/findAllJoinTypeToTheHerd");
 const findAllAnimalsInHerds = require("../Functions/Animals/findAllAnimalsInHerds");
 const findAnimalByKindName = require("../Functions/Animals/findAnimalByKindName");
-const findAllUserHerds = require("../Functions/Herds/findAllUserHerds");
+const findHerdByName = require("../Functions/Herds/findHerdByName");
 
 router.get("/takeAllAnimalsGenders", verifyToken, (req, res) => {
   jwt.verify(
@@ -223,38 +223,49 @@ router.post(
   }
 );
 
-router.get("/findAllAnimalsInHerds", verifyToken, (req, res) => {
-  jwt.verify(
-    req.token,
-    process.env.S3_SECRETKEY,
-    async (jwtError, authData) => {
-      if (jwtError) {
-        res.status(403).json({ Error: "Błąd uwierzytelniania!" });
-      } else {
-        const checkUser = await findUserById(Users, authData);
-        if (checkUser !== null) {
-          const findHerd = await findAllUserHerds(Herds);
-          if (findHerd) {
-            const findAnimalsInHerd = await findAllAnimalsInHerds(
-              AnimalsInHerd
+router.get("/findAllAnimalsInHerd/:herdName", verifyToken, (req, res) => {
+  if (req.params.herdName) {
+    jwt.verify(
+      req.token,
+      process.env.S3_SECRETKEY,
+      async (jwtError, authData) => {
+        if (jwtError) {
+          res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+        } else {
+          const checkUser = await findUserById(Users, authData);
+          if (checkUser !== null) {
+            const findHerd = await findHerdByName(
+              Herds,
+              req.params.herdName,
+              authData.id
             );
-            if (findAnimalsInHerd !== null) {
-              res.status(201).json({ AnimalsInHerd: findAnimalsInHerd });
+            if (findHerd) {
+              const findAnimalsInHerd = await findAllAnimalsInHerds(
+                AnimalsInHerd,
+                findHerd.id
+              );
+              if (findAnimalsInHerd !== null) {
+                res.status(201).json({ AnimalsInHerd: findAnimalsInHerd });
+              } else {
+                res.status(404).json({
+                  Error:
+                    "Użytkownik nie posiada zwierząt przypisanych do jakiejkolwiek hodowli!",
+                });
+              }
             } else {
-              res.status(404).json({
-                Error:
-                  "Użytkownik nie posiada zwierząt przypisanych do jakiejkolwiek hodowli!",
-              });
+              res
+                .status(404)
+                .json({ Error: "Użytkownik nie posiada hodowli!" });
             }
           } else {
-            res.status(404).json({ Error: "Użytkownik nie posiada hodowli!" });
+            res.status(404).json({ Error: "Użytkownik nie istnieje!" });
           }
-        } else {
-          res.status(404).json({ Error: "Użytkownik nie istnieje!" });
         }
       }
-    }
-  );
+    );
+  } else {
+    res.status(400).json({ Error: "Nie wprowadzono danych!" });
+  }
 });
 
 router.get("/findAnimalByTheirKindName/:name", verifyToken, (req, res) => {
