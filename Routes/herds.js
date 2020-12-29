@@ -143,7 +143,7 @@ router.get("/findAllHerds", verifyToken, (req, res) => {
         if (checkUser !== null) {
           const findHerds = await findAllUserHerds(Herds, authData.id);
           if (findHerds !== null) {
-            res.status(201).json({ Herds: findHerds });
+            res.status(200).json({ Herds: findHerds });
           } else {
             res.status(404).json({
               Error: "Użytkownik nie posiada hodowli przypisanych do konta!",
@@ -193,7 +193,7 @@ router.get("/findHerdByName/:name", verifyToken, (req, res) => {
               authData.id
             );
             if (findHerd) {
-              res.status(201).json({ Herds: findHerd });
+              res.status(200).json({ Herds: findHerd });
             } else {
               res.status(404).json({
                 Error: "Użytkownik nie posiada hodowli z podaną nazwą!",
@@ -247,7 +247,7 @@ router.get("/findHerdByAnimalType/:typeOfAnimal", verifyToken, (req, res) => {
               authData.id
             );
             if (findHerd) {
-              res.status(201).json({ Herds: findHerd });
+              res.status(200).json({ Herds: findHerd });
             } else {
               res.status(404).json({
                 Error: "Użytkownik nie posiada tego typu hodowli!",
