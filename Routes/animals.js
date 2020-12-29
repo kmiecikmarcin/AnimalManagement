@@ -23,6 +23,7 @@ const findAllReasonDeath = require("../Functions/Animals/findAllReasonDeath");
 const findAnimalByIdentityNumber = require("../Functions/Animals/findAnimalByIdentityNumber");
 const changeAnimalIdentityNumber = require("../Functions/Animals/changeAnimalIdentityNumber");
 const changeBreedOfAnimal = require("../Functions/Animals/changeBreedOfAnimal");
+const changeBirthDateOfAnimal = require("../Functions/Animals/changeBirthDateOfAnimal");
 
 router.get("/takeAllAnimalsGenders", verifyToken, (req, res) => {
   jwt.verify(
@@ -419,14 +420,14 @@ router.put(
                   req.body.identityNumberOfAnimal
                 );
                 if (findAnimal) {
-                  const updatebreedOfAnimal = await changeBreedOfAnimal(
+                  const updateBreedOfAnimal = await changeBreedOfAnimal(
                     AnimalsInHerd,
                     checkHerd.id,
                     findAnimal.identityNumber,
                     req.body.oldBreedOfAnimal,
                     req.body.newBreedOfAnimal
                   );
-                  if (updatebreedOfAnimal) {
+                  if (updateBreedOfAnimal) {
                     res.status(201).json({
                       Message: "Gatunek zwierzęcia został pomyślnie zmieniony!",
                     });
@@ -457,6 +458,20 @@ router.put(
 router.put(
   "/editBirthDate",
   [
+    check("herdName")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 3, max: 40 })
+      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+    check("identityNumberOfAnimal")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isInt()
+      .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
     check("oldBirthDate")
       .exists()
       .withMessage("Brak wymaganych danych!")
@@ -477,12 +492,85 @@ router.put(
       ),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkHerd = await findHerdByName(
+                Herds,
+                req.body.herdName,
+                authData.id
+              );
+              if (checkHerd) {
+                const findAnimal = await findAnimalByIdentityNumber(
+                  AnimalsInHerd,
+                  checkHerd.id,
+                  req.body.identityNumberOfAnimal
+                );
+                if (findAnimal) {
+                  const updateBirthDateOfAnimal = await changeBirthDateOfAnimal(
+                    AnimalsInHerd,
+                    checkHerd.id,
+                    findAnimal.identityNumber,
+                    req.body.oldBirthDate,
+                    req.body.newBirthDate
+                  );
+                  if (updateBirthDateOfAnimal) {
+                    res.status(201).json({
+                      Message:
+                        "Data narodzin zwierzęcia została pomyślnie zmieniona!",
+                    });
+                  } else {
+                    res.status(400).json({
+                      Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
+                    });
+                  }
+                } else {
+                  res.status(404).json({
+                    Error:
+                      "Nie znaleziono zwierzęcia o podanym numerze identyfikacyjnym!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error: "Nie znaleziono hodowli o wprowadzonej nazwie!",
+                });
+              }
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 router.put(
   "/editAnimalWeight",
   [
+    check("herdName")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 3, max: 40 })
+      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+    check("identityNumberOfAnimal")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isInt()
+      .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
     check("oldAnimalWeight")
       .exists()
       .withMessage("Brak wymaganych danych!")
@@ -497,28 +585,6 @@ router.put(
       .withMessage("Wymagane pole jest puste!")
       .isFloat()
       .withMessage("Wprowadzona wartość nie jest wartością liczbową!"),
-  ],
-  verifyToken,
-  () => {}
-);
-
-router.put(
-  "/editJoinType",
-  [
-    check("oldJoinTypeName")
-      .exists()
-      .withMessage("Brak wymaganych danych!")
-      .notEmpty()
-      .withMessage("Wymagane pole jest puste!")
-      .isLength({ min: 3, max: 256 })
-      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
-    check("newJoinTypeName")
-      .exists()
-      .withMessage("Brak wymaganych danych!")
-      .notEmpty()
-      .withMessage("Wymagane pole jest puste!")
-      .isLength({ min: 3, max: 256 })
-      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
   ],
   verifyToken,
   () => {}
