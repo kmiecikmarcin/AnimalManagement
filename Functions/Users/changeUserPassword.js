@@ -16,7 +16,7 @@ async function changeUserPassword(
           { password: hash },
           { where: { id: userId } }
         );
-        if (changePasswordForUser) {
+        if (changePasswordForUser.includes(1)) {
           return changePasswordForUser;
         }
         return null;

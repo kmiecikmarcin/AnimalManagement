@@ -10,7 +10,7 @@ async function changeAnimalIdentityNumber(
     },
     { where: { identityNumber: oldIdentityNumberOfAnimal, idHerd: herdId } }
   );
-  if (updateData) {
+  if (updateData.includes(1)) {
     return updateData;
   }
   return null;

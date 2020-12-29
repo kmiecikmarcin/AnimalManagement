@@ -3,7 +3,7 @@ async function changeTypeOfHerd(Herds, newTypeOfHerdId, userId) {
     { idKindOfAnimals: newTypeOfHerdId },
     { where: { idUser: userId } }
   );
-  if (updateType) {
+  if (updateType.includes(1)) {
     return updateType;
   }
   return null;

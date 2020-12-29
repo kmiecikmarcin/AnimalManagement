@@ -15,7 +15,7 @@ async function changeWeightOfAnimal(
       },
     }
   );
-  if (updateWeight) {
+  if (updateWeight.includes(1)) {
     return updateWeight;
   }
   return null;

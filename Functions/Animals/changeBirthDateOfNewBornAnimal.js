@@ -15,7 +15,7 @@ async function changeBirthDateOfNewBornAnimal(
       },
     }
   );
-  if (updateBirthDate.length > 1) {
+  if (updateBirthDate.includes(1)) {
     return updateBirthDate;
   }
   return null;

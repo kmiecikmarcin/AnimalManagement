@@ -3,7 +3,7 @@ async function changeHerdName(Herds, newHerdName, userId) {
     { name: newHerdName },
     { where: { idUser: userId } }
   );
-  if (updateHerdName) {
+  if (updateHerdName.includes(1)) {
     return updateHerdName;
   }
   return null;

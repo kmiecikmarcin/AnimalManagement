@@ -18,7 +18,7 @@ async function changeUserEmailAdress(
         { email: newUserEmailAdress },
         { where: { id: checkUserEmailAdress.id } }
       );
-      if (updateUserEmail) {
+      if (updateUserEmail.includes(1)) {
         return updateUserEmail;
       }
       return null;

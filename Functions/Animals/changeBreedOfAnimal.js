@@ -15,7 +15,7 @@ async function changeBreedOfAnimal(
       },
     }
   );
-  if (updateBreed) {
+  if (updateBreed.includes(1)) {
     return updateBreed;
   }
   return null;
