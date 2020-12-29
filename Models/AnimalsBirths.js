@@ -5,8 +5,8 @@ const AnimalsInHerd = require("./AnimalsInHerd");
 const KindsOfAnimals = require("./KindsOfAnimals");
 const Herd = require("./Herds");
 
-const AnimalsBirth = sequelize.define(
-  "AnimalsBirth",
+const AnimalsBirths = sequelize.define(
+  "AnimalsBirths",
   {
     id: {
       type: DataTypes.UUID,
@@ -30,25 +30,25 @@ const AnimalsBirth = sequelize.define(
   { timestamps: true }
 );
 
-AnimalsInHerd.hasMany(AnimalsBirth, {
+AnimalsInHerd.hasMany(AnimalsBirths, {
   foreignKey: {
     allowNull: false,
     field: "idAnimal",
   },
 });
 
-KindsOfAnimals.hasMany(AnimalsBirth, {
+KindsOfAnimals.hasMany(AnimalsBirths, {
   foreignKey: {
     allowNull: false,
-    field: "idSpeciesOfAnimals",
+    field: "idKindOfAnimals",
   },
 });
 
-Herd.hasMany(AnimalsBirth, {
+Herd.hasMany(AnimalsBirths, {
   foreignKey: {
     allowNull: false,
     field: "idHerd",
   },
 });
 
-module.exports = AnimalsBirth;
+module.exports = AnimalsBirths;
