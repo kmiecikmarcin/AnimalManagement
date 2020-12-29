@@ -24,6 +24,7 @@ const findAnimalByIdentityNumber = require("../Functions/Animals/findAnimalByIde
 const changeAnimalIdentityNumber = require("../Functions/Animals/changeAnimalIdentityNumber");
 const changeBreedOfAnimal = require("../Functions/Animals/changeBreedOfAnimal");
 const changeBirthDateOfAnimal = require("../Functions/Animals/changeBirthDateOfAnimal");
+const changeWeightOfAnimal = require("../Functions/Animals/changeWeightOfAnimal");
 
 router.get("/takeAllAnimalsGenders", verifyToken, (req, res) => {
   jwt.verify(
@@ -587,7 +588,65 @@ router.put(
       .withMessage("Wprowadzona wartość nie jest wartością liczbową!"),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkHerd = await findHerdByName(
+                Herds,
+                req.body.herdName,
+                authData.id
+              );
+              if (checkHerd) {
+                const findAnimal = await findAnimalByIdentityNumber(
+                  AnimalsInHerd,
+                  checkHerd.id,
+                  req.body.identityNumberOfAnimal
+                );
+                if (findAnimal) {
+                  const updateWeightOfAnimal = await changeWeightOfAnimal(
+                    AnimalsInHerd,
+                    checkHerd.id,
+                    findAnimal.identityNumber,
+                    req.body.oldAnimalWeight,
+                    req.body.newAnimalWeight
+                  );
+                  if (updateWeightOfAnimal) {
+                    res.status(201).json({
+                      Message: "Waga zwierzęcia została pomyślnie zmieniona!",
+                    });
+                  } else {
+                    res.status(400).json({
+                      Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
+                    });
+                  }
+                } else {
+                  res.status(404).json({
+                    Error:
+                      "Nie znaleziono zwierzęcia o podanym numerze identyfikacyjnym!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error: "Nie znaleziono hodowli o wprowadzonej nazwie!",
+                });
+              }
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 router.post(
