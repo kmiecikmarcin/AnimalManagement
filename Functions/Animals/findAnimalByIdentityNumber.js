@@ -1,10 +1,10 @@
 async function findAnimalByIdentityNumber(
   AnimalsInHerd,
   herdId,
-  oldIdentityNumberOfAnimal
+  identityNumberOfAnimal
 ) {
   const findAnimal = await AnimalsInHerd.findOne({
-    where: { identityNumber: oldIdentityNumberOfAnimal, idHerd: herdId },
+    where: { identityNumber: identityNumberOfAnimal, idHerd: herdId },
   });
   if (findAnimal) {
     return findAnimal;
