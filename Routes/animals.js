@@ -12,6 +12,7 @@ const KindsOfAnimals = require("../Models/KindsOfAnimals");
 const TypesOfJoinToTheHerd = require("../Models/TypesOfJoinToTheHerd");
 const Herds = require("../Models/Herds");
 const ReasonOfDeath = require("../Models/ReasonOfDeath");
+const AnimalsBirths = require("../Models/AnimalsBirths");
 const findUserById = require("../Functions/Users/findUserById");
 const createNewAnimal = require("../Functions/Animals/createNewAnimal");
 const findAllAnimalsGenders = require("../Functions/Animals/findAllAnimalsGenders");
@@ -25,6 +26,7 @@ const changeAnimalIdentityNumber = require("../Functions/Animals/changeAnimalIde
 const changeBreedOfAnimal = require("../Functions/Animals/changeBreedOfAnimal");
 const changeBirthDateOfAnimal = require("../Functions/Animals/changeBirthDateOfAnimal");
 const changeWeightOfAnimal = require("../Functions/Animals/changeWeightOfAnimal");
+const createNewBornAnimal = require("../Functions/Animals/createNewBornAnimal");
 
 router.get("/takeAllAnimalsGenders", verifyToken, (req, res) => {
   jwt.verify(
@@ -354,6 +356,8 @@ router.put(
                   Error: "Nie znaleziono hodowli o wprowadzonej nazwie!",
                 });
               }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
             }
           }
         }
@@ -448,6 +452,8 @@ router.put(
                   Error: "Nie znaleziono hodowli o wprowadzonej nazwie!",
                 });
               }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
             }
           }
         }
@@ -547,6 +553,8 @@ router.put(
                   Error: "Nie znaleziono hodowli o wprowadzonej nazwie!",
                 });
               }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
             }
           }
         }
@@ -641,6 +649,8 @@ router.put(
                   Error: "Nie znaleziono hodowli o wprowadzonej nazwie!",
                 });
               }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
             }
           }
         }
@@ -691,7 +701,47 @@ router.post(
       .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser) {
+              const addNewBornAnimal = await createNewBornAnimal(
+                res,
+                AnimalsBirths,
+                authData.id,
+                req.body.herdName,
+                req.body.kindOfAnimalName,
+                req.body.parentIdentityNumber,
+                req.body.birthDate,
+                req.body.temporaryIdentityNumberOfAnimal
+              );
+              if (addNewBornAnimal) {
+                res.status(201).json({
+                  Message: "Pomyślnie dodano nowo narodzone zwierzę!",
+                });
+              } else {
+                res.status(400).json({
+                  Error: "Coś poszło nie tak!Sprawdź wprowadzone dane!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 router.put("/editNewBornAnimalBirthDate", [], verifyToken, () => {});
