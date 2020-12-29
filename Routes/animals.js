@@ -18,7 +18,7 @@ const createNewAnimal = require("../Functions/Animals/createNewAnimal");
 const findAllAnimalsGenders = require("../Functions/Animals/findAllAnimalsGenders");
 const findAllKindsOfAnimals = require("../Functions/Animals/findAllKindsOfAnimals");
 const findAllJoinTypeToTheHerd = require("../Functions/Animals/findAllJoinTypeToTheHerd");
-const findAllAnimalsInHerds = require("../Functions/Animals/findAllAnimalsInHerds");
+const findAllAnimalsInHerd = require("../Functions/Animals/findAllAnimalsInHerd");
 const findHerdByName = require("../Functions/Herds/findHerdByName");
 const findAllReasonDeath = require("../Functions/Animals/findAllReasonDeath");
 const findAnimalByIdentityNumber = require("../Functions/Animals/findAnimalByIdentityNumber");
@@ -28,6 +28,7 @@ const changeBirthDateOfAnimal = require("../Functions/Animals/changeBirthDateOfA
 const changeWeightOfAnimal = require("../Functions/Animals/changeWeightOfAnimal");
 const createNewBornAnimal = require("../Functions/Animals/createNewBornAnimal");
 const changeBirthDateOfNewBornAnimal = require("../Functions/Animals/changeBirthDateOfNewBornAnimal");
+const findAllNewBornAnimalsInHerd = require("../Functions/Animals/findAllNewBornAnimalsInHerd");
 
 router.get("/takeAllAnimalsGenders", verifyToken, (req, res) => {
   jwt.verify(
@@ -249,7 +250,7 @@ router.get("/findAllAnimalsInHerd/:herdName", verifyToken, (req, res) => {
               authData.id
             );
             if (findHerd) {
-              const findAnimalsInHerd = await findAllAnimalsInHerds(
+              const findAnimalsInHerd = await findAllAnimalsInHerd(
                 AnimalsInHerd,
                 findHerd.id
               );
@@ -846,7 +847,56 @@ router.put(
   }
 );
 
-router.get("/takeNewBornAnimalsInHerd", verifyToken, () => {});
+router.get(
+  "/takeAllNewBornAnimalsInHerd/:herdName",
+  verifyToken,
+  (req, res) => {
+    if (req.params.herdName) {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const findHerd = await findHerdByName(
+                Herds,
+                req.params.herdName,
+                authData.id
+              );
+              if (findHerd) {
+                const findNewBornAnimalsInHerd = await findAllNewBornAnimalsInHerd(
+                  AnimalsBirths,
+                  findHerd.id
+                );
+                if (findNewBornAnimalsInHerd !== null) {
+                  res
+                    .status(200)
+                    .json({ AnimalsBirths: findNewBornAnimalsInHerd });
+                } else {
+                  res.status(404).json({
+                    Error:
+                      "Użytkownik nie posiada zwierząt przypisanych do jakiejkolwiek hodowli!",
+                  });
+                }
+              } else {
+                res
+                  .status(404)
+                  .json({ Error: "Użytkownik nie posiada hodowli!" });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    } else {
+      res.status(400).json({ Error: "Nie wprowadzono danych!" });
+    }
+  }
+);
 
 router.get("/takeAllReasonDeath", verifyToken, (req, res) => {
   jwt.verify(
