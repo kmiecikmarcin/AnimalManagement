@@ -22,6 +22,7 @@ const findHerdByName = require("../Functions/Herds/findHerdByName");
 const findAllReasonDeath = require("../Functions/Animals/findAllReasonDeath");
 const findAnimalByIdentityNumber = require("../Functions/Animals/findAnimalByIdentityNumber");
 const changeAnimalIdentityNumber = require("../Functions/Animals/changeAnimalIdentityNumber");
+const changeBreedOfAnimal = require("../Functions/Animals/changeBreedOfAnimal");
 
 router.get("/takeAllAnimalsGenders", verifyToken, (req, res) => {
   jwt.verify(
@@ -362,6 +363,20 @@ router.put(
 router.put(
   "/editBreedOfAnimal",
   [
+    check("herdName")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 3, max: 40 })
+      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+    check("identityNumberOfAnimal")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isInt()
+      .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
     check("oldBreedOfAnimal")
       .exists()
       .withMessage("Brak wymaganych danych!")
@@ -378,7 +393,65 @@ router.put(
       .withMessage("Nie spełniono wymagań co do wielkości wprowadzonej nazwy!"),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkHerd = await findHerdByName(
+                Herds,
+                req.body.herdName,
+                authData.id
+              );
+              if (checkHerd) {
+                const findAnimal = await findAnimalByIdentityNumber(
+                  AnimalsInHerd,
+                  checkHerd.id,
+                  req.body.identityNumberOfAnimal
+                );
+                if (findAnimal) {
+                  const updatebreedOfAnimal = await changeBreedOfAnimal(
+                    AnimalsInHerd,
+                    checkHerd.id,
+                    findAnimal.identityNumber,
+                    req.body.oldBreedOfAnimal,
+                    req.body.newBreedOfAnimal
+                  );
+                  if (updatebreedOfAnimal) {
+                    res.status(201).json({
+                      Message: "Gatunek zwierzęcia został pomyślnie zmieniony!",
+                    });
+                  } else {
+                    res.status(400).json({
+                      Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
+                    });
+                  }
+                } else {
+                  res.status(404).json({
+                    Error:
+                      "Nie znaleziono zwierzęcia o podanym numerze identyfikacyjnym!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error: "Nie znaleziono hodowli o wprowadzonej nazwie!",
+                });
+              }
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 router.put(
