@@ -27,6 +27,7 @@ const changeBreedOfAnimal = require("../Functions/Animals/changeBreedOfAnimal");
 const changeBirthDateOfAnimal = require("../Functions/Animals/changeBirthDateOfAnimal");
 const changeWeightOfAnimal = require("../Functions/Animals/changeWeightOfAnimal");
 const createNewBornAnimal = require("../Functions/Animals/createNewBornAnimal");
+const changeBirthDateOfNewBornAnimal = require("../Functions/Animals/changeBirthDateOfNewBornAnimal");
 
 router.get("/takeAllAnimalsGenders", verifyToken, (req, res) => {
   jwt.verify(
@@ -781,10 +782,69 @@ router.put(
       ),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkHerd = await findHerdByName(
+                Herds,
+                req.body.herdName,
+                authData.id
+              );
+              if (checkHerd) {
+                const findAnimal = await findAnimalByIdentityNumber(
+                  AnimalsBirths,
+                  checkHerd.id,
+                  req.body.animalChildIdentityNumberOfAnimal
+                );
+                if (findAnimal) {
+                  const updateBirthDateOfNewBornAnimal = await changeBirthDateOfNewBornAnimal(
+                    AnimalsBirths,
+                    checkHerd.id,
+                    findAnimal.identityNumber,
+                    req.body.oldBirthDate,
+                    req.body.newBirthDate
+                  );
+                  if (updateBirthDateOfNewBornAnimal) {
+                    res.status(201).json({
+                      Message:
+                        "Data narodzin zwierzęcia została pomyślnie zmieniona!",
+                    });
+                  } else {
+                    res.status(400).json({
+                      Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
+                    });
+                  }
+                } else {
+                  res.status(404).json({
+                    Error:
+                      "Nie znaleziono zwierzęcia o podanym numerze identyfikacyjnym!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error: "Nie znaleziono hodowli o wprowadzonej nazwie!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
-
-router.put("/editNewDeadAnimalIdentityNumber", [], verifyToken, () => {});
 
 router.get("/takeNewBornAnimalsInHerd", verifyToken, () => {});
 
@@ -854,6 +914,8 @@ router.post(
 
 router.get("/takeAllDeadAnimalsInHerd", verifyToken, () => {});
 
+router.put("/editNewDeadAnimalIdentityNumber", [], verifyToken, () => {});
+
 router.put("/editNewDeadAnimalDateOfDeath", [], verifyToken, () => {});
 
 router.put("/editNewDeadAnimalReasonOfDeath", [], verifyToken, () => {});
@@ -892,9 +954,16 @@ router.delete(
 );
 
 router.delete(
-  "/deleteDeadAnimal",
+  "/deleteNewBornAnimal",
   [
-    check("identityNumberOfAnimal")
+    check("temporaryIdentityNumberOfAnimal")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isInt()
+      .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
+    check("confirmTemporaryIdentityNumberOfAnimal")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
@@ -916,16 +985,9 @@ router.delete(
 );
 
 router.delete(
-  "/deleteNewBornAnimal",
+  "/deleteDeadAnimal",
   [
-    check("temporaryIdentityNumberOfAnimal")
-      .exists()
-      .withMessage("Brak wymaganych danych!")
-      .notEmpty()
-      .withMessage("Wymagane pole jest puste!")
-      .isInt()
-      .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
-    check("confirmTemporaryIdentityNumberOfAnimal")
+    check("identityNumberOfAnimal")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
