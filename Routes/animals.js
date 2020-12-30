@@ -31,6 +31,7 @@ const createNewBornAnimal = require("../Functions/Animals/createNewBornAnimal");
 const changeBirthDateOfNewBornAnimal = require("../Functions/Animals/changeBirthDateOfNewBornAnimal");
 const findAllNewBornAnimalsInHerd = require("../Functions/Animals/findAllNewBornAnimalsInHerd");
 const createNewDeadAnimal = require("../Functions/Animals/createNewDeadAnimal");
+const findAllNewDeadAnimalsInHerd = require("../Functions/Animals/findAllNewDeadAnimalsInHerd");
 
 router.get("/takeAllAnimalsGenders", verifyToken, (req, res) => {
   jwt.verify(
@@ -874,9 +875,7 @@ router.get(
                   findHerd.id
                 );
                 if (findNewBornAnimalsInHerd !== null) {
-                  res
-                    .status(200)
-                    .json({ AnimalsBirths: findNewBornAnimalsInHerd });
+                  res.status(200).json({ findNewBornAnimalsInHerd });
                 } else {
                   res.status(404).json({
                     Error:
@@ -1011,15 +1010,56 @@ router.post(
   }
 );
 
-router.get("/takeAllDeadAnimalsInHerd", verifyToken, () => {});
+router.get("/takeAllDeadsAnimalsInHerd/:herdName", verifyToken, (req, res) => {
+  if (req.params.herdName) {
+    jwt.verify(
+      req.token,
+      process.env.S3_SECRETKEY,
+      async (jwtError, authData) => {
+        if (jwtError) {
+          res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+        } else {
+          const checkUser = await findUserById(Users, authData);
+          if (checkUser !== null) {
+            const findHerd = await findHerdByName(
+              Herds,
+              req.params.herdName,
+              authData.id
+            );
+            if (findHerd) {
+              const findDeadAnimalsInHerd = await findAllNewDeadAnimalsInHerd(
+                AnimalsDeads,
+                findHerd.id
+              );
+              if (findDeadAnimalsInHerd !== null) {
+                res.status(200).json({ AnimalsDeads: findDeadAnimalsInHerd });
+              } else {
+                res.status(404).json({
+                  Error:
+                    "Użytkownik nie posiada zwierząt przypisanych do jakiejkolwiek hodowli!",
+                });
+              }
+            } else {
+              res
+                .status(404)
+                .json({ Error: "Użytkownik nie posiada hodowli!" });
+            }
+          } else {
+            res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+          }
+        }
+      }
+    );
+  } else {
+    res.status(400).json({ Error: "Nie wprowadzono danych!" });
+  }
+});
 
 router.put("/editNewDeadAnimalIdentityNumber", [], verifyToken, () => {});
 
 router.put("/editNewDeadAnimalDateOfDeath", [], verifyToken, () => {});
 
 router.put("/editNewDeadAnimalReasonOfDeath", [], verifyToken, () => {});
-
-router.put("/editNewDeadAnimalDescription", [], verifyToken, () => {});
 
 router.delete(
   "/deleteAnimal",
