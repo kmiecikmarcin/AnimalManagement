@@ -1,6 +1,6 @@
 async function findHerdByName(Herds, herdName, userId) {
   const findHerd = await Herds.findOne({
-    where: { name: herdName, idUser: userId },
+    where: { name: herdName, UserId: userId },
   });
   if (findHerd === null) {
     return null;

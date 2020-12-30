@@ -4,7 +4,7 @@ async function findHerdByAnimalType(KindOfAnimals, Herds, herdType, userId) {
   });
   if (findHerdType != null) {
     const findHerd = await Herds.findOne({
-      where: { idKindOfAnimals: findHerdType.id, idUser: userId },
+      where: { idKindOfAnimals: findHerdType.id, UserId: userId },
     });
     if (findHerd === null) {
       return null;

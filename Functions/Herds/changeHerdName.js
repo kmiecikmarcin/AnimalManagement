@@ -1,8 +1,14 @@
-async function changeHerdName(Herds, newHerdName, userId) {
+async function changeHerdName(Herds, oldHerdName, newHerdName, userId) {
   const updateHerdName = await Herds.update(
     { name: newHerdName },
-    { where: { idUser: userId } }
+    {
+      where: {
+        name: oldHerdName,
+        UserId: userId,
+      },
+    }
   );
+
   if (updateHerdName.includes(1)) {
     return updateHerdName;
   }

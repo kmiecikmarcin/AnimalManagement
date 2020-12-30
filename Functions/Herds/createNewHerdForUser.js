@@ -19,8 +19,8 @@ async function createNewHerdForUser(
       const createNewHerd = await Herds.create({
         name: herdName,
         creationDate: creationDateFromUser,
-        idUser: userId,
-        idKindOfAnimals: checkEnteredHerdTypeFromUser.id,
+        UserId: userId,
+        KindsOfAnimalId: checkEnteredHerdTypeFromUser.id,
       });
       if (createNewHerd) {
         return createNewHerd;
