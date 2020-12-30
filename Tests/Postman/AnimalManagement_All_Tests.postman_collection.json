@@ -231,7 +231,7 @@
 							"script": {
 								"exec": [
 									"pm.test(\"Successful Delete request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -249,7 +249,7 @@
 								}
 							]
 						},
-						"method": "DELETE",
+						"method": "PUT",
 						"header": [
 							{
 								"key": "",
@@ -1843,6 +1843,136 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Find animal by identity number",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/v1/animals/findOneAnimalInHerd/:herdName/:identityNumber",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v1",
+								"animals",
+								"findOneAnimalInHerd",
+								":herdName",
+								":identityNumber"
+							],
+							"variable": [
+								{
+									"key": "herdName",
+									"value": "{{new_name_of_herd}}"
+								},
+								{
+									"key": "identityNumber",
+									"value": "{{new_identityNumberOfAnimal}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit new dead animal identity number",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const random_number = _.random(0,10000);\r",
+									"\r",
+									"const new_dead_animal_identityNumberOfAnimal = random_number;\r",
+									"\r",
+									"pm.collectionVariables.set(\"new_dead_animal_identityNumberOfAnimal\", new_dead_animal_identityNumberOfAnimal);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"oldIdentityNumberOfAnimal\": \"{{new_identityNumberOfAnimal}}\",\r\n    \"newIdentityNumberOfAnimal\": \"{{new_dead_animal_identityNumberOfAnimal}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/v1/animals/editNewDeadAnimalIdentityNumber",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v1",
+								"animals",
+								"editNewDeadAnimalIdentityNumber"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
@@ -1958,6 +2088,10 @@
 		},
 		{
 			"key": "reason_of_death",
+			"value": ""
+		},
+		{
+			"key": "new_dead_animal_identityNumberOfAnimal",
 			"value": ""
 		}
 	]
