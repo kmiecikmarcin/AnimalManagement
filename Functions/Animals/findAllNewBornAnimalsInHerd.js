@@ -1,7 +1,16 @@
+const AnimalsInHerd = require("../../Models/AnimalsInHerd");
+const KindsOfAnimals = require("../../Models/KindsOfAnimals");
+const Herds = require("../../Models/Herds");
+
 async function findAllNewBornAnimalsInHerd(AnimalsBirths, herdId) {
   const search = await AnimalsBirths.findAll({
     raw: true,
     where: { idHerd: herdId },
+    include: [
+      { model: Herds, attributes: ["name"] },
+      { model: KindsOfAnimals, attributes: ["name"] },
+      { model: AnimalsInHerd, attributes: ["identityNumberOfAnimal"] },
+    ],
     attributes: ["dateOfBirth", "identityNumber"],
   });
   if (search !== null && Object.keys(search).length !== 0) {
