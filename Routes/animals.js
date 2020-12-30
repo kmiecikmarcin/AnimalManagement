@@ -13,6 +13,7 @@ const TypesOfJoinToTheHerd = require("../Models/TypesOfJoinToTheHerd");
 const Herds = require("../Models/Herds");
 const ReasonOfDeath = require("../Models/ReasonOfDeath");
 const AnimalsBirths = require("../Models/AnimalsBirths");
+const AnimalsDeads = require("../Models/AnimalsDeads");
 const findUserById = require("../Functions/Users/findUserById");
 const createNewAnimal = require("../Functions/Animals/createNewAnimal");
 const findAllAnimalsGenders = require("../Functions/Animals/findAllAnimalsGenders");
@@ -29,6 +30,7 @@ const changeWeightOfAnimal = require("../Functions/Animals/changeWeightOfAnimal"
 const createNewBornAnimal = require("../Functions/Animals/createNewBornAnimal");
 const changeBirthDateOfNewBornAnimal = require("../Functions/Animals/changeBirthDateOfNewBornAnimal");
 const findAllNewBornAnimalsInHerd = require("../Functions/Animals/findAllNewBornAnimalsInHerd");
+const createNewDeadAnimal = require("../Functions/Animals/createNewDeadAnimal");
 
 router.get("/takeAllAnimalsGenders", verifyToken, (req, res) => {
   jwt.verify(
@@ -927,6 +929,13 @@ router.get("/takeAllReasonDeath", verifyToken, (req, res) => {
 router.post(
   "/addNewDeadAnimal",
   [
+    check("herdName")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 3, max: 40 })
+      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
     check("identityNumberOfAnimal")
       .exists()
       .withMessage("Brak wymaganych danych!")
@@ -959,7 +968,47 @@ router.post(
       .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser) {
+              const addNewDeadAnimal = await createNewDeadAnimal(
+                res,
+                AnimalsDeads,
+                authData.id,
+                req.body.herdName,
+                req.body.identityNumberOfAnimal,
+                req.body.dateOfDeath,
+                req.body.reasonDeath,
+                req.body.description
+              );
+              if (addNewDeadAnimal) {
+                res.status(201).json({
+                  Message: "Pomyślnie dodano nowe zmarłe zwierzę!",
+                });
+              } else {
+                res.status(400).json({
+                  Error: "Coś poszło nie tak!Sprawdź wprowadzone dane!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 router.get("/takeAllDeadAnimalsInHerd", verifyToken, () => {});
