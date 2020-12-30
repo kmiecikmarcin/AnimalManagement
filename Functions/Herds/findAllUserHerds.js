@@ -2,7 +2,6 @@ const KindsOfAnimals = require("../../Models/KindsOfAnimals");
 
 async function findAllUserHerds(Herds, userId) {
   const findHerds = await Herds.findAll({
-    raw: true,
     where: { UserId: userId },
     include: { model: KindsOfAnimals, attributes: ["name"] },
     attributes: ["name", "creationDate"],
