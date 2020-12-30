@@ -1,11 +1,10 @@
 const Herds = require("../../Models/Herds");
 const TypesOfJoinToTheHerd = require("../../Models/TypesOfJoinToTheHerd");
 const KindsOfAnimals = require("../../Models/KindsOfAnimals");
-const GenderOfAnimal = require("../../Models/Herds");
+const GenderOfAnimal = require("../../Models/GenderOfAnimal");
 
 async function findAllAnimalsInHerd(AnimalsInHerd, herdId) {
   const search = await AnimalsInHerd.findAll({
-    raw: true,
     where: { idHerd: herdId },
     include: [
       { model: Herds, attributes: ["name"] },

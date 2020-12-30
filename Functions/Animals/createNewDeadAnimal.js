@@ -2,7 +2,7 @@ const Herds = require("../../Models/Herds");
 const AnimalsInHerd = require("../../Models/AnimalsInHerd");
 const ReasonOfDeath = require("../../Models/ReasonOfDeath");
 const findHerdByName = require("../Herds/findHerdByName");
-const findAnimalByIdentityNumber = require("./findAnimalByIdentityNumber");
+const findAnimalByHerdNameAndIdentityNumber = require("./findAnimalByHerdNameAndIdentityNumber");
 const findReasonOfDeathByName = require("./findReasonOfDeathByName");
 
 async function createNewDeadAnimal(
@@ -17,7 +17,7 @@ async function createNewDeadAnimal(
 ) {
   const checkHerdName = await findHerdByName(Herds, herdName, userId);
   if (checkHerdName) {
-    const checkIdentityNumberOfAnimal = await findAnimalByIdentityNumber(
+    const checkIdentityNumberOfAnimal = await findAnimalByHerdNameAndIdentityNumber(
       AnimalsInHerd,
       checkHerdName.id,
       identityNumberOfAnimal

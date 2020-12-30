@@ -4,7 +4,7 @@ const AnimalsInHerd = require("../../Models/AnimalsInHerd");
 
 const findHerdByName = require("../Herds/findHerdByName");
 const findKindOfAnimalsByName = require("./findKindOfAnimalsByName");
-const findAnimalByIdentityNumber = require("./findAnimalByIdentityNumber");
+const findAnimalByHerdNameAndIdentityNumber = require("./findAnimalByHerdNameAndIdentityNumber");
 
 async function createNewBornAnimal(
   res,
@@ -23,11 +23,12 @@ async function createNewBornAnimal(
       kindOfAnimalName
     );
     if (checkKindOfAnimal) {
-      const checkParentIdentiTyNumber = await findAnimalByIdentityNumber(
+      const checkParentIdentiTyNumber = await findAnimalByHerdNameAndIdentityNumber(
         AnimalsInHerd,
         checkHerdName.id,
         parentIdentityNumber
       );
+      console.log(checkParentIdentiTyNumber);
       if (checkParentIdentiTyNumber) {
         const addNewBornAnimal = AnimalsBirths.create({
           dateOfBirth: birthDate,
