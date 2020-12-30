@@ -22,7 +22,7 @@ const findAllJoinTypeToTheHerd = require("../Functions/Animals/findAllJoinTypeTo
 const findAllAnimalsInHerd = require("../Functions/Animals/findAllAnimalsInHerd");
 const findHerdByName = require("../Functions/Herds/findHerdByName");
 const findAllReasonDeath = require("../Functions/Animals/findAllReasonDeath");
-const findAnimalByHerdNameAndIdentityNumber = require("../Functions/Animals/findAnimalByHerdNameAndIdentityNumber");
+const findAnimalByHerdIdAndIdentityNumber = require("../Functions/Animals/findAnimalByHerdIdAndIdentityNumber");
 const changeAnimalIdentityNumber = require("../Functions/Animals/changeAnimalIdentityNumber");
 const changeBreedOfAnimal = require("../Functions/Animals/changeBreedOfAnimal");
 const changeBirthDateOfAnimal = require("../Functions/Animals/changeBirthDateOfAnimal");
@@ -33,6 +33,7 @@ const findAllNewBornAnimalsInHerd = require("../Functions/Animals/findAllNewBorn
 const createNewDeadAnimal = require("../Functions/Animals/createNewDeadAnimal");
 const findAllNewDeadAnimalsInHerd = require("../Functions/Animals/findAllNewDeadAnimalsInHerd");
 const findNewBornAnimalByIdentityNumber = require("../Functions/Animals/findNewBornAnimalByIdentityNumber");
+const findDeadAnimalByHerdNameAndIdentityNumber = require("../Functions/Animals/findDeadAnimalByHerdNameAndIdentityNumber");
 
 router.get("/takeAllAnimalsGenders", verifyToken, (req, res) => {
   jwt.verify(
@@ -328,7 +329,7 @@ router.put(
                 authData.id
               );
               if (checkHerd) {
-                const findAnimal = await findAnimalByHerdNameAndIdentityNumber(
+                const findAnimal = await findAnimalByHerdIdAndIdentityNumber(
                   AnimalsInHerd,
                   checkHerd.id,
                   req.body.oldIdentityNumberOfAnimal
@@ -425,7 +426,7 @@ router.put(
                 authData.id
               );
               if (checkHerd) {
-                const findAnimal = await findAnimalByHerdNameAndIdentityNumber(
+                const findAnimal = await findAnimalByHerdIdAndIdentityNumber(
                   AnimalsInHerd,
                   checkHerd.id,
                   req.body.identityNumberOfAnimal
@@ -525,7 +526,7 @@ router.put(
                 authData.id
               );
               if (checkHerd) {
-                const findAnimal = await findAnimalByHerdNameAndIdentityNumber(
+                const findAnimal = await findAnimalByHerdIdAndIdentityNumber(
                   AnimalsInHerd,
                   checkHerd.id,
                   req.body.identityNumberOfAnimal
@@ -622,7 +623,7 @@ router.put(
                 authData.id
               );
               if (checkHerd) {
-                const findAnimal = await findAnimalByHerdNameAndIdentityNumber(
+                const findAnimal = await findAnimalByHerdIdAndIdentityNumber(
                   AnimalsInHerd,
                   checkHerd.id,
                   req.body.identityNumberOfAnimal
@@ -1078,7 +1079,7 @@ router.get(
                 authData.id
               );
               if (findHerd) {
-                const responseAboutFoundAnimal = await findAnimalByHerdNameAndIdentityNumber(
+                const responseAboutFoundAnimal = await findAnimalByHerdIdAndIdentityNumber(
                   AnimalsInHerd,
                   findHerd.id,
                   req.params.identityNumber
@@ -1108,9 +1109,135 @@ router.get(
   }
 );
 
-router.put("/editNewDeadAnimalIdentityNumber", [], verifyToken, () => {});
+router.put(
+  "/editNewDeadAnimalIdentityNumber",
+  [
+    check("herdName")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 3, max: 40 })
+      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+    check("oldIdentityNumberOfAnimal")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isInt()
+      .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
+    check("newIdentityNumberOfAnimal")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isInt()
+      .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
+  ],
+  verifyToken,
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkHerd = await findHerdByName(
+                Herds,
+                req.body.herdName,
+                authData.id
+              );
+              if (checkHerd) {
+                const findAnimal = await findDeadAnimalByHerdNameAndIdentityNumber(
+                  AnimalsDeads,
+                  checkHerd.id,
+                  req.body.oldIdentityNumberOfAnimal
+                );
+                if (findAnimal) {
+                  const updateDeadAnimalIdentityNumber = await changeAnimalIdentityNumber(
+                    AnimalsDeads,
+                    req.body.oldIdentityNumberOfAnimal,
+                    req.body.newIdentityNumberOfAnimal,
+                    checkHerd.id
+                  );
+                  if (updateDeadAnimalIdentityNumber) {
+                    res.status(201).json({
+                      Message:
+                        "Numer identyfikacyjny zwierzęcia został zmieniony pomyślnie!",
+                    });
+                  } else {
+                    res.status(400).json({
+                      Error:
+                        "Nie udało się zmienić numeru identyfikacyjnego zwierzęcia!",
+                    });
+                  }
+                } else {
+                  res.status(404).json({
+                    Error:
+                      "Nie udało się zmienić numeru identyfikacyjnego zwierzęcia!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error: "Nie znaleziono hodowli o wprowadzonej nazwie!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
+);
 
-router.put("/editNewDeadAnimalDateOfDeath", [], verifyToken, () => {});
+router.put(
+  "/editNewDeadAnimalDateOfDeath",
+  [
+    check("herdName")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 3, max: 40 })
+      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+    check("identityNumberOfAnimal")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isInt()
+      .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
+    check("oldDate")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isDate()
+      .withMessage(
+        "Wprowadzona wartość nie jest datą! Spróbuj według schematu: YYYY-MM-DD."
+      ),
+    check("newDate")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isDate()
+      .withMessage(
+        "Wprowadzona wartość nie jest datą! Spróbuj według schematu: YYYY-MM-DD."
+      ),
+  ],
+  verifyToken,
+  () => {}
+);
 
 router.put("/editNewDeadAnimalReasonOfDeath", [], verifyToken, () => {});
 
