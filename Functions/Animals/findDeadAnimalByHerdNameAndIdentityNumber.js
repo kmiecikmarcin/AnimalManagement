@@ -5,10 +5,10 @@ async function findDeadAnimalByHerdNameAndIdentityNumber(
 ) {
   const findAnimal = await AnimalsDeads.findOne({
     where: {
-      idHerd: herdId,
       identityNumber: identityNumberOfAnimal,
+      idHerd: herdId,
     },
-    attributes: ["id", "dateOfDeath", "description"],
+    attributes: ["id", "identityNumber", "dateOfDeath", "description"],
   });
   if (findAnimal) {
     return findAnimal;
