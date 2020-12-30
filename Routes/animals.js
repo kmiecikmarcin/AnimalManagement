@@ -22,7 +22,7 @@ const findAllJoinTypeToTheHerd = require("../Functions/Animals/findAllJoinTypeTo
 const findAllAnimalsInHerd = require("../Functions/Animals/findAllAnimalsInHerd");
 const findHerdByName = require("../Functions/Herds/findHerdByName");
 const findAllReasonDeath = require("../Functions/Animals/findAllReasonDeath");
-const findAnimalByIdentityNumber = require("../Functions/Animals/findAnimalByIdentityNumber");
+const findAnimalByHerdNameAndIdentityNumber = require("../Functions/Animals/findAnimalByHerdNameAndIdentityNumber");
 const changeAnimalIdentityNumber = require("../Functions/Animals/changeAnimalIdentityNumber");
 const changeBreedOfAnimal = require("../Functions/Animals/changeBreedOfAnimal");
 const changeBirthDateOfAnimal = require("../Functions/Animals/changeBirthDateOfAnimal");
@@ -327,7 +327,7 @@ router.put(
                 authData.id
               );
               if (checkHerd) {
-                const findAnimal = await findAnimalByIdentityNumber(
+                const findAnimal = await findAnimalByHerdNameAndIdentityNumber(
                   AnimalsInHerd,
                   checkHerd.id,
                   req.body.oldIdentityNumberOfAnimal
@@ -424,7 +424,7 @@ router.put(
                 authData.id
               );
               if (checkHerd) {
-                const findAnimal = await findAnimalByIdentityNumber(
+                const findAnimal = await findAnimalByHerdNameAndIdentityNumber(
                   AnimalsInHerd,
                   checkHerd.id,
                   req.body.identityNumberOfAnimal
@@ -524,7 +524,7 @@ router.put(
                 authData.id
               );
               if (checkHerd) {
-                const findAnimal = await findAnimalByIdentityNumber(
+                const findAnimal = await findAnimalByHerdNameAndIdentityNumber(
                   AnimalsInHerd,
                   checkHerd.id,
                   req.body.identityNumberOfAnimal
@@ -621,7 +621,7 @@ router.put(
                 authData.id
               );
               if (checkHerd) {
-                const findAnimal = await findAnimalByIdentityNumber(
+                const findAnimal = await findAnimalByHerdNameAndIdentityNumber(
                   AnimalsInHerd,
                   checkHerd.id,
                   req.body.identityNumberOfAnimal
@@ -806,7 +806,7 @@ router.put(
                 authData.id
               );
               if (checkHerd) {
-                const findAnimal = await findAnimalByIdentityNumber(
+                const findAnimal = await findAnimalByHerdNameAndIdentityNumber(
                   AnimalsBirths,
                   checkHerd.id,
                   req.body.animalChildIdentityNumberOfAnimal
@@ -1038,7 +1038,7 @@ router.get("/takeAllDeadsAnimalsInHerd/:herdName", verifyToken, (req, res) => {
               } else {
                 res.status(404).json({
                   Error:
-                    "Użytkownik nie posiada zwierząt przypisanych do jakiejkolwiek hodowli!",
+                    "Użytkownik nie posiada zwierząt przypisanych do tabeli ze zgonami!",
                 });
               }
             } else {
@@ -1056,6 +1056,56 @@ router.get("/takeAllDeadsAnimalsInHerd/:herdName", verifyToken, (req, res) => {
     res.status(400).json({ Error: "Nie wprowadzono danych!" });
   }
 });
+
+router.get(
+  "/findOneAnimalInHerd/:herdName/:identityNumber",
+  verifyToken,
+  (req, res) => {
+    if (req.params.herdName && req.params.identityNumber) {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const findHerd = await findHerdByName(
+                Herds,
+                req.params.herdName,
+                authData.id
+              );
+              if (findHerd) {
+                const responseAboutFoundAnimal = await findAnimalByHerdNameAndIdentityNumber(
+                  AnimalsInHerd,
+                  findHerd.id,
+                  req.params.identityNumber
+                );
+                if (responseAboutFoundAnimal !== null) {
+                  res.status(200).json({ Animal: responseAboutFoundAnimal });
+                } else {
+                  res.status(404).json({
+                    Error:
+                      "Użytkownik nie posiada zwierzęcia o wprowadzonym numerze identyfikacyjnym!",
+                  });
+                }
+              } else {
+                res
+                  .status(404)
+                  .json({ Error: "Użytkownik nie posiada hodowli!" });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    } else {
+      res.status(400).json({ Error: "Nie wprowadzono danych!" });
+    }
+  }
+);
 
 router.put("/editNewDeadAnimalIdentityNumber", [], verifyToken, () => {});
 
