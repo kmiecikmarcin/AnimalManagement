@@ -5,7 +5,6 @@ async function changeDateOfAnimalDead(
   identityNumberOfAnimal,
   herdId
 ) {
-  console.log(identityNumberOfAnimal);
   const updateDate = await AnimalsDeads.update(
     { date: newDate },
     {
