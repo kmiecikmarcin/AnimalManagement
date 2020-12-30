@@ -36,6 +36,7 @@ AnimalsInHerd.hasMany(AnimalsDeads, {
     field: "idAnimal",
   },
 });
+AnimalsDeads.belongsTo(AnimalsInHerd);
 
 ReasonOfDeath.hasMany(AnimalsDeads, {
   foreignKey: {
