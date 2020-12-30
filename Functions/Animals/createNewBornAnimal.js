@@ -4,7 +4,7 @@ const AnimalsInHerd = require("../../Models/AnimalsInHerd");
 
 const findHerdByName = require("../Herds/findHerdByName");
 const findKindOfAnimalsByName = require("./findKindOfAnimalsByName");
-const findAnimalByHerdNameAndIdentityNumber = require("./findAnimalByHerdNameAndIdentityNumber");
+const findAnimalByHerdNameAndIdentityNumber = require("./findAnimalByHerdIdAndIdentityNumber");
 
 async function createNewBornAnimal(
   res,

@@ -3,7 +3,7 @@ const KindsOfAnimals = require("../../Models/KindsOfAnimals");
 const GenderOfAnimal = require("../../Models/GenderOfAnimal");
 const TypesOfJoinToTheHerd = require("../../Models/GenderOfAnimal");
 
-async function findAnimalByHerdNameAndIdentityNumber(
+async function findAnimalByHerdIdAndIdentityNumber(
   AnimalsInHerd,
   herdId,
   identityNumberOfAnimal
@@ -32,4 +32,4 @@ async function findAnimalByHerdNameAndIdentityNumber(
   return null;
 }
 
-module.exports = findAnimalByHerdNameAndIdentityNumber;
+module.exports = findAnimalByHerdIdAndIdentityNumber;

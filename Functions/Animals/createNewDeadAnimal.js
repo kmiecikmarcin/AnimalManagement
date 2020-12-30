@@ -2,7 +2,7 @@ const Herds = require("../../Models/Herds");
 const AnimalsInHerd = require("../../Models/AnimalsInHerd");
 const ReasonOfDeath = require("../../Models/ReasonOfDeath");
 const findHerdByName = require("../Herds/findHerdByName");
-const findAnimalByHerdNameAndIdentityNumber = require("./findAnimalByHerdNameAndIdentityNumber");
+const findAnimalByHerdNameAndIdentityNumber = require("./findAnimalByHerdIdAndIdentityNumber");
 const findReasonOfDeathByName = require("./findReasonOfDeathByName");
 const changeLifeStatusOfAnimal = require("./changeLifeStatusOfAnimal");
 
@@ -38,7 +38,11 @@ async function createNewDeadAnimal(
           HerdId: checkHerdName.id,
         });
         if (addNewDeadAnimal) {
-          const changeLifeStatus = await changeLifeStatusOfAnimal();
+          const changeLifeStatus = await changeLifeStatusOfAnimal(
+            AnimalsInHerd,
+            checkHerdName.id,
+            checkIdentityNumberOfAnimal.identityNumber
+          );
           if (changeLifeStatus) {
             return changeLifeStatus;
           }
