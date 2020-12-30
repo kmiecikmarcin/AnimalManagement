@@ -35,6 +35,7 @@ Users.hasMany(Herds, {
     name: "idUser",
   },
 });
+Herds.belongsTo(Users);
 
 KindsOfAnimals.hasMany(Herds, {
   foreignKey: {
@@ -42,5 +43,6 @@ KindsOfAnimals.hasMany(Herds, {
     name: "idKindOfAnimals",
   },
 });
+Herds.belongsTo(KindsOfAnimals);
 
 module.exports = Herds;

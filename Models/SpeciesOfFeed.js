@@ -30,5 +30,6 @@ TypesOfFeed.hasMany(SpeciesOfFeed, {
     field: "idTypeOfFeed",
   },
 });
+SpeciesOfFeed.belongsTo(TypesOfFeed);
 
 module.exports = SpeciesOfFeed;

@@ -29,5 +29,6 @@ TypesOfAnimals.hasMany(KindsOfAnimals, {
     name: "idTypesOfAnimals",
   },
 });
+KindsOfAnimals.belongsTo(TypesOfAnimals);
 
 module.exports = KindsOfAnimals;
