@@ -1300,8 +1300,6 @@ router.put(
   }
 );
 
-router.put("/editNewDeadAnimalReasonOfDeath", [], verifyToken, () => {});
-
 router.delete(
   "/deleteAnimal",
   [
