@@ -34,6 +34,7 @@ const createNewDeadAnimal = require("../Functions/Animals/createNewDeadAnimal");
 const findAllNewDeadAnimalsInHerd = require("../Functions/Animals/findAllNewDeadAnimalsInHerd");
 const findNewBornAnimalByIdentityNumber = require("../Functions/Animals/findNewBornAnimalByIdentityNumber");
 const findDeadAnimalByHerdNameAndIdentityNumber = require("../Functions/Animals/findDeadAnimalByHerdNameAndIdentityNumber");
+const changeDateOfAnimalDead = require("../Functions/Animals/changeDateOfAnimalDead");
 
 router.get("/takeAllAnimalsGenders", verifyToken, (req, res) => {
   jwt.verify(
@@ -1236,7 +1237,67 @@ router.put(
       ),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkHerd = await findHerdByName(
+                Herds,
+                req.body.herdName,
+                authData.id
+              );
+              if (checkHerd) {
+                const findAnimal = await findDeadAnimalByHerdNameAndIdentityNumber(
+                  AnimalsDeads,
+                  checkHerd.id,
+                  req.body.identityNumberOfAnimal
+                );
+                if (findAnimal) {
+                  const updateDateOfDead = await changeDateOfAnimalDead(
+                    AnimalsDeads,
+                    req.body.oldDate,
+                    req.body.newDate,
+                    findAnimal.identityNumber,
+                    checkHerd.id
+                  );
+                  if (updateDateOfDead) {
+                    res
+                      .status(201)
+                      .json({ Message: "Pomyślnie zmieniono datę śmierci!" });
+                  } else {
+                    res
+                      .status(400)
+                      .json({ Error: "Nie udało się zmienić daty!" });
+                  }
+                } else {
+                  res.status(404).json({
+                    Error:
+                      "Nie znaleziono martwego zwierzęcia o podanym numerze identyfikacyjnym!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error: "Nie znaleziono hodowli o wprowadzonej nazwie!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 router.put("/editNewDeadAnimalReasonOfDeath", [], verifyToken, () => {});
