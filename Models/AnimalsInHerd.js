@@ -42,6 +42,12 @@ const AnimalsInHerd = sequelize.define(
       allowNull: false,
       field: "animalWeight",
     },
+    lifeStatusOfAnimal: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
+      field: "lifeStatusOfAnimal",
+    },
   },
   { timestamps: true }
 );

@@ -16,6 +16,11 @@ const AnimalsDeads = sequelize.define(
       allowNull: false,
       field: "idAnimalsDeads",
     },
+    identityNumber: {
+      type: DataTypes.BIGINT,
+      allowNull: false,
+      field: "identityNumberOfAnimal",
+    },
     date: {
       type: DataTypes.DATEONLY,
       allowNull: false,
