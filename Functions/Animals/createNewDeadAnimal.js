@@ -45,7 +45,7 @@ async function createNewDeadAnimal(
         .json({ Error: "Wprowadzona przyczyna śmierci jest nieprawidłowa!" });
     }
     return res.status(404).json({
-      Error: "Rodzic o wprowadzonym numerze identyfikacyjnym nie istnieje!",
+      Error: "Zwierzę numerze identyfikacyjnym nie istnieje!",
     });
   }
   return res

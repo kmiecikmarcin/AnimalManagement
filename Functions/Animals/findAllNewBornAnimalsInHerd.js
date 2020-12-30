@@ -1,5 +1,6 @@
 async function findAllNewBornAnimalsInHerd(AnimalsBirths, herdId) {
   const search = await AnimalsBirths.findAll({
+    raw: true,
     where: { idHerd: herdId },
     attributes: ["dateOfBirth", "identityNumber"],
   });
