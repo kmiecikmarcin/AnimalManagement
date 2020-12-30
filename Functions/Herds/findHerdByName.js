@@ -5,7 +5,7 @@ async function findHerdByName(Herds, herdName, userId) {
     raw: true,
     where: { name: herdName, UserId: userId },
     include: { model: KindsOfAnimals, attributes: ["name"] },
-    attributes: ["name", "creationDate"],
+    attributes: ["id", "name", "creationDate"],
   });
   if (findHerd === null) {
     return null;
