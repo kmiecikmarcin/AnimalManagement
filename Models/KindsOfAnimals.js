@@ -26,7 +26,7 @@ const KindsOfAnimals = sequelize.define(
 TypesOfAnimals.hasMany(KindsOfAnimals, {
   foreignKey: {
     allowNull: false,
-    name: "idTypesOfAnimals",
+    field: "idTypesOfAnimals",
   },
 });
 KindsOfAnimals.belongsTo(TypesOfAnimals);

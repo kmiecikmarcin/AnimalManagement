@@ -32,7 +32,7 @@ const Herds = sequelize.define(
 Users.hasMany(Herds, {
   foreignKey: {
     allowNull: false,
-    name: "idUser",
+    field: "idUser",
   },
 });
 Herds.belongsTo(Users);
@@ -40,7 +40,7 @@ Herds.belongsTo(Users);
 KindsOfAnimals.hasMany(Herds, {
   foreignKey: {
     allowNull: false,
-    name: "idKindOfAnimals",
+    field: "idKindOfAnimals",
   },
 });
 Herds.belongsTo(KindsOfAnimals);
