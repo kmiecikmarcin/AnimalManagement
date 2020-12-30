@@ -875,7 +875,9 @@ router.get(
                   findHerd.id
                 );
                 if (findNewBornAnimalsInHerd !== null) {
-                  res.status(200).json({ findNewBornAnimalsInHerd });
+                  res
+                    .status(200)
+                    .json({ AnimalsBirths: findNewBornAnimalsInHerd });
                 } else {
                   res.status(404).json({
                     Error:

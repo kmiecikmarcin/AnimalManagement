@@ -329,6 +329,7 @@ router.put(
               if (findHerd) {
                 const updateHerdName = await changeHerdName(
                   Herds,
+                  req.body.oldHerdName,
                   req.body.newHerdName,
                   authData.id
                 );
@@ -337,7 +338,9 @@ router.put(
                     .status(201)
                     .json({ Message: "Nazwa hodowli została zaktualizowana!" });
                 } else {
-                  res.status(400).json({ Error: "Coś poszło nie tak" });
+                  res.status(400).json({
+                    Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
+                  });
                 }
               } else {
                 res.status(404).json({
@@ -528,7 +531,7 @@ router.delete(
                     .json({ Message: "Hodowla została usunięta pomyślnie!" });
                 } else {
                   res.status(400).json({
-                    Error: "Coś poszło nie tak! Sprawdź wprowadozne dane!",
+                    Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
                   });
                 }
               } else {
