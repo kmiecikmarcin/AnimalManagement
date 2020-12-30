@@ -4,6 +4,7 @@ const ReasonOfDeath = require("../../Models/ReasonOfDeath");
 const findHerdByName = require("../Herds/findHerdByName");
 const findAnimalByHerdNameAndIdentityNumber = require("./findAnimalByHerdNameAndIdentityNumber");
 const findReasonOfDeathByName = require("./findReasonOfDeathByName");
+const changeLifeStatusOfAnimal = require("./changeLifeStatusOfAnimal");
 
 async function createNewDeadAnimal(
   res,
@@ -29,6 +30,7 @@ async function createNewDeadAnimal(
       );
       if (checkReasonOfDeath) {
         const addNewDeadAnimal = AnimalsDeads.create({
+          identityNumber: checkIdentityNumberOfAnimal.identityNumber,
           date: dateOfDeath,
           description: descriptionOfDeath,
           AnimalsInHerdId: checkIdentityNumberOfAnimal.id,
@@ -36,7 +38,11 @@ async function createNewDeadAnimal(
           HerdId: checkHerdName.id,
         });
         if (addNewDeadAnimal) {
-          return addNewDeadAnimal;
+          const changeLifeStatus = await changeLifeStatusOfAnimal();
+          if (changeLifeStatus) {
+            return changeLifeStatus;
+          }
+          return null;
         }
         return null;
       }
