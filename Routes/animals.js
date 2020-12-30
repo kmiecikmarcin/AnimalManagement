@@ -32,6 +32,7 @@ const changeBirthDateOfNewBornAnimal = require("../Functions/Animals/changeBirth
 const findAllNewBornAnimalsInHerd = require("../Functions/Animals/findAllNewBornAnimalsInHerd");
 const createNewDeadAnimal = require("../Functions/Animals/createNewDeadAnimal");
 const findAllNewDeadAnimalsInHerd = require("../Functions/Animals/findAllNewDeadAnimalsInHerd");
+const findNewBornAnimalByIdentityNumber = require("../Functions/Animals/findNewBornAnimalByIdentityNumber");
 
 router.get("/takeAllAnimalsGenders", verifyToken, (req, res) => {
   jwt.verify(
@@ -806,7 +807,7 @@ router.put(
                 authData.id
               );
               if (checkHerd) {
-                const findAnimal = await findAnimalByHerdNameAndIdentityNumber(
+                const findAnimal = await findNewBornAnimalByIdentityNumber(
                   AnimalsBirths,
                   checkHerd.id,
                   req.body.animalChildIdentityNumberOfAnimal
