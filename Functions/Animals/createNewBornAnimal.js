@@ -28,7 +28,6 @@ async function createNewBornAnimal(
         checkHerdName.id,
         parentIdentityNumber
       );
-      console.log(checkParentIdentiTyNumber);
       if (checkParentIdentiTyNumber) {
         const addNewBornAnimal = AnimalsBirths.create({
           dateOfBirth: birthDate,

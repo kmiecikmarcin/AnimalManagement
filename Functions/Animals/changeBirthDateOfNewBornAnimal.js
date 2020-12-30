@@ -11,7 +11,7 @@ async function changeBirthDateOfNewBornAnimal(
       where: {
         identityNumber: identityNumberOfNewBornAnimal,
         dateOfBirth: oldBirthDate,
-        idHerd: herdId,
+        HerdId: herdId,
       },
     }
   );
