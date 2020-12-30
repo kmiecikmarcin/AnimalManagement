@@ -14,7 +14,7 @@ async function changeUserEmailAdress(
       checkUserEmailAdress.password
     );
     if (checkPassword) {
-      const updateUserEmail = Users.update(
+      const updateUserEmail = await Users.update(
         { email: newUserEmailAdress },
         { where: { id: checkUserEmailAdress.id } }
       );
