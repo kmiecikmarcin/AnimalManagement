@@ -29,5 +29,6 @@ Users.hasMany(AddingTransactionForSoldOrderByUser, {
     field: "idUser",
   },
 });
+AddingTransactionForSoldOrderByUser.belongsTo(Users);
 
 module.exports = AddingTransactionForSoldOrderByUser;

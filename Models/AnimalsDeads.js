@@ -44,6 +44,7 @@ ReasonOfDeath.hasMany(AnimalsDeads, {
     field: "idReasonDeath",
   },
 });
+AnimalsDeads.belongsTo(ReasonOfDeath);
 
 Herds.hasMany(AnimalsDeads, {
   foreignKey: {
@@ -51,5 +52,6 @@ Herds.hasMany(AnimalsDeads, {
     field: "idHerd",
   },
 });
+AnimalsDeads.belongsTo(Herds);
 
 module.exports = AnimalsDeads;

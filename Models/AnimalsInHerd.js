@@ -52,6 +52,7 @@ Herds.hasMany(AnimalsInHerd, {
     field: "idHerd",
   },
 });
+AnimalsInHerd.belongsTo(Herds);
 
 TypesOfJoinToTheHerd.hasMany(AnimalsInHerd, {
   foreignKey: {
@@ -59,6 +60,7 @@ TypesOfJoinToTheHerd.hasMany(AnimalsInHerd, {
     field: "idJoinType",
   },
 });
+AnimalsInHerd.belongsTo(TypesOfJoinToTheHerd);
 
 KindsOfAnimals.hasMany(AnimalsInHerd, {
   foreignKey: {
@@ -66,6 +68,7 @@ KindsOfAnimals.hasMany(AnimalsInHerd, {
     field: "idKindOfAnimals",
   },
 });
+AnimalsInHerd.belongsTo(KindsOfAnimals);
 
 GenderOfAnimal.hasMany(AnimalsInHerd, {
   foreignKey: {
@@ -73,5 +76,6 @@ GenderOfAnimal.hasMany(AnimalsInHerd, {
     field: "idAnimalGender",
   },
 });
+AnimalsInHerd.belongsTo(GenderOfAnimal);
 
 module.exports = AnimalsInHerd;

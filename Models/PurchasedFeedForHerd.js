@@ -42,6 +42,7 @@ SpeciesOfFeed.hasMany(PurchasedFeedForHerd, {
     field: "idSpeciesOfFeed",
   },
 });
+PurchasedFeedForHerd.belongsTo(SpeciesOfFeed);
 
 Users.hasMany(PurchasedFeedForHerd, {
   foreignKey: {
@@ -49,5 +50,6 @@ Users.hasMany(PurchasedFeedForHerd, {
     field: "idUser",
   },
 });
+PurchasedFeedForHerd.belongsTo(Users);
 
 module.exports = PurchasedFeedForHerd;

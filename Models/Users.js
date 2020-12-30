@@ -43,11 +43,14 @@ TypesOfUsersRoles.hasMany(Users, {
     name: "idTypeOfUserRole",
   },
 });
+Users.belongsTo(TypesOfUsersRoles);
+
 Genders.hasMany(Users, {
   foreignKey: {
     allowNull: false,
     name: "idGender",
   },
 });
+Users.belongsTo(Genders);
 
 module.exports = Users;
