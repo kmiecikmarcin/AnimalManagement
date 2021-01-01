@@ -44,7 +44,7 @@ async function createNewAnimal(
             joinDate: dateOfJoinToTheHerd,
             birthDate: animalBirthDate,
             weight: animalWeight,
-            lifeStatusOfAnimal: false,
+            lifeStatusOfAnimal: true,
             HerdId: checkHerdName.id,
             TypesOfJoinToTheHerdId: checkJoinType.id,
             KindsOfAnimalId: checkKindOfAnimal.id,

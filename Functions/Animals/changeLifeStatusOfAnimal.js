@@ -12,7 +12,7 @@ async function changeLifeStatusOfAnimal(
   );
   if (findAnimal) {
     const updateLifeStatus = await AnimalsInHerd.update(
-      { lifeStatusOfAnimal: true },
+      { lifeStatusOfAnimal: false },
       { where: { HerdId: herdId, identityNumber: identityNumberOfAnimal } }
     );
     if (updateLifeStatus) {
