@@ -37,6 +37,21 @@ const findDeadAnimalByHerdNameAndIdentityNumber = require("../Functions/Animals/
 const changeDateOfAnimalDead = require("../Functions/Animals/changeDateOfAnimalDead");
 const deleteAnimal = require("../Functions/Animals/deleteAnimal");
 
+/**
+ * @swagger
+ * /animals/takeAllAnimalsGenders:
+ *    get:
+ *      tags:
+ *      - name: Animals
+ *      summary: Take all animals genders
+ *      responses:
+ *        201:
+ *          description: List of animals genders.
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: System has no gender assigned to the animals! or User doesn't exist!
+ */
 router.get("/takeAllAnimalsGenders", verifyToken, (req, res) => {
   jwt.verify(
     req.token,
@@ -66,6 +81,21 @@ router.get("/takeAllAnimalsGenders", verifyToken, (req, res) => {
   );
 });
 
+/**
+ * @swagger
+ * /animals/takeAllKindsOfAnimals:
+ *    get:
+ *      tags:
+ *      - name: Animals
+ *      summary: Take all kinds of animals
+ *      responses:
+ *        201:
+ *          description: List kinds of animals.
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: System has no kinds assigned to the animals! or User doesn't exist!
+ */
 router.get("/takeAllKindsOfAnimals", verifyToken, (req, res) => {
   jwt.verify(
     req.token,
@@ -94,6 +124,21 @@ router.get("/takeAllKindsOfAnimals", verifyToken, (req, res) => {
   );
 });
 
+/**
+ * @swagger
+ * /animals/takeAllJoinTypeToTheHerd:
+ *    get:
+ *      tags:
+ *      - name: Animals
+ *      summary: Take all types of animals join to the herd
+ *      responses:
+ *        201:
+ *          description: List about types of animals join to the herd.
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: System has no join types assigned to the animals! or User doesn't exist!
+ */
 router.get("/takeAllJoinTypeToTheHerd", verifyToken, (req, res) => {
   jwt.verify(
     req.token,
@@ -123,6 +168,64 @@ router.get("/takeAllJoinTypeToTheHerd", verifyToken, (req, res) => {
   );
 });
 
+/**
+ * @swagger
+ * /animals/addNewAnimal:
+ *    post:
+ *      tags:
+ *      - name: Animals
+ *      summary: Add new animal by user
+ *      parameters:
+ *        - name: herdName
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: joinTypeName
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: kindOfAnimalName
+ *          in: formData
+ *          required: true
+ *          type: date
+ *        - name: animalGender
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: animalGender
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: identityNumberOfAnimal
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: breedOfAnimal
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: dateOfJoinToTheHerd
+ *          in: formData
+ *          required: true
+ *          type: date
+ *        - name: birthDate
+ *          in: formData
+ *          required: true
+ *          type: date
+ *        - name: animalWeight
+ *          in: formData
+ *          required: true
+ *          type: date
+ *      responses:
+ *        201:
+ *          description: New animal has been added!
+ *        400:
+ *          description: Something went wrong!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: User, herd, kind of animal, join type or animal gender doesn't exist!
+ */
 router.post(
   "/addNewAnimal",
   [
@@ -240,6 +343,26 @@ router.post(
   }
 );
 
+/**
+ * @swagger
+ * /animals/findAllAnimalsInHerd/{herdName}:
+ *    get:
+ *      tags:
+ *      - name: Animals
+ *      summary: Take all animals in herd
+ *      parameters:
+ *        - name: herdName
+ *          in: formData
+ *          required: true
+ *          type: string
+ *      responses:
+ *        201:
+ *          description: List of animals in herd.
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: User doesn't have animals in this herd! or User doesn't exist!
+ */
 router.get("/findAllAnimalsInHerd/:herdName", verifyToken, (req, res) => {
   if (req.params.herdName) {
     jwt.verify(
@@ -285,6 +408,30 @@ router.get("/findAllAnimalsInHerd/:herdName", verifyToken, (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /animals/findOneAnimalInHerd/{herdName}/{identityNumber}:
+ *    get:
+ *      tags:
+ *      - name: Animals
+ *      summary: Take one animal from herd
+ *      parameters:
+ *        - name: herdName
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: identityNumber
+ *          in: formData
+ *          required: true
+ *          type: int
+ *      responses:
+ *        201:
+ *          description: Data about this animal.
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: User doesn't have this animal in this herd!, User doesn't exist! or User doesn't have herd with this name!
+ */
 router.get(
   "/findOneAnimalInHerd/:herdName/:identityNumber",
   verifyToken,
@@ -335,6 +482,36 @@ router.get(
   }
 );
 
+/**
+ * @swagger
+ * /animals/editIdentityNumberOfAnimal:
+ *    put:
+ *      tags:
+ *      - name: Animals
+ *      summary: Edit identity number of animal
+ *      parameters:
+ *        - name: herdName
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: oldIdentityNumberOfAnimal
+ *          in: formData
+ *          required: true
+ *          type: int
+ *        - name: newIdentityNumberOfAnimal
+ *          in: formData
+ *          required: true
+ *          type: int
+ *      responses:
+ *        201:
+ *          description: Data updated successfully!
+ *        400:
+ *          description: Data has not been updated!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: Errors about empty data.
+ */
 router.put(
   "/editIdentityNumberOfAnimal",
   [
@@ -425,6 +602,40 @@ router.put(
   }
 );
 
+/**
+ * @swagger
+ * /animals/editBreedOfAnimal:
+ *    put:
+ *      tags:
+ *      - name: Animals
+ *      summary: Edit breed of animal
+ *      parameters:
+ *        - name: herdName
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: identityNumberOfAnimal
+ *          in: formData
+ *          required: true
+ *          type: int
+ *        - name: oldBreedOfAnimal
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: newBreedOfAnimal
+ *          in: formData
+ *          required: true
+ *          type: string
+ *      responses:
+ *        201:
+ *          description: Data updated successfully!
+ *        400:
+ *          description: Something went wrong!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: Errors about empty data.
+ */
 router.put(
   "/editBreedOfAnimal",
   [
@@ -521,6 +732,40 @@ router.put(
   }
 );
 
+/**
+ * @swagger
+ * /animals/editBirthDate:
+ *    put:
+ *      tags:
+ *      - name: Animals
+ *      summary: Edit animal birth date
+ *      parameters:
+ *        - name: herdName
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: identityNumberOfAnimal
+ *          in: formData
+ *          required: true
+ *          type: int
+ *        - name: oldBirthDate
+ *          in: formData
+ *          required: true
+ *          type: date
+ *        - name: newBirthDate
+ *          in: formData
+ *          required: true
+ *          type: date
+ *      responses:
+ *        201:
+ *          description: Data updated successfully!
+ *        400:
+ *          description: Something went wrong!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: Errors about empty data.
+ */
 router.put(
   "/editBirthDate",
   [
@@ -622,6 +867,40 @@ router.put(
   }
 );
 
+/**
+ * @swagger
+ * /animals/editAnimalWeight:
+ *    put:
+ *      tags:
+ *      - name: Animals
+ *      summary: Edit animal weight
+ *      parameters:
+ *        - name: herdName
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: identityNumberOfAnimal
+ *          in: formData
+ *          required: true
+ *          type: int
+ *        - name: oldAnimalWeight
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: newAnimalWeight
+ *          in: formData
+ *          required: true
+ *          type: string
+ *      responses:
+ *        201:
+ *          description: Data updated successfully!
+ *        400:
+ *          description: Something went wrong!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: Errors about empty data.
+ */
 router.put(
   "/editAnimalWeight",
   [
@@ -718,6 +997,44 @@ router.put(
   }
 );
 
+/**
+ * @swagger
+ * /animals/addNewBornAnimal:
+ *    post:
+ *      tags:
+ *      - name: Animals
+ *      summary: Add new born animal by user
+ *      parameters:
+ *        - name: kindOfAnimalName
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: parentIdentityNumber
+ *          in: formData
+ *          required: true
+ *          type: int
+ *        - name: herdName
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: birthDate
+ *          in: formData
+ *          required: true
+ *          type: date
+ *        - name: temporaryIdentityNumberOfAnimal
+ *          in: formData
+ *          required: true
+ *          type: int
+ *      responses:
+ *        201:
+ *          description: New born animal has been added!
+ *        400:
+ *          description: Something went wrong!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: Errors about empty data.
+ */
 router.post(
   "/addNewBornAnimal",
   [
@@ -790,7 +1107,7 @@ router.post(
                 });
               } else {
                 res.status(400).json({
-                  Error: "Coś poszło nie tak!Sprawdź wprowadzone dane!",
+                  Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
                 });
               }
             } else {
@@ -803,6 +1120,40 @@ router.post(
   }
 );
 
+/**
+ * @swagger
+ * /animals/editNewBornAnimalBirthDate:
+ *    put:
+ *      tags:
+ *      - name: Animals
+ *      summary: Edit new born animal birth date
+ *      parameters:
+ *        - name: herdName
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: animalChildIdentityNumberOfAnimal
+ *          in: formData
+ *          required: true
+ *          type: int
+ *        - name: oldBirthDate
+ *          in: formData
+ *          required: true
+ *          type: date
+ *        - name: newBirthDate
+ *          in: formData
+ *          required: true
+ *          type: date
+ *      responses:
+ *        201:
+ *          description: Data updated successfully!
+ *        400:
+ *          description: Something went wrong!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: Errors about empty data.
+ */
 router.put(
   "/editNewBornAnimalBirthDate",
   [
@@ -904,6 +1255,26 @@ router.put(
   }
 );
 
+/**
+ * @swagger
+ * /animals/takeAllNewBornAnimalsInHerd/{herdName}:
+ *    get:
+ *      tags:
+ *      - name: Animals
+ *      summary: Take all new born animals in herd
+ *      parameters:
+ *        - name: herdName
+ *          in: formData
+ *          required: true
+ *          type: string
+ *      responses:
+ *        201:
+ *          description: List of new born animals.
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: Errors about empty data.
+ */
 router.get(
   "/takeAllNewBornAnimalsInHerd/:herdName",
   verifyToken,
@@ -955,7 +1326,22 @@ router.get(
   }
 );
 
-router.get("/takeAllReasonDeath", verifyToken, (req, res) => {
+/**
+ * @swagger
+ * /animals/takeAllReasonsDeaths:
+ *    get:
+ *      tags:
+ *      - name: Animals
+ *      summary: Take all reasons of death
+ *      responses:
+ *        201:
+ *          description: List of reasons deaths.
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: Errors about empty data.
+ */
+router.get("/takeAllReasonsDeaths", verifyToken, (req, res) => {
   jwt.verify(
     req.token,
     process.env.S3_SECRETKEY,
@@ -981,6 +1367,44 @@ router.get("/takeAllReasonDeath", verifyToken, (req, res) => {
   );
 });
 
+/**
+ * @swagger
+ * /animals/addNewDeadAnimal:
+ *    post:
+ *      tags:
+ *      - name: Animals
+ *      summary: Add new dead animal
+ *      parameters:
+ *        - name: herdName
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: identityNumberOfAnimal
+ *          in: formData
+ *          required: true
+ *          type: int
+ *        - name: dateOfDeath
+ *          in: formData
+ *          required: true
+ *          type: date
+ *        - name: reasonDeath
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: description
+ *          in: formData
+ *          required: true
+ *          type: string
+ *      responses:
+ *        201:
+ *          description: New dead animal has been added!
+ *        400:
+ *          description: Something went wrong!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: Errors about empty data.
+ */
 router.post(
   "/addNewDeadAnimal",
   [
@@ -1066,6 +1490,26 @@ router.post(
   }
 );
 
+/**
+ * @swagger
+ * /animals/takeAllDeadsAnimalsInHerd/{herdName}:
+ *    get:
+ *      tags:
+ *      - name: Animals
+ *      summary: Take all deads animals in herd
+ *      parameters:
+ *        - name: herdName
+ *          in: formData
+ *          required: true
+ *          type: string
+ *      responses:
+ *        201:
+ *          description: List of deads animals.
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: Errors about empty data.
+ */
 router.get("/takeAllDeadsAnimalsInHerd/:herdName", verifyToken, (req, res) => {
   if (req.params.herdName) {
     jwt.verify(
@@ -1111,6 +1555,36 @@ router.get("/takeAllDeadsAnimalsInHerd/:herdName", verifyToken, (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /animals/editNewDeadAnimalIdentityNumber:
+ *    put:
+ *      tags:
+ *      - name: Animals
+ *      summary: Edit new dead animal identity number
+ *      parameters:
+ *        - name: herdName
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: oldIdentityNumberOfAnimal
+ *          in: formData
+ *          required: true
+ *          type: int
+ *        - name: newIdentityNumberOfAnimal
+ *          in: formData
+ *          required: true
+ *          type: int
+ *      responses:
+ *        201:
+ *          description: Data updated successfully!
+ *        400:
+ *          description: Something went wrong!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: Errors about empty data.
+ */
 router.put(
   "/editNewDeadAnimalIdentityNumber",
   [
@@ -1201,6 +1675,40 @@ router.put(
   }
 );
 
+/**
+ * @swagger
+ * /animals/editNewDeadAnimalDateOfDeath:
+ *    put:
+ *      tags:
+ *      - name: Animals
+ *      summary: Edit new dead animal date of death
+ *      parameters:
+ *        - name: herdName
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: identityNumberOfAnimal
+ *          in: formData
+ *          required: true
+ *          type: int
+ *        - name: oldDate
+ *          in: formData
+ *          required: true
+ *          type: date
+ *        - name: newDate
+ *          in: formData
+ *          required: true
+ *          type: date
+ *      responses:
+ *        201:
+ *          description: Data updated successfully!
+ *        400:
+ *          description: Something went wrong!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: Errors about empty data.
+ */
 router.put(
   "/editNewDeadAnimalDateOfDeath",
   [
@@ -1301,6 +1809,36 @@ router.put(
   }
 );
 
+/**
+ * @swagger
+ * /animals/deleteNewBornAnimal:
+ *    delete:
+ *      tags:
+ *      - name: Animals
+ *      summary: Delete new born animal
+ *      parameters:
+ *        - name: herdName
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: temporaryIdentityNumberOfAnimal
+ *          in: formData
+ *          required: true
+ *          type: int
+ *        - name: confirmTemporaryIdentityNumberOfAnimal
+ *          in: formData
+ *          required: true
+ *          type: int
+ *      responses:
+ *        201:
+ *          description: The new born animal deleted successfully!
+ *        400:
+ *          description: The animal couldn not be removed!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: Errors about empty data.
+ */
 router.delete(
   "/deleteNewBornAnimal",
   [
@@ -1397,6 +1935,36 @@ router.delete(
   }
 );
 
+/**
+ * @swagger
+ * /animals/deleteDeadAnimal:
+ *    delete:
+ *      tags:
+ *      - name: Animals
+ *      summary: Delete dead animal
+ *      parameters:
+ *        - name: herdName
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: identityNumberOfAnimal
+ *          in: formData
+ *          required: true
+ *          type: int
+ *        - name: confirmIdentityNumberOfAnimal
+ *          in: formData
+ *          required: true
+ *          type: int
+ *      responses:
+ *        201:
+ *          description: The dead animal deleted successfully!
+ *        400:
+ *          description: The animal couldn not be removed!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: Errors about empty data.
+ */
 router.delete(
   "/deleteDeadAnimal",
   [
@@ -1493,6 +2061,36 @@ router.delete(
   }
 );
 
+/**
+ * @swagger
+ * /animals/deleteAnimal:
+ *    delete:
+ *      tags:
+ *      - name: Animals
+ *      summary: Delete animal from herd
+ *      parameters:
+ *        - name: herdName
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: identityNumberOfAnimal
+ *          in: formData
+ *          required: true
+ *          type: int
+ *        - name: confirmIdentityNumberOfAnimal
+ *          in: formData
+ *          required: true
+ *          type: int
+ *      responses:
+ *        201:
+ *          description: Animal deleted successfully!
+ *        400:
+ *          description: The animal couldn not be removed!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: Errors about empty data.
+ */
 router.delete(
   "/deleteAnimal",
   [
