@@ -56,19 +56,19 @@ async function createNewAnimal(
           return null;
         }
         return res
-          .status(400)
+          .status(404)
           .json({ Error: "Wprowadzona płeć zwierzęcia nie istnieje!" });
       }
       return res
-        .status(400)
+        .status(404)
         .json({ Error: "Wprowadzony rodzaj zwierzęcia nie istnieje!" });
     }
-    return res.status(400).json({
+    return res.status(404).json({
       Error: "Wprowadzony typ dołączenia zwierzęcia do stada nie istnieje!",
     });
   }
   return res
-    .status(400)
+    .status(404)
     .json({ Error: "Hodowla o wprowadzonej nazwie nie istnieje!" });
 }
 
