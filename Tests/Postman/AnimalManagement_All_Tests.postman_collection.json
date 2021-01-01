@@ -293,7 +293,7 @@
 									"const random_password = _.random(100000,9000000);\r",
 									"const new_password = random_password + \"@\";\r",
 									"\r",
-									"pm.environment.set(\"new_password\", new_password);\r",
+									"pm.collectionVariables.set(\"new_password\", new_password);\r",
 									"\r",
 									""
 								],
@@ -416,7 +416,8 @@
 									"const type_of_herd = herds_type[random_number_for_type_of_herd];\r",
 									"\r",
 									"const take_date = new Date();\r",
-									"const date = take_date.getFullYear() + \"-\" + (take_date.getMonth() + 1) + \"-\" + take_date.getDate();\r",
+									"const date = take_date.getFullYear() + \"-\" + (\"0\" + (take_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_date.getDate()).slice(-2);\r",
+									"console.log(date)\r",
 									"\r",
 									"pm.collectionVariables.set(\"name_of_herd\", name_of_herd);\r",
 									"pm.collectionVariables.set(\"type_of_herd\", type_of_herd);\r",
@@ -1083,9 +1084,6 @@
 									"\r",
 									"const breeds_of_animal_array = [\"Nioska\"];\r",
 									"\r",
-									"const take_date = new Date();\r",
-									"const date = take_date.getFullYear() + \"-\" + (take_date.getMonth() + 1) + \"-\" + take_date.getDate();\r",
-									"\r",
 									"const animal_weight = _.random(1, 20);\r",
 									"\r",
 									"const join_type = join_type_name_array[random_number_for_join_type_name];\r",
@@ -1096,7 +1094,6 @@
 									"pm.collectionVariables.set(\"animal_gender\", animal_gender);\r",
 									"pm.collectionVariables.set(\"identityNumberOfAnimal\", identityNumberOfAnimal);\r",
 									"pm.collectionVariables.set(\"breeds_of_animal_array\", breeds_of_animal_array);\r",
-									"pm.collectionVariables.set(\"date\", date);\r",
 									"pm.collectionVariables.set(\"animal_weight\", animal_weight);"
 								],
 								"type": "text/javascript"
@@ -1267,6 +1264,66 @@
 					"response": []
 				},
 				{
+					"name": "Find animal by identity number",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/v1/animals/findOneAnimalInHerd/:herdName/:identityNumber",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v1",
+								"animals",
+								"findOneAnimalInHerd",
+								":herdName",
+								":identityNumber"
+							],
+							"variable": [
+								{
+									"key": "herdName",
+									"value": "{{new_name_of_herd}}"
+								},
+								{
+									"key": "identityNumber",
+									"value": "{{new_identityNumberOfAnimal}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Edit breed of animal",
 					"event": [
 						{
@@ -1357,7 +1414,7 @@
 							"script": {
 								"exec": [
 									"const take_date = new Date();\r",
-									"const new_date = take_date.getFullYear() + \"-\" + (take_date.getMonth() + 1) + \"-\" + take_date.getDate();\r",
+									"const new_date = take_date.getFullYear() + \"-\" + (\"0\" + (take_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_date.getDate()).slice(-2);\r",
 									"\r",
 									"pm.collectionVariables.set(\"new_date\", new_date);"
 								],
@@ -1496,7 +1553,7 @@
 									"const temporary_identity_number = _.random(1,10000);\r",
 									"\r",
 									"const take_date = new Date();\r",
-									"const newborn_animal_birth_date = take_date.getFullYear() + \"-\" + (take_date.getMonth() + 1) + \"-\" + take_date.getDate();\r",
+									"const newborn_animal_birth_date = take_date.getFullYear() + \"-\" + (\"0\" + (take_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_date.getDate()).slice(-2);\r",
 									"\r",
 									"pm.collectionVariables.set(\"newborn_animal_birth_date\", newborn_animal_birth_date);\r",
 									"pm.collectionVariables.set(\"temporary_identity_number\", temporary_identity_number);"
@@ -1566,7 +1623,7 @@
 							"script": {
 								"exec": [
 									"const take_date = new Date();\r",
-									"const new_newborn_animal_birth_date = take_date.getFullYear() + \"-\" + (take_date.getMonth() + 1) + \"-\" + take_date.getDate();\r",
+									"const new_newborn_animal_birth_date = take_date.getFullYear() + \"-\" + (\"0\" + (take_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_date.getDate()).slice(-2);\r",
 									"\r",
 									"pm.collectionVariables.set(\"new_newborn_animal_birth_date\", new_newborn_animal_birth_date);"
 								],
@@ -1845,66 +1902,6 @@
 					"response": []
 				},
 				{
-					"name": "Find animal by identity number",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Response is correct\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.Message).not.eql(null);\r",
-									"});\r",
-									"pm.test(\"Successful GET request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:3000/herdapi/v1/animals/findOneAnimalInHerd/:herdName/:identityNumber",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"herdapi",
-								"v1",
-								"animals",
-								"findOneAnimalInHerd",
-								":herdName",
-								":identityNumber"
-							],
-							"variable": [
-								{
-									"key": "herdName",
-									"value": "{{new_name_of_herd}}"
-								},
-								{
-									"key": "identityNumber",
-									"value": "{{new_identityNumberOfAnimal}}"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Edit new dead animal identity number",
 					"event": [
 						{
@@ -2030,6 +2027,125 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Delete animal",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Zwierzę zostało trwale usunięte ze stada!\");\r",
+									"});\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"identityNumberOfAnimal\": \"{{new_identityNumberOfAnimal}}\",\r\n    \"confirmIdentityNumberOfAnimal\": \"{{new_identityNumberOfAnimal}}\",\r\n    \"userPassword\": \"{{new_password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/v1/animals/deleteAnimal",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v1",
+								"animals",
+								"deleteAnimal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete new born animal",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/v1/animals/deleteNewBornAnimal",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v1",
+								"animals",
+								"deleteNewBornAnimal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete dead animal",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/v1/animals/deleteDeadAnimal",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v1",
+								"animals",
+								"deleteDeadAnimal"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
@@ -2149,6 +2265,10 @@
 		},
 		{
 			"key": "new_dead_animal_identityNumberOfAnimal",
+			"value": ""
+		},
+		{
+			"key": "new_password",
 			"value": ""
 		}
 	]
