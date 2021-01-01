@@ -26,7 +26,6 @@ async function findAnimalByHerdIdAndIdentityNumber(
     ],
   });
   if (findAnimal) {
-    console.log(findAnimal);
     return findAnimal;
   }
   return null;

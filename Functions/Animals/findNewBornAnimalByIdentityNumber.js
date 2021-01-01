@@ -17,7 +17,6 @@ async function findNewBornAnimalByIdentityNumber(
     attributes: ["dateOfBirth", "identityNumber"],
   });
   if (findAnimal) {
-    console.log(findAnimal);
     return findAnimal;
   }
   return null;
