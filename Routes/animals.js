@@ -1400,6 +1400,13 @@ router.delete(
 router.delete(
   "/deleteDeadAnimal",
   [
+    check("herdName")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 3, max: 40 })
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
     check("identityNumberOfAnimal")
       .exists()
       .withMessage("Brak wymaganych danych!")
@@ -1407,18 +1414,83 @@ router.delete(
       .withMessage("Wymagane pole jest puste!")
       .isInt()
       .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
-    check("userPassword")
+    check("confirmIdentityNumberOfAnimal")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
-      .isLength({ min: 6 })
-      .withMessage("Hasło jest za krótkie!")
-      .isLength({ max: 32 })
-      .withMessage("Hasło jest za długie!"),
+      .isInt()
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!")
+      .custom((value, { req }) => {
+        if (value !== req.body.identityNumberOfAnimal) {
+          throw new Error(
+            "Wprowadzone numery identyfikacyjne zwierzęcia są różne!"
+          );
+        } else {
+          return value;
+        }
+      }),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkHerd = await findHerdByName(
+                Herds,
+                req.body.herdName,
+                authData.id
+              );
+              if (checkHerd) {
+                const findAnimal = await findDeadAnimalByHerdNameAndIdentityNumber(
+                  AnimalsDeads,
+                  checkHerd.id,
+                  req.body.identityNumberOfAnimal
+                );
+                if (findAnimal) {
+                  const deleteAnimalByUser = await deleteAnimal(
+                    AnimalsDeads,
+                    checkHerd.id,
+                    req.body.identityNumberOfAnimal
+                  );
+                  if (deleteAnimalByUser) {
+                    res.status(200).json({
+                      Message: "Zmarłe zwierzę zostało trwale usunięte!",
+                    });
+                  } else {
+                    res
+                      .status(400)
+                      .json({ Error: "Nie udało się usunąć zwierzęcia!" });
+                  }
+                } else {
+                  res.status(404).json({
+                    Error:
+                      "Nie znaleziono zwierzęcia o podanym numerze identyfikacyjnym!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error: "Nie znaleziono hodowli o wprowadzonej nazwie!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 router.delete(
