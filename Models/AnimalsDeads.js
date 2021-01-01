@@ -1,7 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 
 const sequelize = require("../Functions/Database/connectionWithDatabase");
-const AnimalsInHerd = require("./AnimalsInHerd");
 const ReasonOfDeath = require("./ReasonOfDeath");
 const Herds = require("./Herds");
 
@@ -34,14 +33,6 @@ const AnimalsDeads = sequelize.define(
   },
   { timestamps: true }
 );
-
-AnimalsInHerd.hasMany(AnimalsDeads, {
-  foreignKey: {
-    allowNull: false,
-    field: "idAnimal",
-  },
-});
-AnimalsDeads.belongsTo(AnimalsInHerd);
 
 ReasonOfDeath.hasMany(AnimalsDeads, {
   foreignKey: {
