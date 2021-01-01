@@ -32,7 +32,7 @@ async function createNewBornAnimal(
         const addNewBornAnimal = AnimalsBirths.create({
           dateOfBirth: birthDate,
           identityNumber: temporaryIdentityNumberOfAnimal,
-          AnimalsInHerdId: checkParentIdentiTyNumber.id,
+          parentIdentityNumber: checkParentIdentiTyNumber.identityNumber,
           KindsOfAnimalId: checkKindOfAnimal.id,
           HerdId: checkHerdName.id,
         });

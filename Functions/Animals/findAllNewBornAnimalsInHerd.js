@@ -1,4 +1,3 @@
-const AnimalsInHerd = require("../../Models/AnimalsInHerd");
 const KindsOfAnimals = require("../../Models/KindsOfAnimals");
 const Herds = require("../../Models/Herds");
 
@@ -8,7 +7,6 @@ async function findAllNewBornAnimalsInHerd(AnimalsBirths, herdId) {
     include: [
       { model: Herds, attributes: ["name"] },
       { model: KindsOfAnimals, attributes: ["name"] },
-      { model: AnimalsInHerd, attributes: ["identityNumberOfAnimal"] },
     ],
     attributes: ["dateOfBirth", "identityNumber"],
   });

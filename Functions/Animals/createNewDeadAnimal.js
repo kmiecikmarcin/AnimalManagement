@@ -33,7 +33,6 @@ async function createNewDeadAnimal(
           identityNumber: checkIdentityNumberOfAnimal.identityNumber,
           date: dateOfDeath,
           description: descriptionOfDeath,
-          AnimalsInHerdId: checkIdentityNumberOfAnimal.id,
           ReasonOfDeathId: checkReasonOfDeath.id,
           HerdId: checkHerdName.id,
         });

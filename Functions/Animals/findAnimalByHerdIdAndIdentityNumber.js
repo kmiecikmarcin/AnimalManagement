@@ -10,14 +10,7 @@ async function findAnimalByHerdIdAndIdentityNumber(
 ) {
   const findAnimal = await AnimalsInHerd.findOne({
     where: { identityNumber: identityNumberOfAnimal, idHerd: herdId },
-    attributes: [
-      "id",
-      "identityNumber",
-      "breed",
-      "joinDate",
-      "birthDate",
-      "weight",
-    ],
+    attributes: ["identityNumber", "breed", "joinDate", "birthDate", "weight"],
     include: [
       { model: Herds, attributes: ["name"] },
       { model: KindsOfAnimals, attributes: ["name"] },
