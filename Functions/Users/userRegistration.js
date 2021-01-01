@@ -7,8 +7,8 @@ async function register(Users, userEmail, userPassword, idRole, idUserGender) {
     email: userEmail,
     password: hash,
     accountDeletedStatus: false,
-    idTypeOfUserRole: idRole,
-    idGender: idUserGender,
+    TypesOfUsersRoleId: idRole,
+    GenderId: idUserGender,
   });
   if (user === null) {
     return null;

@@ -1,9 +1,9 @@
 const { Sequelize, DataTypes } = require("sequelize");
 
 const sequelize = require("../Functions/Database/connectionWithDatabase");
-const Herd = require("./Herds");
+const Herds = require("./Herds");
 const TypesOfJoinToTheHerd = require("./TypesOfJoinToTheHerd");
-const KindOfAnimals = require("./KindOfAnimals");
+const KindsOfAnimals = require("./KindsOfAnimals");
 const GenderOfAnimal = require("./GenderOfAnimal");
 
 const AnimalsInHerd = sequelize.define(
@@ -42,16 +42,23 @@ const AnimalsInHerd = sequelize.define(
       allowNull: false,
       field: "animalWeight",
     },
+    lifeStatusOfAnimal: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
+      field: "lifeStatusOfAnimal",
+    },
   },
   { timestamps: true }
 );
 
-Herd.hasMany(AnimalsInHerd, {
+Herds.hasMany(AnimalsInHerd, {
   foreignKey: {
     allowNull: false,
     field: "idHerd",
   },
 });
+AnimalsInHerd.belongsTo(Herds);
 
 TypesOfJoinToTheHerd.hasMany(AnimalsInHerd, {
   foreignKey: {
@@ -59,13 +66,15 @@ TypesOfJoinToTheHerd.hasMany(AnimalsInHerd, {
     field: "idJoinType",
   },
 });
+AnimalsInHerd.belongsTo(TypesOfJoinToTheHerd);
 
-KindOfAnimals.hasMany(AnimalsInHerd, {
+KindsOfAnimals.hasMany(AnimalsInHerd, {
   foreignKey: {
     allowNull: false,
     field: "idKindOfAnimals",
   },
 });
+AnimalsInHerd.belongsTo(KindsOfAnimals);
 
 GenderOfAnimal.hasMany(AnimalsInHerd, {
   foreignKey: {
@@ -73,5 +82,6 @@ GenderOfAnimal.hasMany(AnimalsInHerd, {
     field: "idAnimalGender",
   },
 });
+AnimalsInHerd.belongsTo(GenderOfAnimal);
 
 module.exports = AnimalsInHerd;

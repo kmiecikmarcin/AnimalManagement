@@ -1,8 +1,12 @@
-async function findAllUserHerds(Herds) {
+const KindsOfAnimals = require("../../Models/KindsOfAnimals");
+
+async function findAllUserHerds(Herds, userId) {
   const findHerds = await Herds.findAll({
-    attributes: ["id", "name", "creationDate"],
+    where: { UserId: userId },
+    include: { model: KindsOfAnimals, attributes: ["name"] },
+    attributes: ["name", "creationDate"],
   });
-  if (findHerds !== null) {
+  if (findHerds !== null && Object.keys(findHerds) !== 0) {
     return findHerds;
   }
   return null;

@@ -12,11 +12,11 @@ async function changeUserPassword(
     if (checkPassword) {
       const hash = await bcrypt.hash(newUserPassword, 8);
       if (hash) {
-        const changePasswordForUser = Users.update(
+        const changePasswordForUser = await Users.update(
           { password: hash },
           { where: { id: userId } }
         );
-        if (changePasswordForUser) {
+        if (changePasswordForUser.includes(1)) {
           return changePasswordForUser;
         }
         return null;

@@ -40,14 +40,17 @@ const Users = sequelize.define(
 TypesOfUsersRoles.hasMany(Users, {
   foreignKey: {
     allowNull: false,
-    name: "idTypeOfUserRole",
+    field: "idTypeOfUserRole",
   },
 });
+Users.belongsTo(TypesOfUsersRoles);
+
 Genders.hasMany(Users, {
   foreignKey: {
     allowNull: false,
-    name: "idGender",
+    field: "idGender",
   },
 });
+Users.belongsTo(Genders);
 
 module.exports = Users;

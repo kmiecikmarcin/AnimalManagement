@@ -40,6 +40,7 @@ TypesOfProducts.hasMany(AllProductsFromAnimals, {
     field: "idProductType",
   },
 });
+AllProductsFromAnimals.belongsTo(TypesOfProducts);
 
 Users.hasMany(AllProductsFromAnimals, {
   foreignKey: {
@@ -47,5 +48,6 @@ Users.hasMany(AllProductsFromAnimals, {
     field: "idUser",
   },
 });
+AllProductsFromAnimals.belongsTo(Users);
 
 module.exports = AllProductsFromAnimals;

@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const { check, validationResult } = require("express-validator");
 const Users = require("../Models/Users");
 const Herds = require("../Models/Herds");
-const KindOfAnimals = require("../Models/KindOfAnimals");
+const KindsOfAnimals = require("../Models/KindsOfAnimals");
 const verifyToken = require("../Functions/Users/verifyJwtToken");
 const findUserById = require("../Functions/Users/findUserById");
 const findAllUserHerds = require("../Functions/Herds/findAllUserHerds");
@@ -57,14 +57,14 @@ router.post(
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 40 })
-      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
     check("herdType")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isLength({ max: 256 })
-      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
     check("creationDate")
       .exists()
       .withMessage("Brak wymaganych danych!")
@@ -141,9 +141,9 @@ router.get("/findAllHerds", verifyToken, (req, res) => {
       } else {
         const checkUser = await findUserById(Users, authData);
         if (checkUser !== null) {
-          const findHerds = await findAllUserHerds(Herds);
+          const findHerds = await findAllUserHerds(Herds, authData.id);
           if (findHerds !== null) {
-            res.status(201).json({ Herds: findHerds });
+            res.status(200).json({ Herds: findHerds });
           } else {
             res.status(404).json({
               Error: "Użytkownik nie posiada hodowli przypisanych do konta!",
@@ -193,7 +193,7 @@ router.get("/findHerdByName/:name", verifyToken, (req, res) => {
               authData.id
             );
             if (findHerd) {
-              res.status(201).json({ Herds: findHerd });
+              res.status(200).json({ Herds: findHerd });
             } else {
               res.status(404).json({
                 Error: "Użytkownik nie posiada hodowli z podaną nazwą!",
@@ -241,13 +241,13 @@ router.get("/findHerdByAnimalType/:typeOfAnimal", verifyToken, (req, res) => {
           const checkUser = await findUserById(Users, authData);
           if (checkUser !== null) {
             const findHerd = await findHerdByAnimalType(
-              KindOfAnimals,
+              KindsOfAnimals,
               Herds,
               req.params.typeOfAnimal,
               authData.id
             );
             if (findHerd) {
-              res.status(201).json({ Herds: findHerd });
+              res.status(200).json({ Herds: findHerd });
             } else {
               res.status(404).json({
                 Error: "Użytkownik nie posiada tego typu hodowli!",
@@ -297,14 +297,14 @@ router.put(
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 40 })
-      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
     check("newHerdName")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 40 })
-      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
   ],
   verifyToken,
   (req, res) => {
@@ -329,6 +329,7 @@ router.put(
               if (findHerd) {
                 const updateHerdName = await changeHerdName(
                   Herds,
+                  req.body.oldHerdName,
                   req.body.newHerdName,
                   authData.id
                 );
@@ -337,7 +338,9 @@ router.put(
                     .status(201)
                     .json({ Message: "Nazwa hodowli została zaktualizowana!" });
                 } else {
-                  res.status(400).json({ Error: "Coś poszło nie tak" });
+                  res.status(400).json({
+                    Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
+                  });
                 }
               } else {
                 res.status(404).json({
@@ -383,7 +386,7 @@ router.put(
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isLength({ max: 256 })
-      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
   ],
   verifyToken,
   (req, res) => {
@@ -401,13 +404,13 @@ router.put(
             const checkUser = await findUserById(Users, authData);
             if (checkUser !== null) {
               const checkEnteredHerdTypeFromUser = await findKindOfAnimalsByName(
-                KindOfAnimals,
+                KindsOfAnimals,
                 req.body.newTypeOfHerd
               );
               if (checkEnteredHerdTypeFromUser) {
                 const updateType = await changeTypeOfHerd(
                   Herds,
-                  req.body.newHerdName,
+                  checkEnteredHerdTypeFromUser.id,
                   authData.id
                 );
                 if (updateType) {
@@ -471,7 +474,7 @@ router.delete(
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 40 })
-      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
     check("userPassword")
       .exists()
       .withMessage("Brak wymaganych danych!")
@@ -528,7 +531,7 @@ router.delete(
                     .json({ Message: "Hodowla została usunięta pomyślnie!" });
                 } else {
                   res.status(400).json({
-                    Error: "Coś poszło nie tak! Sprawdź wprowadozne dane!",
+                    Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
                   });
                 }
               } else {

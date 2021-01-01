@@ -1,8 +1,8 @@
 const { Sequelize, DataTypes } = require("sequelize");
 
 const sequelize = require("../Functions/Database/connectionWithDatabase");
-const AnimalsInHerd = require("./AnimalsInHerd");
 const ReasonOfDeath = require("./ReasonOfDeath");
+const Herds = require("./Herds");
 
 const AnimalsDeads = sequelize.define(
   "AnimalsDeads",
@@ -14,6 +14,11 @@ const AnimalsDeads = sequelize.define(
       unique: false,
       allowNull: false,
       field: "idAnimalsDeads",
+    },
+    identityNumber: {
+      type: DataTypes.BIGINT,
+      allowNull: false,
+      field: "identityNumberOfAnimal",
     },
     date: {
       type: DataTypes.DATEONLY,
@@ -29,18 +34,20 @@ const AnimalsDeads = sequelize.define(
   { timestamps: true }
 );
 
-AnimalsInHerd.hasMany(AnimalsDeads, {
-  foreignKey: {
-    allowNull: false,
-    field: "idAnimal",
-  },
-});
-
 ReasonOfDeath.hasMany(AnimalsDeads, {
   foreignKey: {
     allowNull: false,
     field: "idReasonDeath",
   },
 });
+AnimalsDeads.belongsTo(ReasonOfDeath);
+
+Herds.hasMany(AnimalsDeads, {
+  foreignKey: {
+    allowNull: false,
+    field: "idHerd",
+  },
+});
+AnimalsDeads.belongsTo(Herds);
 
 module.exports = AnimalsDeads;

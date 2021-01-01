@@ -1,12 +1,11 @@
 const { Sequelize, DataTypes } = require("sequelize");
 
 const sequelize = require("../Functions/Database/connectionWithDatabase");
-const AnimalsInHerd = require("./AnimalsInHerd");
-const KindOfAnimals = require("./KindOfAnimals");
-const Herd = require("./Herds");
+const KindsOfAnimals = require("./KindsOfAnimals");
+const Herds = require("./Herds");
 
-const AnimalsBirth = sequelize.define(
-  "AnimalsBirth",
+const AnimalsBirths = sequelize.define(
+  "AnimalsBirths",
   {
     id: {
       type: DataTypes.UUID,
@@ -26,29 +25,29 @@ const AnimalsBirth = sequelize.define(
       allowNull: false,
       field: "temporaryIdentityNumber",
     },
+    parentIdentityNumber: {
+      type: DataTypes.BIGINT,
+      allowNull: false,
+      field: "parentIdentityNumber",
+    },
   },
   { timestamps: true }
 );
 
-AnimalsInHerd.hasMany(AnimalsBirth, {
+KindsOfAnimals.hasMany(AnimalsBirths, {
   foreignKey: {
     allowNull: false,
-    field: "idAnimal",
+    field: "idKindOfAnimals",
   },
 });
+AnimalsBirths.belongsTo(KindsOfAnimals);
 
-KindOfAnimals.hasMany(AnimalsBirth, {
-  foreignKey: {
-    allowNull: false,
-    field: "idSpeciesOfAnimals",
-  },
-});
-
-Herd.hasMany(AnimalsBirth, {
+Herds.hasMany(AnimalsBirths, {
   foreignKey: {
     allowNull: false,
     field: "idHerd",
   },
 });
+AnimalsBirths.belongsTo(Herds);
 
-module.exports = AnimalsBirth;
+module.exports = AnimalsBirths;

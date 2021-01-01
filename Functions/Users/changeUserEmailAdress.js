@@ -14,11 +14,11 @@ async function changeUserEmailAdress(
       checkUserEmailAdress.password
     );
     if (checkPassword) {
-      const updateUserEmail = Users.update(
+      const updateUserEmail = await Users.update(
         { email: newUserEmailAdress },
         { where: { id: checkUserEmailAdress.id } }
       );
-      if (updateUserEmail) {
+      if (updateUserEmail.includes(1)) {
         return updateUserEmail;
       }
       return null;

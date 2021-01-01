@@ -32,7 +32,7 @@ const swaggerOptions = {
       title: "Animal herds management - API",
       description:
         "API for easy work with documentation which describe data based on life of animals.",
-      version: "0.2.0",
+      version: "0.3.0",
     },
     host: "localhost:3000",
     basePath: "/herdapi/v1",
@@ -55,7 +55,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 sequelize
-  .sync({ force: true })
+  .sync({ force: false })
   .then(() => {
     fillDataForGenderTable(Genders);
     fillDataForAnimalGender(GenderOfAnimal);

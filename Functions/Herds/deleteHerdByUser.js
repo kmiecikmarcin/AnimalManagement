@@ -13,7 +13,7 @@ async function deleteHerdByUser(
   );
   if (checkPassword) {
     const deleteHerd = await Herds.destroy({
-      where: { name: herdName, idUser: userId },
+      where: { name: herdName, UserId: userId },
     });
     if (deleteHerd) {
       return deleteHerd;

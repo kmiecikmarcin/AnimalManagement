@@ -1,6 +1,6 @@
 const Herds = require("../../Models/Herds");
 const TypesOfJoinToTheHerd = require("../../Models/TypesOfJoinToTheHerd");
-const KindOfAnimals = require("../../Models/KindOfAnimals");
+const KindsOfAnimals = require("../../Models/KindsOfAnimals");
 const GenderOfAnimal = require("../../Models/GenderOfAnimal");
 const findHerdByName = require("../Herds/findHerdByName");
 const findTypesOfJoinToTheHerd = require("./findTypesOfJoinToTheHerd");
@@ -29,7 +29,7 @@ async function createNewAnimal(
     );
     if (checkJoinType) {
       const checkKindOfAnimal = await findKindOfAnimalsByName(
-        KindOfAnimals,
+        KindsOfAnimals,
         kindOfAnimalName
       );
       if (checkKindOfAnimal) {
@@ -44,10 +44,11 @@ async function createNewAnimal(
             joinDate: dateOfJoinToTheHerd,
             birthDate: animalBirthDate,
             weight: animalWeight,
-            idHerd: checkHerdName.id,
-            idJoinType: checkJoinType.id,
-            idKindOfAnimal: checkKindOfAnimal.id,
-            idAnimalGender: checkAnimalGender.id,
+            lifeStatusOfAnimal: true,
+            HerdId: checkHerdName.id,
+            TypesOfJoinToTheHerdId: checkJoinType.id,
+            KindsOfAnimalId: checkKindOfAnimal.id,
+            GenderOfAnimalId: checkAnimalGender.id,
           });
           if (addNewAnimal) {
             return addNewAnimal;
@@ -55,19 +56,19 @@ async function createNewAnimal(
           return null;
         }
         return res
-          .status(400)
+          .status(404)
           .json({ Error: "Wprowadzona płeć zwierzęcia nie istnieje!" });
       }
       return res
-        .status(400)
+        .status(404)
         .json({ Error: "Wprowadzony rodzaj zwierzęcia nie istnieje!" });
     }
-    return res.status(400).json({
+    return res.status(404).json({
       Error: "Wprowadzony typ dołączenia zwierzęcia do stada nie istnieje!",
     });
   }
   return res
-    .status(400)
+    .status(404)
     .json({ Error: "Hodowla o wprowadzonej nazwie nie istnieje!" });
 }
 

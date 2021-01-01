@@ -236,14 +236,14 @@ router.post(
       } else {
         const userRole = await findTypeOfUserRoleById(
           TypesOfUsersRoles,
-          userEmail.idTypeOfUserRole
+          userEmail.TypesOfUsersRoleId
         );
         if (userRole !== null) {
           const checkEnteredDataFromUser = await userLogin(
             req.body.userPassword,
             userEmail.password,
             userEmail.id,
-            userEmail.idTypeOfUserRole,
+            userEmail.TypesOfUsersRoleId,
             userRole.name
           );
           if (checkEnteredDataFromUser !== null) {

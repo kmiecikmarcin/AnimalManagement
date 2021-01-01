@@ -14,5 +14,6 @@ module.exports = {
     "comma-dangle": 0,
     "no-console": "off",
     "no-plusplus": "off",
+    "max-len": ["error", 150],
   },
 };
