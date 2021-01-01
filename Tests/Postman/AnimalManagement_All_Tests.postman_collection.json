@@ -1725,7 +1725,7 @@
 					"response": []
 				},
 				{
-					"name": "Take all reason of death",
+					"name": "Take all reasons of deaths",
 					"event": [
 						{
 							"listen": "test",
@@ -1757,7 +1757,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/animals/takeAllReasonDeath",
+							"raw": "localhost:3000/herdapi/v1/animals/takeAllReasonsDeaths",
 							"host": [
 								"localhost"
 							],
@@ -1766,7 +1766,7 @@
 								"herdapi",
 								"v1",
 								"animals",
-								"takeAllReasonDeath"
+								"takeAllReasonsDeaths"
 							]
 						}
 					},
