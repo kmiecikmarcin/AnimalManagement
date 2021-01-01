@@ -46,11 +46,11 @@ async function createNewBornAnimal(
       });
     }
     return res
-      .status(400)
+      .status(404)
       .json({ Error: "Wprowadzony rodzaj zwierzęcia nie istnieje!" });
   }
   return res
-    .status(400)
+    .status(404)
     .json({ Error: "Hodowla o wprowadzonej nazwie nie istnieje!" });
 }
 
