@@ -2029,6 +2029,63 @@
 					"response": []
 				},
 				{
+					"name": "Delete new born animal",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Młode zwierzę zostało trwale usunięte!\");\r",
+									"});\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"temporaryIdentityNumberOfAnimal\": \"{{temporary_identity_number}}\",\r\n    \"confirmTemporaryIdentityNumberOfAnimal\": \"{{temporary_identity_number}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/v1/animals/deleteNewBornAnimal",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v1",
+								"animals",
+								"deleteNewBornAnimal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Delete animal",
 					"event": [
 						{
@@ -2062,7 +2119,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"identityNumberOfAnimal\": \"{{new_identityNumberOfAnimal}}\",\r\n    \"confirmIdentityNumberOfAnimal\": \"{{new_identityNumberOfAnimal}}\",\r\n    \"userPassword\": \"{{new_password}}\"\r\n}",
+							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"identityNumberOfAnimal\": \"{{new_identityNumberOfAnimal}}\",\r\n    \"confirmIdentityNumberOfAnimal\": \"{{new_identityNumberOfAnimal}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2080,68 +2137,6 @@
 								"v1",
 								"animals",
 								"deleteAnimal"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete new born animal",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "localhost:3000/herdapi/v1/animals/deleteNewBornAnimal",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"herdapi",
-								"v1",
-								"animals",
-								"deleteNewBornAnimal"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete dead animal",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "localhost:3000/herdapi/v1/animals/deleteDeadAnimal",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"herdapi",
-								"v1",
-								"animals",
-								"deleteDeadAnimal"
 							]
 						}
 					},
