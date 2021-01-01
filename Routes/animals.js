@@ -35,6 +35,7 @@ const findAllNewDeadAnimalsInHerd = require("../Functions/Animals/findAllNewDead
 const findNewBornAnimalByIdentityNumber = require("../Functions/Animals/findNewBornAnimalByIdentityNumber");
 const findDeadAnimalByHerdNameAndIdentityNumber = require("../Functions/Animals/findDeadAnimalByHerdNameAndIdentityNumber");
 const changeDateOfAnimalDead = require("../Functions/Animals/changeDateOfAnimalDead");
+const deleteAnimalFromHerd = require("../Functions/Animals/deleteAnimalFromHerd");
 
 router.get("/takeAllAnimalsGenders", verifyToken, (req, res) => {
   jwt.verify(
@@ -131,14 +132,14 @@ router.post(
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 40 })
-      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
     check("joinTypeName")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 256 })
-      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
     check("kindOfAnimalName")
       .exists()
       .withMessage("Brak wymaganych danych!")
@@ -158,7 +159,7 @@ router.post(
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isInt()
-      .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
     check("breedOfAnimal")
       .exists()
       .withMessage("Brak wymaganych danych!")
@@ -284,6 +285,56 @@ router.get("/findAllAnimalsInHerd/:herdName", verifyToken, (req, res) => {
   }
 });
 
+router.get(
+  "/findOneAnimalInHerd/:herdName/:identityNumber",
+  verifyToken,
+  (req, res) => {
+    if (req.params.herdName && req.params.identityNumber) {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const findHerd = await findHerdByName(
+                Herds,
+                req.params.herdName,
+                authData.id
+              );
+              if (findHerd) {
+                const responseAboutFoundAnimal = await findAnimalByHerdIdAndIdentityNumber(
+                  AnimalsInHerd,
+                  findHerd.id,
+                  req.params.identityNumber
+                );
+                if (responseAboutFoundAnimal !== null) {
+                  res.status(200).json({ Animal: responseAboutFoundAnimal });
+                } else {
+                  res.status(404).json({
+                    Error:
+                      "Użytkownik nie posiada zwierzęcia o wprowadzonym numerze identyfikacyjnym!",
+                  });
+                }
+              } else {
+                res
+                  .status(404)
+                  .json({ Error: "Użytkownik nie posiada hodowli!" });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    } else {
+      res.status(400).json({ Error: "Nie wprowadzono danych!" });
+    }
+  }
+);
+
 router.put(
   "/editIdentityNumberOfAnimal",
   [
@@ -293,21 +344,21 @@ router.put(
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 40 })
-      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
     check("oldIdentityNumberOfAnimal")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isInt()
-      .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
     check("newIdentityNumberOfAnimal")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isInt()
-      .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
   ],
   verifyToken,
   (req, res) => {
@@ -383,14 +434,14 @@ router.put(
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 40 })
-      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
     check("identityNumberOfAnimal")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isInt()
-      .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
     check("oldBreedOfAnimal")
       .exists()
       .withMessage("Brak wymaganych danych!")
@@ -479,14 +530,14 @@ router.put(
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 40 })
-      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
     check("identityNumberOfAnimal")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isInt()
-      .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
     check("oldBirthDate")
       .exists()
       .withMessage("Brak wymaganych danych!")
@@ -580,14 +631,14 @@ router.put(
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 40 })
-      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
     check("identityNumberOfAnimal")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isInt()
-      .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
     check("oldAnimalWeight")
       .exists()
       .withMessage("Brak wymaganych danych!")
@@ -683,14 +734,14 @@ router.post(
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isInt()
-      .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
     check("herdName")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 40 })
-      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
     check("birthDate")
       .exists()
       .withMessage("Brak wymaganych danych!")
@@ -706,7 +757,7 @@ router.post(
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isInt()
-      .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
   ],
   verifyToken,
   (req, res) => {
@@ -761,14 +812,14 @@ router.put(
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 40 })
-      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
     check("animalChildIdentityNumberOfAnimal")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isInt()
-      .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
     check("oldBirthDate")
       .exists()
       .withMessage("Brak wymaganych danych!")
@@ -939,14 +990,14 @@ router.post(
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 40 })
-      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
     check("identityNumberOfAnimal")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isInt()
-      .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
     check("dateOfDeath")
       .exists()
       .withMessage("Brak wymaganych danych!")
@@ -962,14 +1013,14 @@ router.post(
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 256 })
-      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
     check("description")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 256 })
-      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
   ],
   verifyToken,
   (req, res) => {
@@ -1060,56 +1111,6 @@ router.get("/takeAllDeadsAnimalsInHerd/:herdName", verifyToken, (req, res) => {
   }
 });
 
-router.get(
-  "/findOneAnimalInHerd/:herdName/:identityNumber",
-  verifyToken,
-  (req, res) => {
-    if (req.params.herdName && req.params.identityNumber) {
-      jwt.verify(
-        req.token,
-        process.env.S3_SECRETKEY,
-        async (jwtError, authData) => {
-          if (jwtError) {
-            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
-          } else {
-            const checkUser = await findUserById(Users, authData);
-            if (checkUser !== null) {
-              const findHerd = await findHerdByName(
-                Herds,
-                req.params.herdName,
-                authData.id
-              );
-              if (findHerd) {
-                const responseAboutFoundAnimal = await findAnimalByHerdIdAndIdentityNumber(
-                  AnimalsInHerd,
-                  findHerd.id,
-                  req.params.identityNumber
-                );
-                if (responseAboutFoundAnimal !== null) {
-                  res.status(200).json({ Animal: responseAboutFoundAnimal });
-                } else {
-                  res.status(404).json({
-                    Error:
-                      "Użytkownik nie posiada zwierzęcia o wprowadzonym numerze identyfikacyjnym!",
-                  });
-                }
-              } else {
-                res
-                  .status(404)
-                  .json({ Error: "Użytkownik nie posiada hodowli!" });
-              }
-            } else {
-              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
-            }
-          }
-        }
-      );
-    } else {
-      res.status(400).json({ Error: "Nie wprowadzono danych!" });
-    }
-  }
-);
-
 router.put(
   "/editNewDeadAnimalIdentityNumber",
   [
@@ -1119,21 +1120,21 @@ router.put(
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 40 })
-      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
     check("oldIdentityNumberOfAnimal")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isInt()
-      .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
     check("newIdentityNumberOfAnimal")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isInt()
-      .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
   ],
   verifyToken,
   (req, res) => {
@@ -1209,14 +1210,14 @@ router.put(
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 40 })
-      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
     check("identityNumberOfAnimal")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isInt()
-      .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
     check("oldDate")
       .exists()
       .withMessage("Brak wymaganych danych!")
@@ -1303,20 +1304,36 @@ router.put(
 router.delete(
   "/deleteAnimal",
   [
+    check("herdName")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 3, max: 40 })
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
     check("identityNumberOfAnimal")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isInt()
-      .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
     check("confirmIdentityNumberOfAnimal")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isInt()
-      .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!")
+      .custom((value, { req }) => {
+        if (value !== req.body.identityNumberOfAnimal) {
+          throw new Error(
+            "Wprowadzone numery identyfikacyjne zwierzęcia są różne!"
+          );
+        } else {
+          return value;
+        }
+      }),
     check("userPassword")
       .exists()
       .withMessage("Brak wymaganych danych!")
@@ -1328,7 +1345,65 @@ router.delete(
       .withMessage("Hasło jest za długie!"),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkHerd = await findHerdByName(
+                Herds,
+                req.body.herdName,
+                authData.id
+              );
+              if (checkHerd) {
+                const findAnimal = await findAnimalByHerdIdAndIdentityNumber(
+                  AnimalsInHerd,
+                  checkHerd.id,
+                  req.body.identityNumberOfAnimal
+                );
+                if (findAnimal) {
+                  const deleteAnimal = await deleteAnimalFromHerd(
+                    AnimalsInHerd,
+                    checkHerd.id,
+                    req.body.identityNumberOfAnimal
+                  );
+                  if (deleteAnimal) {
+                    res.status(200).json({
+                      Message: "Zwierzę zostało trwale usunięte ze stada!",
+                    });
+                  } else {
+                    res
+                      .status(400)
+                      .json({ Error: "Nie udało się usunąć zwierzęcia!" });
+                  }
+                } else {
+                  res.status(404).json({
+                    Error:
+                      "Nie znaleziono zwierzęcia o podanym numerze identyfikacyjnym!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error: "Nie znaleziono hodowli o wprowadzonej nazwie!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 router.delete(
@@ -1340,14 +1415,14 @@ router.delete(
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isInt()
-      .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
     check("confirmTemporaryIdentityNumberOfAnimal")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isInt()
-      .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
     check("userPassword")
       .exists()
       .withMessage("Brak wymaganych danych!")
@@ -1371,7 +1446,7 @@ router.delete(
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isInt()
-      .withMessage("Wprowadzona wartośc nie jest ciągiem liczbowym!"),
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
     check("userPassword")
       .exists()
       .withMessage("Brak wymaganych danych!")
