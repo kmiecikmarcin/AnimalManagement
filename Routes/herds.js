@@ -57,14 +57,14 @@ router.post(
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 40 })
-      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
     check("herdType")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isLength({ max: 256 })
-      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
     check("creationDate")
       .exists()
       .withMessage("Brak wymaganych danych!")
@@ -297,14 +297,14 @@ router.put(
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 40 })
-      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
     check("newHerdName")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 40 })
-      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
   ],
   verifyToken,
   (req, res) => {
@@ -386,7 +386,7 @@ router.put(
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isLength({ max: 256 })
-      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
   ],
   verifyToken,
   (req, res) => {
@@ -474,7 +474,7 @@ router.delete(
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 40 })
-      .withMessage("Długośc wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
     check("userPassword")
       .exists()
       .withMessage("Brak wymaganych danych!")
