@@ -1,57 +1,48 @@
-const Herds = require("../../Models/Herds");
 const KindsOfAnimals = require("../../Models/KindsOfAnimals");
 const AnimalsInHerd = require("../../Models/AnimalsInHerd");
 
-const findHerdByName = require("../Herds/findHerdByName");
 const findKindOfAnimalsByName = require("./findKindOfAnimalsByName");
 const findAnimalByHerdNameAndIdentityNumber = require("./findAnimalByHerdIdAndIdentityNumber");
 
 async function createNewBornAnimal(
   res,
   AnimalsBirths,
-  userId,
-  herdName,
+  herdId,
   kindOfAnimalName,
   parentIdentityNumber,
   birthDate,
   temporaryIdentityNumberOfAnimal
 ) {
-  const checkHerdName = await findHerdByName(Herds, herdName, userId);
-  if (checkHerdName) {
-    const checkKindOfAnimal = await findKindOfAnimalsByName(
-      KindsOfAnimals,
-      kindOfAnimalName
+  const checkKindOfAnimal = await findKindOfAnimalsByName(
+    KindsOfAnimals,
+    kindOfAnimalName
+  );
+  if (checkKindOfAnimal) {
+    const checkParentIdentiTyNumber = await findAnimalByHerdNameAndIdentityNumber(
+      AnimalsInHerd,
+      herdId,
+      parentIdentityNumber
     );
-    if (checkKindOfAnimal) {
-      const checkParentIdentiTyNumber = await findAnimalByHerdNameAndIdentityNumber(
-        AnimalsInHerd,
-        checkHerdName.id,
-        parentIdentityNumber
-      );
-      if (checkParentIdentiTyNumber) {
-        const addNewBornAnimal = AnimalsBirths.create({
-          dateOfBirth: birthDate,
-          identityNumber: temporaryIdentityNumberOfAnimal,
-          parentIdentityNumber: checkParentIdentiTyNumber.identityNumber,
-          KindsOfAnimalId: checkKindOfAnimal.id,
-          HerdId: checkHerdName.id,
-        });
-        if (addNewBornAnimal) {
-          return addNewBornAnimal;
-        }
-        return null;
-      }
-      return res.status(404).json({
-        Error: "Rodzic o wprowadzonym numerze identyfikacyjnym nie istnieje!",
+    if (checkParentIdentiTyNumber) {
+      const addNewBornAnimal = AnimalsBirths.create({
+        dateOfBirth: birthDate,
+        identityNumber: temporaryIdentityNumberOfAnimal,
+        parentIdentityNumber: checkParentIdentiTyNumber.identityNumber,
+        KindsOfAnimalId: checkKindOfAnimal.id,
+        HerdId: herdId,
       });
+      if (addNewBornAnimal) {
+        return addNewBornAnimal;
+      }
+      return null;
     }
-    return res
-      .status(404)
-      .json({ Error: "Wprowadzony rodzaj zwierzęcia nie istnieje!" });
+    return res.status(404).json({
+      Error: "Rodzic o wprowadzonym numerze identyfikacyjnym nie istnieje!",
+    });
   }
   return res
     .status(404)
-    .json({ Error: "Hodowla o wprowadzonej nazwie nie istnieje!" });
+    .json({ Error: "Wprowadzony rodzaj zwierzęcia nie istnieje!" });
 }
 
 module.exports = createNewBornAnimal;
