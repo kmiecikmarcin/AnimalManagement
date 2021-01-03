@@ -36,6 +36,7 @@ const findNewBornAnimalByIdentityNumber = require("../Functions/Animals/findNewB
 const findDeadAnimalByHerdNameAndIdentityNumber = require("../Functions/Animals/findDeadAnimalByHerdNameAndIdentityNumber");
 const changeDateOfAnimalDead = require("../Functions/Animals/changeDateOfAnimalDead");
 const deleteAnimal = require("../Functions/Animals/deleteAnimal");
+const checkEnteredIdentityNumberForAnimals = require("../Functions/Others/checkEnteredIdentityNumberForAnimals");
 
 /**
  * @swagger
@@ -311,27 +312,49 @@ router.post(
           }
           const checkUser = await findUserById(Users, authData);
           if (checkUser !== null) {
-            const addNewAnimal = await createNewAnimal(
-              res,
-              AnimalsInHerd,
-              authData.id,
+            const checkHerd = await findHerdByName(
+              Herds,
               req.body.herdName,
-              req.body.joinTypeName,
-              req.body.kindOfAnimalName,
-              req.body.animalGender,
-              req.body.identityNumberOfAnimal,
-              req.body.breedOfAnimal,
-              req.body.dateOfJoinToTheHerd,
-              req.body.birthDate,
-              req.body.animalWeight
+              authData.id
             );
-            if (addNewAnimal) {
-              res
-                .status(201)
-                .json({ Message: "Zwierzę zostało dodane pomyślnie!" });
+            if (checkHerd) {
+              const checkAnimalIdentityNumber = await checkEnteredIdentityNumberForAnimals(
+                AnimalsInHerd,
+                req.body.identityNumberOfAnimal,
+                checkHerd.id
+              );
+              if (checkAnimalIdentityNumber === null) {
+                const addNewAnimal = await createNewAnimal(
+                  res,
+                  AnimalsInHerd,
+                  checkHerd.id,
+                  req.body.joinTypeName,
+                  req.body.kindOfAnimalName,
+                  req.body.animalGender,
+                  req.body.identityNumberOfAnimal,
+                  req.body.breedOfAnimal,
+                  req.body.dateOfJoinToTheHerd,
+                  req.body.birthDate,
+                  req.body.animalWeight
+                );
+                if (addNewAnimal) {
+                  res
+                    .status(201)
+                    .json({ Message: "Zwierzę zostało dodane pomyślnie!" });
+                } else {
+                  res.status(400).json({
+                    Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
+                  });
+                }
+              } else {
+                res.status(400).json({
+                  Error:
+                    "Posiadasz już zwierzę o wprowadzonym numerze identyfikacyjnym!",
+                });
+              }
             } else {
-              res.status(400).json({
-                Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
+              res.status(404).json({
+                Error: "Nie posiadasz hodowli o wprowadzonej nazwie!",
               });
             }
           } else {
@@ -561,33 +584,45 @@ router.put(
                 authData.id
               );
               if (checkHerd) {
-                const findAnimal = await findAnimalByHerdIdAndIdentityNumber(
+                const checkAnimalIdentityNumber = await checkEnteredIdentityNumberForAnimals(
                   AnimalsInHerd,
-                  checkHerd.id,
-                  req.body.oldIdentityNumberOfAnimal
+                  req.body.newIdentityNumberOfAnimal,
+                  checkHerd.id
                 );
-                if (findAnimal) {
-                  const updateAnimalIdentityNumber = await changeAnimalIdentityNumber(
+                if (checkAnimalIdentityNumber === null) {
+                  const findAnimal = await findAnimalByHerdIdAndIdentityNumber(
                     AnimalsInHerd,
-                    req.body.oldIdentityNumberOfAnimal,
-                    req.body.newIdentityNumberOfAnimal,
-                    checkHerd.id
+                    checkHerd.id,
+                    req.body.oldIdentityNumberOfAnimal
                   );
-                  if (updateAnimalIdentityNumber) {
-                    res.status(201).json({
-                      Message:
-                        "Numer identyfikacyjny zwierzęcia został zmieniony pomyślnie!",
-                    });
+                  if (findAnimal) {
+                    const updateAnimalIdentityNumber = await changeAnimalIdentityNumber(
+                      AnimalsInHerd,
+                      req.body.oldIdentityNumberOfAnimal,
+                      req.body.newIdentityNumberOfAnimal,
+                      checkHerd.id
+                    );
+                    if (updateAnimalIdentityNumber) {
+                      res.status(201).json({
+                        Message:
+                          "Numer identyfikacyjny zwierzęcia został zmieniony pomyślnie!",
+                      });
+                    } else {
+                      res.status(400).json({
+                        Error:
+                          "Nie udało się zmienić numeru identyfikacyjnego zwierzęcia!",
+                      });
+                    }
                   } else {
-                    res.status(400).json({
+                    res.status(404).json({
                       Error:
-                        "Nie udało się zmienić numeru identyfikacyjnego zwierzęcia!",
+                        "Zwierzę o wprowadzonym numerze identyfikacyjnym nie istnieje!",
                     });
                   }
                 } else {
-                  res.status(404).json({
+                  res.status(400).json({
                     Error:
-                      "Zwierzę o wprowadzonym numerze identyfikacyjnym nie istnieje!",
+                      "Wprowadzony numer identyfikacyjny jest już przypisany do innego zwierzęcia",
                   });
                 }
               } else {
@@ -1104,23 +1139,45 @@ router.post(
           } else {
             const checkUser = await findUserById(Users, authData);
             if (checkUser) {
-              const addNewBornAnimal = await createNewBornAnimal(
-                res,
-                AnimalsBirths,
-                authData.id,
+              const checkHerdName = await findHerdByName(
+                Herds,
                 req.body.herdName,
-                req.body.kindOfAnimalName,
-                req.body.parentIdentityNumber,
-                req.body.birthDate,
-                req.body.temporaryIdentityNumberOfAnimal
+                authData.id
               );
-              if (addNewBornAnimal) {
-                res.status(201).json({
-                  Message: "Pomyślnie dodano nowo narodzone zwierzę!",
-                });
+              if (checkHerdName) {
+                const checkAnimalIdentityNumber = await checkEnteredIdentityNumberForAnimals(
+                  AnimalsBirths,
+                  req.body.temporaryIdentityNumberOfAnimal,
+                  checkHerdName.id
+                );
+                if (checkAnimalIdentityNumber === null) {
+                  const addNewBornAnimal = await createNewBornAnimal(
+                    res,
+                    AnimalsBirths,
+                    checkHerdName.id,
+                    req.body.kindOfAnimalName,
+                    req.body.parentIdentityNumber,
+                    req.body.birthDate,
+                    req.body.temporaryIdentityNumberOfAnimal
+                  );
+                  if (addNewBornAnimal) {
+                    res.status(201).json({
+                      Message: "Pomyślnie dodano nowo narodzone zwierzę!",
+                    });
+                  } else {
+                    res.status(400).json({
+                      Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
+                    });
+                  }
+                } else {
+                  res.status(400).json({
+                    Error:
+                      "Wprowadzony numer identyfikacyjny jest już przypisany do innego zwierzęcia!",
+                  });
+                }
               } else {
-                res.status(400).json({
-                  Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
+                res.status(404).json({
+                  Error: "Hodowla o wprowadzonej nazwie nie istnieje!",
                 });
               }
             } else {
@@ -1479,23 +1536,45 @@ router.post(
           } else {
             const checkUser = await findUserById(Users, authData);
             if (checkUser) {
-              const addNewDeadAnimal = await createNewDeadAnimal(
-                res,
-                AnimalsDeads,
-                authData.id,
+              const checkHerdName = await findHerdByName(
+                Herds,
                 req.body.herdName,
-                req.body.identityNumberOfAnimal,
-                req.body.dateOfDeath,
-                req.body.reasonDeath,
-                req.body.description
+                authData.id
               );
-              if (addNewDeadAnimal) {
-                res.status(201).json({
-                  Message: "Pomyślnie dodano nowe zmarłe zwierzę!",
-                });
+              if (checkHerdName) {
+                const checkAnimalIdentityNumber = await checkEnteredIdentityNumberForAnimals(
+                  AnimalsDeads,
+                  req.body.identityNumberOfAnimal,
+                  checkHerdName.id
+                );
+                if (checkAnimalIdentityNumber === null) {
+                  const addNewDeadAnimal = await createNewDeadAnimal(
+                    res,
+                    AnimalsDeads,
+                    checkHerdName.id,
+                    req.body.identityNumberOfAnimal,
+                    req.body.dateOfDeath,
+                    req.body.reasonDeath,
+                    req.body.description
+                  );
+                  if (addNewDeadAnimal) {
+                    res.status(201).json({
+                      Message: "Pomyślnie dodano nowe zmarłe zwierzę!",
+                    });
+                  } else {
+                    res.status(400).json({
+                      Error: "Coś poszło nie tak!Sprawdź wprowadzone dane!",
+                    });
+                  }
+                } else {
+                  res.status(400).json({
+                    Error:
+                      "Wprowadzony numer identyfikacyjny jest już przypisany do innego zwierzęcia!",
+                  });
+                }
               } else {
-                res.status(400).json({
-                  Error: "Coś poszło nie tak!Sprawdź wprowadzone dane!",
+                res.status(404).json({
+                  Error: "Hodowla o wprowadzonej nazwie nie istnieje!",
                 });
               }
             } else {
@@ -1651,33 +1730,45 @@ router.put(
                 authData.id
               );
               if (checkHerd) {
-                const findAnimal = await findDeadAnimalByHerdNameAndIdentityNumber(
+                const checkAnimalIdentityNumber = await checkEnteredIdentityNumberForAnimals(
                   AnimalsDeads,
-                  checkHerd.id,
-                  req.body.oldIdentityNumberOfAnimal
+                  req.body.newIdentityNumberOfAnimal,
+                  checkHerd.id
                 );
-                if (findAnimal) {
-                  const updateDeadAnimalIdentityNumber = await changeAnimalIdentityNumber(
+                if (checkAnimalIdentityNumber === null) {
+                  const findAnimal = await findDeadAnimalByHerdNameAndIdentityNumber(
                     AnimalsDeads,
-                    req.body.oldIdentityNumberOfAnimal,
-                    req.body.newIdentityNumberOfAnimal,
-                    checkHerd.id
+                    checkHerd.id,
+                    req.body.oldIdentityNumberOfAnimal
                   );
-                  if (updateDeadAnimalIdentityNumber) {
-                    res.status(201).json({
-                      Message:
-                        "Numer identyfikacyjny zwierzęcia został zmieniony pomyślnie!",
-                    });
+                  if (findAnimal) {
+                    const updateDeadAnimalIdentityNumber = await changeAnimalIdentityNumber(
+                      AnimalsDeads,
+                      req.body.oldIdentityNumberOfAnimal,
+                      req.body.newIdentityNumberOfAnimal,
+                      checkHerd.id
+                    );
+                    if (updateDeadAnimalIdentityNumber) {
+                      res.status(201).json({
+                        Message:
+                          "Numer identyfikacyjny zwierzęcia został zmieniony pomyślnie!",
+                      });
+                    } else {
+                      res.status(400).json({
+                        Error:
+                          "Nie udało się zmienić numeru identyfikacyjnego zwierzęcia!",
+                      });
+                    }
                   } else {
-                    res.status(400).json({
+                    res.status(404).json({
                       Error:
-                        "Nie udało się zmienić numeru identyfikacyjnego zwierzęcia!",
+                        "Nie znaleziono zwierzęcia o wprowadzonym numerze identyfikacyjnym!",
                     });
                   }
                 } else {
-                  res.status(404).json({
+                  res.status(400).json({
                     Error:
-                      "Nie udało się zmienić numeru identyfikacyjnego zwierzęcia!",
+                      "Wprowadzony numer identyfikacyjny jest już przypisany do innego zwierzęcia!",
                   });
                 }
               } else {
