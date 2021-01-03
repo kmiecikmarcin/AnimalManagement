@@ -453,10 +453,12 @@ router.put(
  *          in: formData
  *          required: true
  *          type: string
+ *          format: password
  *        - name: confirmPassword
  *          in: formData
  *          required: true
  *          type: string
+ *          format: password
  *      responses:
  *        201:
  *          description: The herd deleted successfully!
