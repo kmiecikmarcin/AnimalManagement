@@ -15,6 +15,11 @@ const PurchasedFeedForHerd = sequelize.define(
       allowNull: false,
       field: "idPurchasedFeed",
     },
+    identityNumber: {
+      type: DataTypes.BIGINT,
+      allowNull: false,
+      field: "identityNumberOfPurchasedFeed",
+    },
     quantity: {
       type: DataTypes.FLOAT,
       unique: true,

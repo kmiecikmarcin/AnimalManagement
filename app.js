@@ -36,7 +36,7 @@ const swaggerOptions = {
       version: "0.3.0",
     },
     host: "localhost:3000",
-    basePath: "/herdapi/v1",
+    basePath: "/herdapi/v20",
     securityDefinitions: {
       bearerAuth: {
         type: "apiKey",
@@ -73,10 +73,10 @@ sequelize
 
 const port = process.env.PORT || 3000;
 
-app.use("/herdapi/v1/users", RoutesUsers);
-app.use("/herdapi/v1/herds", RoutesHerds);
-app.use("/herdapi/v1/animals", RoutesAnimals);
-app.use("/herdapi/v1/feed", RoutesFeed);
+app.use("/herdapi/v20/users", RoutesUsers);
+app.use("/herdapi/v20/herds", RoutesHerds);
+app.use("/herdapi/v20/animals", RoutesAnimals);
+app.use("/herdapi/v20/feed", RoutesFeed);
 
 app.listen(port);
 
