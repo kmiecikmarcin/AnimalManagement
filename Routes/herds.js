@@ -37,7 +37,8 @@ const findHerdByAnimalType = require("../Functions/Herds/findHerdByAnimalType");
  *        - name: creationDate
  *          in: formData
  *          required: true
- *          type: date
+ *          type: string
+ *          format: date
  *      responses:
  *        201:
  *          description: New herd has been added!

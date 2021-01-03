@@ -192,14 +192,11 @@ router.get("/takeAllJoinTypeToTheHerd", verifyToken, (req, res) => {
  *          in: formData
  *          required: true
  *          type: string
- *        - name: animalGender
- *          in: formData
- *          required: true
- *          type: string
  *        - name: identityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: string
+ *          type: integer
+ *          format: int64
  *        - name: breedOfAnimal
  *          in: formData
  *          required: true
@@ -207,15 +204,18 @@ router.get("/takeAllJoinTypeToTheHerd", verifyToken, (req, res) => {
  *        - name: dateOfJoinToTheHerd
  *          in: formData
  *          required: true
- *          type: date
+ *          type: string
+ *          format: date
  *        - name: birthDate
  *          in: formData
  *          required: true
- *          type: date
+ *          type: string
+ *          format: date
  *        - name: animalWeight
  *          in: formData
  *          required: true
- *          type: date
+ *          type: number
+ *          format: float
  *      responses:
  *        201:
  *          description: New animal has been added!
@@ -423,7 +423,8 @@ router.get("/findAllAnimalsInHerd/:herdName", verifyToken, (req, res) => {
  *        - name: identityNumber
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *      responses:
  *        201:
  *          description: Data about this animal.
@@ -497,11 +498,13 @@ router.get(
  *        - name: oldIdentityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *        - name: newIdentityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *      responses:
  *        201:
  *          description: Data updated successfully!
@@ -617,7 +620,8 @@ router.put(
  *        - name: identityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *        - name: oldBreedOfAnimal
  *          in: formData
  *          required: true
@@ -747,15 +751,18 @@ router.put(
  *        - name: identityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *        - name: oldBirthDate
  *          in: formData
  *          required: true
- *          type: date
+ *          type: string
+ *          format: date
  *        - name: newBirthDate
  *          in: formData
  *          required: true
- *          type: date
+ *          type: string
+ *          format: datee
  *      responses:
  *        201:
  *          description: Data updated successfully!
@@ -882,15 +889,18 @@ router.put(
  *        - name: identityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *        - name: oldAnimalWeight
  *          in: formData
  *          required: true
- *          type: string
+ *          type: number
+ *          format: float
  *        - name: newAnimalWeight
  *          in: formData
  *          required: true
- *          type: string
+ *          type: number
+ *          format: float
  *      responses:
  *        201:
  *          description: Data updated successfully!
@@ -1012,7 +1022,8 @@ router.put(
  *        - name: parentIdentityNumber
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *        - name: herdName
  *          in: formData
  *          required: true
@@ -1020,11 +1031,13 @@ router.put(
  *        - name: birthDate
  *          in: formData
  *          required: true
- *          type: date
+ *          type: string
+ *          format: date
  *        - name: temporaryIdentityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *      responses:
  *        201:
  *          description: New born animal has been added!
@@ -1135,15 +1148,18 @@ router.post(
  *        - name: animalChildIdentityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *        - name: oldBirthDate
  *          in: formData
  *          required: true
- *          type: date
+ *          type: string
+ *          format: date
  *        - name: newBirthDate
  *          in: formData
  *          required: true
- *          type: date
+ *          type: string
+ *          format: date
  *      responses:
  *        201:
  *          description: Data updated successfully!
@@ -1382,11 +1398,13 @@ router.get("/takeAllReasonsDeaths", verifyToken, (req, res) => {
  *        - name: identityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *        - name: dateOfDeath
  *          in: formData
  *          required: true
- *          type: date
+ *          type: string
+ *          format: date
  *        - name: reasonDeath
  *          in: formData
  *          required: true
@@ -1570,11 +1588,13 @@ router.get("/takeAllDeadsAnimalsInHerd/:herdName", verifyToken, (req, res) => {
  *        - name: oldIdentityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *        - name: newIdentityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *      responses:
  *        201:
  *          description: Data updated successfully!
@@ -1690,15 +1710,18 @@ router.put(
  *        - name: identityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *        - name: oldDate
  *          in: formData
  *          required: true
- *          type: date
+ *          type: string
+ *          format: date
  *        - name: newDate
  *          in: formData
  *          required: true
- *          type: date
+ *          type: string
+ *          format: date
  *      responses:
  *        201:
  *          description: Data updated successfully!
@@ -1824,11 +1847,13 @@ router.put(
  *        - name: temporaryIdentityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *        - name: confirmTemporaryIdentityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *      responses:
  *        201:
  *          description: The new born animal deleted successfully!
@@ -1950,11 +1975,13 @@ router.delete(
  *        - name: identityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *        - name: confirmIdentityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *      responses:
  *        201:
  *          description: The dead animal deleted successfully!
@@ -2076,11 +2103,13 @@ router.delete(
  *        - name: identityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *        - name: confirmIdentityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *      responses:
  *        201:
  *          description: Animal deleted successfully!
