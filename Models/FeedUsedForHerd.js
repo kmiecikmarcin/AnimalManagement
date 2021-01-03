@@ -16,7 +16,7 @@ const FeedUsedForHerd = sequelize.define(
     date: {
       type: DataTypes.DATEONLY,
       allowNull: false,
-      field: "dataWhenFeedWasUsed",
+      field: "dateWhenFeedWasUsed",
     },
   },
   { timestamps: true }
