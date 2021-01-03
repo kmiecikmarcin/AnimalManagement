@@ -17,6 +17,7 @@ const findKindOfAnimalsByName = require("../Functions/Animals/findKindOfAnimalsB
 const changeTypeOfHerd = require("../Functions/Herds/changeTypeOfHerd");
 const deleteHerdByUser = require("../Functions/Herds/deleteHerdByUser");
 const findHerdByAnimalType = require("../Functions/Herds/findHerdByAnimalType");
+const checkEnteredName = require("../Functions/Others/checkEnteredName");
 
 /**
  * @swagger
@@ -91,20 +92,31 @@ router.post(
           } else {
             const checkUser = await findUserById(Users, authData);
             if (checkUser !== null) {
-              const addNewHerd = await createNewHerdForUser(
+              const checkNameOfHerd = await checkEnteredName(
                 Herds,
                 req.body.herdName,
-                req.body.creationDate,
-                authData.id,
-                req.body.herdType
+                authData.id
               );
-              if (addNewHerd) {
-                res
-                  .status(201)
-                  .json({ Message: "Nowa hodowla została dodana!" });
+              if (checkNameOfHerd === null) {
+                const addNewHerd = await createNewHerdForUser(
+                  Herds,
+                  req.body.herdName,
+                  req.body.creationDate,
+                  authData.id,
+                  req.body.herdType
+                );
+                if (addNewHerd) {
+                  res
+                    .status(201)
+                    .json({ Message: "Nowa hodowla została dodana!" });
+                } else {
+                  res.status(400).json({
+                    Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
+                  });
+                }
               } else {
                 res.status(400).json({
-                  Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
+                  Error: "Posiadasz już hodowlę o wprowadzonej nazwie!",
                 });
               }
             } else {
@@ -328,20 +340,34 @@ router.put(
                 authData.id
               );
               if (findHerd) {
-                const updateHerdName = await changeHerdName(
+                const checkHerdName = await checkEnteredName(
                   Herds,
-                  req.body.oldHerdName,
                   req.body.newHerdName,
                   authData.id
                 );
-                if (updateHerdName) {
-                  res
-                    .status(201)
-                    .json({ Message: "Nazwa hodowli została zaktualizowana!" });
+                if (checkHerdName === null) {
+                  const updateHerdName = await changeHerdName(
+                    Herds,
+                    req.body.oldHerdName,
+                    req.body.newHerdName,
+                    authData.id
+                  );
+                  if (updateHerdName) {
+                    res.status(201).json({
+                      Message: "Nazwa hodowli została zaktualizowana!",
+                    });
+                  } else {
+                    res.status(400).json({
+                      Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
+                    });
+                  }
                 } else {
-                  res.status(400).json({
-                    Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
-                  });
+                  res
+                    .status(400)
+                    .json({
+                      Error:
+                        "Posiadasz już hodowlę o wprowadzonej przez Ciebie nazwie!",
+                    });
                 }
               } else {
                 res.status(404).json({
