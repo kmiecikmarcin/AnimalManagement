@@ -7,6 +7,11 @@ const PurchasedFeedForHerd = require("./PurchasedFeedForHerd");
 const FeedUsedForHerd = sequelize.define(
   "FeedUsedForHerd",
   {
+    identityNumber: {
+      type: DataTypes.BIGINT,
+      allowNull: false,
+      field: "feedIdentityNumberUsedForHerd",
+    },
     quentity: {
       type: DataTypes.FLOAT,
       unique: true,
