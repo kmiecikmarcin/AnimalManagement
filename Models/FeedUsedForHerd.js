@@ -16,7 +16,7 @@ const FeedUsedForHerd = sequelize.define(
       type: DataTypes.FLOAT,
       unique: true,
       allowNull: false,
-      field: "quantityOfFeedUsedForAnimals",
+      field: "quantityOfFeedUsedForHerd",
     },
     date: {
       type: DataTypes.DATEONLY,
