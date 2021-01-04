@@ -121,6 +121,23 @@ router.get("/takeFeedStatusByItsType/:typeName", verifyToken, () => {});
 
 /**
  * @swagger
+ * /feed/takeAllSpeciesOfFeed:
+ *    get:
+ *      tags:
+ *      - name: Feed
+ *      summary: Take all species of feed
+ *      responses:
+ *        201:
+ *          description: List of data about species of feed.
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: System doesn't have assigned species of feed! or User doesn't exist!
+ */
+router.get("/takeAllSpeciesOfFeed", verifyToken, () => {});
+
+/**
+ * @swagger
  * /feed/editSpeciesOfFeed:
  *    put:
  *      tags:
