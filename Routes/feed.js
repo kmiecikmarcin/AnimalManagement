@@ -5,6 +5,43 @@ const { check } = require("express-validator");
 const verifyToken = require("../Functions/Users/verifyJwtToken");
 require("dotenv").config();
 
+/**
+ * @swagger
+ * /feed/addNewFeed:
+ *    post:
+ *      tags:
+ *      - name: Feed
+ *      summary: Add new feed
+ *      parameters:
+ *        - name: identityNumberOfPurchasedFeed
+ *          in: formData
+ *          required: true
+ *          type: integer
+ *          format: int64
+ *        - name: speciesOfFeedName
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: quantityOfFeed
+ *          in: formData
+ *          required: true
+ *          type: number
+ *          format: float
+ *        - name: dateOfPurchasedFeed
+ *          in: formData
+ *          required: true
+ *          type: string
+ *          format: date
+ *      responses:
+ *        201:
+ *          description: New feed has been added!
+ *        400:
+ *          description: Something went wrong!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: User or species of feed doesn't exist!
+ */
 router.post(
   "/addNewFeed",
   [
@@ -23,13 +60,6 @@ router.post(
       .isLength({ max: 256 })
       .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
     check("quantityOfFeed")
-      .exists()
-      .withMessage("Brak wymaganych danych!")
-      .notEmpty()
-      .withMessage("Wymagane pole jest puste!")
-      .isFloat()
-      .withMessage("Wprowadzona wartość nie jest liczbą!"),
-    check("currentQuantityOfFeed")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
