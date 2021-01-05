@@ -6,7 +6,7 @@ const sequelize = require("./Functions/Database/connectionWithDatabase");
 const RoutesUsers = require("./Routes/users");
 const RoutesHerds = require("./Routes/herds");
 const RoutesAnimals = require("./Routes/animals");
-const RoutesFeed = require("./Routes/feed");
+const RoutesFeeds = require("./Routes/feeds");
 const Genders = require("./Models/Genders");
 const GenderOfAnimal = require("./Models/GenderOfAnimal");
 const TypesOfUsersRoles = require("./Models/TypesOfUsersRoles");
@@ -76,7 +76,7 @@ const port = process.env.PORT || 3000;
 app.use("/herdapi/v20/users", RoutesUsers);
 app.use("/herdapi/v20/herds", RoutesHerds);
 app.use("/herdapi/v20/animals", RoutesAnimals);
-app.use("/herdapi/v20/feed", RoutesFeed);
+app.use("/herdapi/v20/feeds", RoutesFeeds);
 
 app.listen(port);
 

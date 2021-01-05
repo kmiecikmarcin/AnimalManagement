@@ -1,9 +1,17 @@
 const express = require("express");
 
 const router = express.Router();
-const { check } = require("express-validator");
+const jwt = require("jsonwebtoken");
+const { check, validationResult } = require("express-validator");
 const verifyToken = require("../Functions/Users/verifyJwtToken");
 require("dotenv").config();
+const Users = require("../Models/Users");
+const SpeciesOfFeeds = require("../Models/SpeciesOfFeeds");
+const PurchasedFeedForHerd = require("../Models/PurchasedFeedForHerd");
+const findUserById = require("../Functions/Users/findUserById");
+const findSpeciesOfFeeds = require("../Functions/Feed/findSpeciesOfFeeds");
+const checkIdentityNumberForFeedAndProducts = require("../Functions/Others/checkIdentityNumberForFeedAndProducts");
+const createNewPurchasedFeed = require("../Functions/Feed/createNewPurchasedFeed");
 
 /**
  * @swagger
@@ -77,7 +85,67 @@ router.post(
       ),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkSpeciesOfFeed = await findSpeciesOfFeeds(
+                SpeciesOfFeeds,
+                req.body.speciesOfFeedName
+              );
+              if (checkSpeciesOfFeed) {
+                const checkIdentityNumber = await checkIdentityNumberForFeedAndProducts(
+                  PurchasedFeedForHerd,
+                  req.body.identityNumberOfPurchasedFeed,
+                  authData.id
+                );
+                if (checkIdentityNumber === null) {
+                  const addNewFeed = await createNewPurchasedFeed(
+                    PurchasedFeedForHerd,
+                    req.body.identityNumberOfPurchasedFeed,
+                    req.body.quantityOfFeed,
+                    req.body.dateOfPurchasedFeed,
+                    checkSpeciesOfFeed.id
+                  );
+                  if (addNewFeed) {
+                    res.status(201).json({
+                      Message: "Pomyślnie dodano zakupione pożywienie!",
+                    });
+                  } else {
+                    res.status(400).json({
+                      Error: "Nie udało się dodać nowego pożywienia!",
+                    });
+                  }
+                } else {
+                  res.status(400).json({
+                    Error:
+                      "Wprowadzony numer identyfikacyjny jest już przypisany do innego zakupionego pożywienia!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error:
+                    "Wprowadzony gatunek pożywienia nie istnieje w systemie!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 /**
