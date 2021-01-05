@@ -2378,6 +2378,44 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Take food status by its type",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/v20/foods/takeFoodStatusByItsType/:speciesName",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v20",
+								"foods",
+								"takeFoodStatusByItsType",
+								":speciesName"
+							],
+							"variable": [
+								{
+									"key": "speciesName",
+									"value": "{{species_name}}"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
