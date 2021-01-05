@@ -2201,10 +2201,10 @@
 			]
 		},
 		{
-			"name": "Feed - scenario 1",
+			"name": "Food - scenario 1",
 			"item": [
 				{
-					"name": "Take all species of feeds",
+					"name": "Take all species of foods",
 					"event": [
 						{
 							"listen": "test",
@@ -2252,7 +2252,7 @@
 					"response": []
 				},
 				{
-					"name": "Add new feed",
+					"name": "Add new food",
 					"event": [
 						{
 							"listen": "test",
@@ -2332,7 +2332,7 @@
 					"response": []
 				},
 				{
-					"name": "Take feed status",
+					"name": "Take food status",
 					"event": [
 						{
 							"listen": "test",
@@ -2517,6 +2517,18 @@
 		},
 		{
 			"key": "species_name",
+			"value": ""
+		},
+		{
+			"key": "date_of_purchased_food",
+			"value": ""
+		},
+		{
+			"key": "identity_number_of_purchased_food",
+			"value": ""
+		},
+		{
+			"key": "quantity_of_food",
 			"value": ""
 		}
 	]

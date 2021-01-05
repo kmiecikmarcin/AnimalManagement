@@ -11,7 +11,7 @@ async function createNewPurchasedFoods(
     quantity: quantityOfFood,
     currentQuantity: quantityOfFood,
     date: dateOfPurchasedFood,
-    SpeciesOfFeedId: checkSpeciesOfFoodId,
+    SpeciesOfFoodId: checkSpeciesOfFoodId,
     UserId: userId,
   });
   if (createNewFeed) {
