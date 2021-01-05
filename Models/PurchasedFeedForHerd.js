@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes } = require("sequelize");
 
 const sequelize = require("../Functions/Database/connectionWithDatabase");
-const SpeciesOfFeed = require("./SpeciesOfFeed");
+const SpeciesOfFeeds = require("./SpeciesOfFeeds");
 const Users = require("./Users");
 
 const PurchasedFeedForHerd = sequelize.define(
@@ -41,13 +41,13 @@ const PurchasedFeedForHerd = sequelize.define(
   { timestamps: true }
 );
 
-SpeciesOfFeed.hasMany(PurchasedFeedForHerd, {
+SpeciesOfFeeds.hasMany(PurchasedFeedForHerd, {
   foreignKey: {
     allowNull: false,
-    field: "idSpeciesOfFeed",
+    field: "idSpecieOfFeed",
   },
 });
-PurchasedFeedForHerd.belongsTo(SpeciesOfFeed);
+PurchasedFeedForHerd.belongsTo(SpeciesOfFeeds);
 
 Users.hasMany(PurchasedFeedForHerd, {
   foreignKey: {

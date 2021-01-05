@@ -3,8 +3,8 @@ const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../Functions/Database/connectionWithDatabase");
 const TypesOfFeed = require("./TypesOfFeed");
 
-const SpeciesOfFeed = sequelize.define(
-  "SpeciesOfFeed",
+const SpeciesOfFeeds = sequelize.define(
+  "SpeciesOfFeeds",
   {
     id: {
       type: DataTypes.UUID,
@@ -24,12 +24,12 @@ const SpeciesOfFeed = sequelize.define(
   { timestamps: true }
 );
 
-TypesOfFeed.hasMany(SpeciesOfFeed, {
+TypesOfFeed.hasMany(SpeciesOfFeeds, {
   foreignKey: {
     allowNull: false,
     field: "idTypeOfFeed",
   },
 });
-SpeciesOfFeed.belongsTo(TypesOfFeed);
+SpeciesOfFeeds.belongsTo(TypesOfFeed);
 
-module.exports = SpeciesOfFeed;
+module.exports = SpeciesOfFeeds;
