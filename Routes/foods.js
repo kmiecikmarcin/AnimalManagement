@@ -15,6 +15,7 @@ const createNewPurchasedFood = require("../Functions/Foods/createNewPurchasedFoo
 const findAllSpeciesOfFoods = require("../Functions/Foods/findAllSpeciesOfFoods");
 const findAllUserFoodStatus = require("../Functions/Foods/findAllUserFoodStatus");
 const findAllUserFoodsStatusByItsSpecies = require("../Functions/Foods/findAllUserFoodsStatusByItsSpecies");
+const changeSpeciesOfFood = require("../Functions/Foods/changeSpeciesOfFood");
 
 /**
  * @swagger
@@ -147,7 +148,7 @@ router.post(
                 SpeciesOfFoods,
                 req.body.speciesOfFoodName
               );
-              if (checkSpeciesOfFood) {
+              if (checkSpeciesOfFood !== null) {
                 const checkIdentityNumber = await checkIdentityNumberForFoodAndProducts(
                   PurchasedFoodForHerd,
                   req.body.identityNumberOfPurchasedFood,
@@ -280,7 +281,7 @@ router.get("/takeFoodStatusByItsType/:speciesName", verifyToken, (req, res) => {
                 findSpecies.id
               );
               if (findFoodsStatusBySpecies !== null) {
-                res.status(201).json({ FoodsStatus: findFoodsStatusBySpecies });
+                res.status(200).json({ FoodsStatus: findFoodsStatusBySpecies });
               } else {
                 res.status(404).json({
                   Error: "Użytkownik nie posiada pożywienia wybranego gatunku!",
@@ -348,7 +349,54 @@ router.put(
       .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser != null) {
+              const checkSpecies = await findSpeciesOfFoods(
+                SpeciesOfFoods,
+                req.body.speciesOfFoodName
+              );
+              if (checkSpecies !== null) {
+                const updateSpecies = await changeSpeciesOfFood(
+                  PurchasedFoodForHerd,
+                  req.body.identityNumberOfPurchasedFood,
+                  checkSpecies.id,
+                  authData.id
+                );
+                if (updateSpecies) {
+                  res.status(201).json({
+                    Message: "Pomyślnie zmieniono gatunek pożywienia!",
+                  });
+                } else {
+                  res.status(400).json({
+                    Error: "Nie udało się zmienić gatunku pożywienia!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error:
+                    "Wprowadzony gatunek pożywienia nie istnieje w systemie!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 /**
