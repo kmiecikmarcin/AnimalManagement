@@ -12,6 +12,48 @@ const findUserById = require("../Functions/Users/findUserById");
 const findSpeciesOfFeeds = require("../Functions/Feed/findSpeciesOfFeeds");
 const checkIdentityNumberForFeedAndProducts = require("../Functions/Others/checkIdentityNumberForFeedAndProducts");
 const createNewPurchasedFeed = require("../Functions/Feed/createNewPurchasedFeed");
+const findAllSpeciesOfFeeds = require("../Functions/Feed/findAllSpeciesOfFeeds");
+
+/**
+ * @swagger
+ * /feed/takeAllSpeciesOfFeed:
+ *    get:
+ *      tags:
+ *      - name: Feed
+ *      summary: Take all species of feed
+ *      responses:
+ *        201:
+ *          description: List of data about species of feed.
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: System doesn't have assigned species of feed! or User doesn't exist!
+ */
+router.get("/takeAllSpeciesOfFeed", verifyToken, (req, res) => {
+  jwt.verify(
+    req.token,
+    process.env.S3_SECRETKEY,
+    async (jwtError, authData) => {
+      if (jwtError) {
+        res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+      } else {
+        const checkUser = await findUserById(Users, authData);
+        if (checkUser !== null) {
+          const findSpecies = await findAllSpeciesOfFeeds(SpeciesOfFeeds);
+          if (findSpecies) {
+            res.status(200).json({ SpeciesOfFeeds: findSpecies });
+          } else {
+            res.status(404).json({
+              Error: "System nie posiada przypisanych gatunków pożywienia",
+            });
+          }
+        } else {
+          res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+        }
+      }
+    }
+  );
+});
 
 /**
  * @swagger
@@ -187,23 +229,6 @@ router.get("/takeFeedStatus", verifyToken, () => {});
  *          description: User doesn't have feed assigned to his account! or User doesn't exist!
  */
 router.get("/takeFeedStatusByItsType/:typeName", verifyToken, () => {});
-
-/**
- * @swagger
- * /feed/takeAllSpeciesOfFeed:
- *    get:
- *      tags:
- *      - name: Feed
- *      summary: Take all species of feed
- *      responses:
- *        201:
- *          description: List of data about species of feed.
- *        403:
- *          description: Authentication failed!
- *        404:
- *          description: System doesn't have assigned species of feed! or User doesn't exist!
- */
-router.get("/takeAllSpeciesOfFeed", verifyToken, () => {});
 
 /**
  * @swagger
