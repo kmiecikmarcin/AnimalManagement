@@ -13,6 +13,7 @@ const findSpeciesOfFeeds = require("../Functions/Feed/findSpeciesOfFeeds");
 const checkIdentityNumberForFeedAndProducts = require("../Functions/Others/checkIdentityNumberForFeedAndProducts");
 const createNewPurchasedFeed = require("../Functions/Feed/createNewPurchasedFeed");
 const findAllSpeciesOfFeeds = require("../Functions/Feed/findAllSpeciesOfFeeds");
+const findAllUserFeedStatus = require("../Functions/Feed/findAllUserFeedStatus");
 
 /**
  * @swagger
@@ -206,7 +207,33 @@ router.post(
  *        404:
  *          description: User doesn't have feed assigned to his account! or User doesn't exist!
  */
-router.get("/takeFeedStatus", verifyToken, () => {});
+router.get("/takeFeedStatus", verifyToken, (req, res) => {
+  jwt.verify(
+    req.token,
+    process.env.S3_SECRETKEY,
+    async (jwtError, authData) => {
+      if (jwtError) {
+        res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+      } else {
+        const checkUser = await findUserById(Users, authData);
+        if (checkUser) {
+          const findUserFeed = await findAllUserFeedStatus(
+            PurchasedFeedForHerd
+          );
+          if (findUserFeed) {
+            res.status(200).json({ FeedStatus: findUserFeed });
+          } else {
+            res.status(404).json({
+              Error: "Użytkownik nie posiada żadnego przypisanego pożywienia!",
+            });
+          }
+        } else {
+          res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+        }
+      }
+    }
+  );
+});
 
 /**
  * @swagger
