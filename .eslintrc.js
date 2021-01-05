@@ -15,5 +15,14 @@ module.exports = {
     "no-console": "off",
     "no-plusplus": "off",
     "max-len": ["error", 150],
+    "operator-linebreak": [
+      "error",
+      "after",
+      {
+        overrides: {
+          ":": "before",
+        },
+      },
+    ],
   },
 };
