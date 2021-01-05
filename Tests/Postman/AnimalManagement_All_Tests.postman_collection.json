@@ -2381,6 +2381,23 @@
 				},
 				{
 					"name": "Take food status by its type",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -2412,6 +2429,77 @@
 									"key": "speciesName",
 									"value": "{{species_name}}"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit species of food",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie zmieniono gatunek pożywienia!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const new_species_of_feed_array = [\"Burak\", \"Żyto\"]\r",
+									"const random_number = _.random(0,1);\r",
+									"\r",
+									"const new_species_of_feed = new_species_of_feed_array[random_number];\r",
+									"\r",
+									"pm.collectionVariables.set(\"new_species_of_feed\",new_species_of_feed);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfPurchasedFood\": \"{{identity_number_of_purchased_food}}\",\r\n    \"speciesOfFoodName\": \"{{new_species_of_feed}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/v20/foods/editSpeciesOfFood",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v20",
+								"foods",
+								"editSpeciesOfFood"
 							]
 						}
 					},
