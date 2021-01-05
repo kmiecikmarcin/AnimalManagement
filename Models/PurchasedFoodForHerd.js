@@ -22,13 +22,11 @@ const PurchasedFoodForHerd = sequelize.define(
     },
     quantity: {
       type: DataTypes.FLOAT,
-      unique: true,
       allowNull: false,
       field: "quantityOfFood",
     },
     currentQuantity: {
       type: DataTypes.FLOAT,
-      unique: true,
       allowNull: false,
       field: "currentQuantityOfFood",
     },
