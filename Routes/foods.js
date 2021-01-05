@@ -16,6 +16,7 @@ const findAllSpeciesOfFoods = require("../Functions/Foods/findAllSpeciesOfFoods"
 const findAllUserFoodStatus = require("../Functions/Foods/findAllUserFoodStatus");
 const findAllUserFoodsStatusByItsSpecies = require("../Functions/Foods/findAllUserFoodsStatusByItsSpecies");
 const changeSpeciesOfFood = require("../Functions/Foods/changeSpeciesOfFood");
+const changeQuantityOfFood = require("../Functions/Foods/changeQuantityOfFood");
 
 /**
  * @swagger
@@ -163,7 +164,7 @@ router.post(
                     checkSpeciesOfFood.id,
                     authData.id
                   );
-                  if (addNewFood) {
+                  if (addNewFood !== null) {
                     res.status(201).json({
                       Message: "Pomyślnie dodano zakupione pożywienie!",
                     });
@@ -218,12 +219,12 @@ router.get("/takeFoodStatus", verifyToken, (req, res) => {
         res.status(403).json({ Error: "Błąd uwierzytelniania!" });
       } else {
         const checkUser = await findUserById(Users, authData);
-        if (checkUser) {
+        if (checkUser !== null) {
           const findUserFood = await findAllUserFoodStatus(
             PurchasedFoodForHerd,
             authData.id
           );
-          if (findUserFood) {
+          if (findUserFood !== null) {
             res.status(200).json({ FoodStatus: findUserFood });
           } else {
             res.status(404).json({
@@ -269,7 +270,7 @@ router.get("/takeFoodStatusByItsType/:speciesName", verifyToken, (req, res) => {
           res.status(403).json({ Error: "Błąd uwierzytelniania!" });
         } else {
           const checkUser = await findUserById(Users, authData);
-          if (checkUser) {
+          if (checkUser !== null) {
             const findSpecies = await findSpeciesOfFoods(
               SpeciesOfFoods,
               req.params.speciesName
@@ -362,7 +363,7 @@ router.put(
             res.status(403).json({ Error: "Błąd uwierzytelniania!" });
           } else {
             const checkUser = await findUserById(Users, authData);
-            if (checkUser != null) {
+            if (checkUser !== null) {
               const checkSpecies = await findSpeciesOfFoods(
                 SpeciesOfFoods,
                 req.body.speciesOfFoodName
@@ -374,7 +375,7 @@ router.put(
                   checkSpecies.id,
                   authData.id
                 );
-                if (updateSpecies) {
+                if (updateSpecies !== null) {
                   res.status(201).json({
                     Message: "Pomyślnie zmieniono gatunek pożywienia!",
                   });
@@ -446,7 +447,58 @@ router.put(
       .withMessage("Wprowadzona wartość nie jest liczbą!"),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkIdentityNumber = await checkIdentityNumberForFoodAndProducts(
+                PurchasedFoodForHerd,
+                req.body.identityNumberOfPurchasedFood,
+                authData.id
+              );
+              if (checkIdentityNumber !== null) {
+                const updateQuantity = await changeQuantityOfFood(
+                  PurchasedFoodForHerd,
+                  req.body.identityNumberOfPurchasedFood,
+                  req.body.quantityOfFood,
+                  checkIdentityNumber.quantity,
+                  checkIdentityNumber.currentQuantity,
+                  authData.id
+                );
+                if (updateQuantity !== null) {
+                  res.status(201).json({
+                    Message:
+                      "Pomyślnie zaktualizowano ilość zakupionego pokarmu!",
+                  });
+                } else {
+                  res.status(400).json({
+                    Error: "Nie udało się zmienić ilości zakupionego pokarmu!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error:
+                    "Użytkownik nie posiada pożywienia z wprowadzonym numerem identyfikacyjnym!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 /**
