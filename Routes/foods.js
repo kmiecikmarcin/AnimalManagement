@@ -17,6 +17,7 @@ const findAllUserFoodStatus = require("../Functions/Foods/findAllUserFoodStatus"
 const findAllUserFoodsStatusByItsSpecies = require("../Functions/Foods/findAllUserFoodsStatusByItsSpecies");
 const changeSpeciesOfFood = require("../Functions/Foods/changeSpeciesOfFood");
 const changeQuantityOfFood = require("../Functions/Foods/changeQuantityOfFood");
+const changeDateOfPurchasedFood = require("../Functions/Foods/changeDateOfPurchasedFood");
 
 /**
  * @swagger
@@ -564,7 +565,56 @@ router.put(
       ),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkIdentityNumber = await checkIdentityNumberForFoodAndProducts(
+                PurchasedFoodForHerd,
+                req.body.identityNumberOfPurchasedFood,
+                authData.id
+              );
+              if (checkIdentityNumber !== null) {
+                const updateDate = await changeDateOfPurchasedFood(
+                  PurchasedFoodForHerd,
+                  checkIdentityNumber.identityNumber,
+                  req.body.oldDate,
+                  req.body.newDate,
+                  authData.id
+                );
+                if (updateDate !== null) {
+                  res
+                    .status(201)
+                    .json({ Message: "Data została zaktualizowana!" });
+                } else {
+                  res
+                    .status(400)
+                    .json({ Error: "Nie udało się zaktualizować daty!" });
+                }
+              } else {
+                res.status(404).json({
+                  Error:
+                    "Pożywienie o wprowadzonym numerze identyfikacyjnym nie istnieje!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 /**
