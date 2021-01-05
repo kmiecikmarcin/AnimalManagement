@@ -2504,6 +2504,74 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Edit quantity of food",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie zaktualizowano ilość zakupionego pokarmu!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const new_quantity_of_food = _.random(0,1000);\r",
+									"\r",
+									"pm.collectionVariables.set(\"new_quantity_of_food\", new_quantity_of_food);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfPurchasedFood\": \"{{identity_number_of_purchased_food}}\",\r\n    \"quantityOfFood\": \"{{new_quantity_of_food}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/v20/foods/editQuantityOfFood",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v20",
+								"foods",
+								"editQuantityOfFood"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
@@ -2655,6 +2723,14 @@
 		},
 		{
 			"key": "quantity_of_food",
+			"value": ""
+		},
+		{
+			"key": "new_quantity_of_food",
+			"value": ""
+		},
+		{
+			"key": "new_species_of_feed",
 			"value": ""
 		}
 	]
