@@ -14,6 +14,7 @@ const checkIdentityNumberForFoodAndProducts = require("../Functions/Others/check
 const createNewPurchasedFood = require("../Functions/Foods/createNewPurchasedFoods");
 const findAllSpeciesOfFoods = require("../Functions/Foods/findAllSpeciesOfFoods");
 const findAllUserFoodStatus = require("../Functions/Foods/findAllUserFoodStatus");
+const findAllUserFoodsStatusByItsSpecies = require("../Functions/Foods/findAllUserFoodsStatusByItsSpecies");
 
 /**
  * @swagger
@@ -256,7 +257,50 @@ router.get("/takeFoodStatus", verifyToken, (req, res) => {
  *        404:
  *          description: User doesn't have food assigned to his account! or User doesn't exist!
  */
-router.get("/takeFoodStatusByItsType/:typeName", verifyToken, () => {});
+router.get("/takeFoodStatusByItsType/:speciesName", verifyToken, (req, res) => {
+  console.log(req.params.speciesName);
+  if (req.params.speciesName) {
+    jwt.verify(
+      req.token,
+      process.env.S3_SECRETKEY,
+      async (jwtError, authData) => {
+        if (jwtError) {
+          res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+        } else {
+          const checkUser = await findUserById(Users, authData);
+          if (checkUser) {
+            const findSpecies = await findSpeciesOfFoods(
+              SpeciesOfFoods,
+              req.params.speciesName
+            );
+            if (findSpecies !== null) {
+              const findFoodsStatusBySpecies = await findAllUserFoodsStatusByItsSpecies(
+                PurchasedFoodForHerd,
+                authData.id,
+                findSpecies.id
+              );
+              if (findFoodsStatusBySpecies !== null) {
+                res.status(201).json({ FoodsStatus: findFoodsStatusBySpecies });
+              } else {
+                res.status(404).json({
+                  Error: "Użytkownik nie posiada pożywienia wybranego gatunku!",
+                });
+              }
+            } else {
+              res.status(404).json({
+                Error: "Wprowadzony gatunek pożywienia nie istnieje!",
+              });
+            }
+          } else {
+            res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+          }
+        }
+      }
+    );
+  } else {
+    res.status(400).json({ Error: "Nie wprowadzono danych!" });
+  }
+});
 
 /**
  * @swagger
