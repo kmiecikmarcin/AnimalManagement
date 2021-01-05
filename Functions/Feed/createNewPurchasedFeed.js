@@ -3,14 +3,16 @@ async function createNewPurchasedFeed(
   identityNumberOfPurchasedFeed,
   quantityOfFeed,
   dateOfPurchasedFeed,
-  checkSpeciesOfFeedId
+  checkSpeciesOfFeedId,
+  userId
 ) {
   const createNewFeed = await PurchasedFeedForHerd.create({
     identityNumber: identityNumberOfPurchasedFeed,
     quantity: quantityOfFeed,
     currentQuantity: quantityOfFeed,
     date: dateOfPurchasedFeed,
-    PurchasedFeedForHerdId: checkSpeciesOfFeedId,
+    SpeciesOfFeedId: checkSpeciesOfFeedId,
+    UserId: userId,
   });
   if (createNewFeed) {
     return createNewFeed;
