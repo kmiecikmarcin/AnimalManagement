@@ -417,7 +417,6 @@
 									"\r",
 									"const take_date = new Date();\r",
 									"const date = take_date.getFullYear() + \"-\" + (\"0\" + (take_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_date.getDate()).slice(-2);\r",
-									"console.log(date)\r",
 									"\r",
 									"pm.collectionVariables.set(\"name_of_herd\", name_of_herd);\r",
 									"pm.collectionVariables.set(\"type_of_herd\", type_of_herd);\r",
@@ -2200,6 +2199,91 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Feed - scenario 1",
+			"item": [
+				{
+					"name": "Add new feed",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie dodano zakupione pożywienie!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const identity_number_of_purchased_feed = _.random(0,10000);\r",
+									"const quantity_of_feed = _.random(0,1000);\r",
+									"\r",
+									"const species_name_array = [\"Przenica\", \"Marchewka\"]\r",
+									"const random_number = _.random(0,1);\r",
+									"\r",
+									"const species_name = species_name_array[random_number];\r",
+									"\r",
+									"const take_date = new Date();\r",
+									"const date_of_purchased_feed = take_date.getFullYear() + \"-\" + (\"0\" + (take_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_date.getDate()).slice(-2);\r",
+									"\r",
+									"pm.collectionVariables.set(\"identity_number_of_purchased_feed\", identity_number_of_purchased_feed);\r",
+									"pm.collectionVariables.set(\"species_name\", species_name);\r",
+									"pm.collectionVariables.set(\"quantity_of_feed\", quantity_of_feed);\r",
+									"pm.collectionVariables.set(\"date_of_purchased_feed\", date_of_purchased_feed);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfPurchasedFeed\": \"{{identity_number_of_purchased_feed}}\",\r\n    \"speciesOfFeedName\": \"{{species_name}}\",\r\n    \"quantityOfFeed\": \"{{quantity_of_feed}}\",\r\n    \"dateOfPurchasedFeed\": \"{{date_of_purchased_feed}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/v20/feeds/addNewFeed",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v20",
+								"feeds",
+								"addNewFeed"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [
@@ -2321,6 +2405,22 @@
 		},
 		{
 			"key": "new_password",
+			"value": ""
+		},
+		{
+			"key": "date_of_purchased_feed",
+			"value": ""
+		},
+		{
+			"key": "identity_number_of_purchased_feed",
+			"value": ""
+		},
+		{
+			"key": "quantity_of_feed",
+			"value": ""
+		},
+		{
+			"key": "species_name",
 			"value": ""
 		}
 	]
