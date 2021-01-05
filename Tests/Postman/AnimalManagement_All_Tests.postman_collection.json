@@ -2236,7 +2236,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/feeds/takeAllSpeciesOfFeed",
+							"raw": "localhost:3000/herdapi/v20/foods/takeAllSpeciesOfFood",
 							"host": [
 								"localhost"
 							],
@@ -2244,8 +2244,8 @@
 							"path": [
 								"herdapi",
 								"v20",
-								"feeds",
-								"takeAllSpeciesOfFeed"
+								"foods",
+								"takeAllSpeciesOfFood"
 							]
 						}
 					},
@@ -2273,8 +2273,8 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const identity_number_of_purchased_feed = _.random(0,10000);\r",
-									"const quantity_of_feed = _.random(0,1000);\r",
+									"const identity_number_of_purchased_food = _.random(0,10000);\r",
+									"const quantity_of_food = _.random(0,1000);\r",
 									"\r",
 									"const species_name_array = [\"Przenica\", \"Marchewka\"]\r",
 									"const random_number = _.random(0,1);\r",
@@ -2282,12 +2282,12 @@
 									"const species_name = species_name_array[random_number];\r",
 									"\r",
 									"const take_date = new Date();\r",
-									"const date_of_purchased_feed = take_date.getFullYear() + \"-\" + (\"0\" + (take_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_date.getDate()).slice(-2);\r",
+									"const date_of_purchased_food = take_date.getFullYear() + \"-\" + (\"0\" + (take_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_date.getDate()).slice(-2);\r",
 									"\r",
-									"pm.collectionVariables.set(\"identity_number_of_purchased_feed\", identity_number_of_purchased_feed);\r",
+									"pm.collectionVariables.set(\"identity_number_of_purchased_food\", identity_number_of_purchased_food);\r",
 									"pm.collectionVariables.set(\"species_name\", species_name);\r",
-									"pm.collectionVariables.set(\"quantity_of_feed\", quantity_of_feed);\r",
-									"pm.collectionVariables.set(\"date_of_purchased_feed\", date_of_purchased_feed);"
+									"pm.collectionVariables.set(\"quantity_of_food\", quantity_of_food);\r",
+									"pm.collectionVariables.set(\"date_of_purchased_food\", date_of_purchased_food);"
 								],
 								"type": "text/javascript"
 							}
@@ -2308,7 +2308,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"identityNumberOfPurchasedFeed\": \"{{identity_number_of_purchased_feed}}\",\r\n    \"speciesOfFeedName\": \"{{species_name}}\",\r\n    \"quantityOfFeed\": \"{{quantity_of_feed}}\",\r\n    \"dateOfPurchasedFeed\": \"{{date_of_purchased_feed}}\"\r\n}",
+							"raw": "{\r\n    \"identityNumberOfPurchasedFood\": \"{{identity_number_of_purchased_food}}\",\r\n    \"speciesOfFoodName\": \"{{species_name}}\",\r\n    \"quantityOfFood\": \"{{quantity_of_food}}\",\r\n    \"dateOfPurchasedFood\": \"{{date_of_purchased_food}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2316,7 +2316,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/feeds/addNewFeed",
+							"raw": "localhost:3000/herdapi/v20/foods/addNewFood",
 							"host": [
 								"localhost"
 							],
@@ -2324,8 +2324,8 @@
 							"path": [
 								"herdapi",
 								"v20",
-								"feeds",
-								"addNewFeed"
+								"foods",
+								"addNewFood"
 							]
 						}
 					},
@@ -2364,7 +2364,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/feeds/takeFeedStatus",
+							"raw": "localhost:3000/herdapi/v20/foods/takeFoodStatus",
 							"host": [
 								"localhost"
 							],
@@ -2372,8 +2372,8 @@
 							"path": [
 								"herdapi",
 								"v20",
-								"feeds",
-								"takeFeedStatus"
+								"foods",
+								"takeFoodStatus"
 							]
 						}
 					},
