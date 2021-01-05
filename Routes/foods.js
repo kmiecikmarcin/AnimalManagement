@@ -6,31 +6,31 @@ const { check, validationResult } = require("express-validator");
 const verifyToken = require("../Functions/Users/verifyJwtToken");
 require("dotenv").config();
 const Users = require("../Models/Users");
-const SpeciesOfFeeds = require("../Models/SpeciesOfFeeds");
-const PurchasedFeedForHerd = require("../Models/PurchasedFeedForHerd");
+const SpeciesOfFoods = require("../Models/SpeciesOfFoods");
+const PurchasedFoodForHerd = require("../Models/PurchasedFoodForHerd");
 const findUserById = require("../Functions/Users/findUserById");
-const findSpeciesOfFeeds = require("../Functions/Feed/findSpeciesOfFeeds");
-const checkIdentityNumberForFeedAndProducts = require("../Functions/Others/checkIdentityNumberForFeedAndProducts");
-const createNewPurchasedFeed = require("../Functions/Feed/createNewPurchasedFeed");
-const findAllSpeciesOfFeeds = require("../Functions/Feed/findAllSpeciesOfFeeds");
-const findAllUserFeedStatus = require("../Functions/Feed/findAllUserFeedStatus");
+const findSpeciesOfFoods = require("../Functions/Foods/findSpeciesOfFoods");
+const checkIdentityNumberForFoodAndProducts = require("../Functions/Others/checkIdentityNumberForFoodAndProducts");
+const createNewPurchasedFood = require("../Functions/Foods/createNewPurchasedFoods");
+const findAllSpeciesOfFoods = require("../Functions/Foods/findAllSpeciesOfFoods");
+const findAllUserFoodStatus = require("../Functions/Foods/findAllUserFoodStatus");
 
 /**
  * @swagger
- * /feed/takeAllSpeciesOfFeed:
+ * /food/takeAllSpeciesOfFood:
  *    get:
  *      tags:
- *      - name: Feed
- *      summary: Take all species of feed
+ *      - name: Food
+ *      summary: Take all species of food
  *      responses:
  *        201:
- *          description: List of data about species of feed.
+ *          description: List of data about species of food.
  *        403:
  *          description: Authentication failed!
  *        404:
- *          description: System doesn't have assigned species of feed! or User doesn't exist!
+ *          description: System doesn't have assigned species of food! or User doesn't exist!
  */
-router.get("/takeAllSpeciesOfFeed", verifyToken, (req, res) => {
+router.get("/takeAllSpeciesOfFood", verifyToken, (req, res) => {
   jwt.verify(
     req.token,
     process.env.S3_SECRETKEY,
@@ -40,9 +40,9 @@ router.get("/takeAllSpeciesOfFeed", verifyToken, (req, res) => {
       } else {
         const checkUser = await findUserById(Users, authData);
         if (checkUser !== null) {
-          const findSpecies = await findAllSpeciesOfFeeds(SpeciesOfFeeds);
+          const findSpecies = await findAllSpeciesOfFoods(SpeciesOfFoods);
           if (findSpecies) {
-            res.status(200).json({ SpeciesOfFeeds: findSpecies });
+            res.status(200).json({ SpeciesOfFoods: findSpecies });
           } else {
             res.status(404).json({
               Error: "System nie posiada przypisanych gatunków pożywienia",
@@ -58,66 +58,66 @@ router.get("/takeAllSpeciesOfFeed", verifyToken, (req, res) => {
 
 /**
  * @swagger
- * /feed/addNewFeed:
+ * /food/addNewFood:
  *    post:
  *      tags:
- *      - name: Feed
- *      summary: Add new feed
+ *      - name: Food
+ *      summary: Add new food
  *      parameters:
- *        - name: identityNumberOfPurchasedFeed
+ *        - name: identityNumberOfPurchasedFood
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
- *        - name: speciesOfFeedName
+ *        - name: speciesOfFoodName
  *          in: formData
  *          required: true
  *          type: string
- *        - name: quantityOfFeed
+ *        - name: quantityOfFood
  *          in: formData
  *          required: true
  *          type: number
  *          format: float
- *        - name: dateOfPurchasedFeed
+ *        - name: dateOfPurchasedFood
  *          in: formData
  *          required: true
  *          type: string
  *          format: date
  *      responses:
  *        201:
- *          description: New feed has been added!
+ *          description: New food has been added!
  *        400:
  *          description: Something went wrong!
  *        403:
  *          description: Authentication failed!
  *        404:
- *          description: User or species of feed doesn't exist!
+ *          description: User or species of food doesn't exist!
  */
 router.post(
-  "/addNewFeed",
+  "/addNewFood",
   [
-    check("identityNumberOfPurchasedFeed")
+    check("identityNumberOfPurchasedFood")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isInt()
       .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
-    check("speciesOfFeedName")
+    check("speciesOfFoodName")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isLength({ max: 256 })
       .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
-    check("quantityOfFeed")
+    check("quantityOfFood")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isFloat()
       .withMessage("Wprowadzona wartość nie jest liczbą!"),
-    check("dateOfPurchasedFeed")
+    check("dateOfPurchasedFood")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
@@ -142,26 +142,26 @@ router.post(
           } else {
             const checkUser = await findUserById(Users, authData);
             if (checkUser !== null) {
-              const checkSpeciesOfFeed = await findSpeciesOfFeeds(
-                SpeciesOfFeeds,
-                req.body.speciesOfFeedName
+              const checkSpeciesOfFood = await findSpeciesOfFoods(
+                SpeciesOfFoods,
+                req.body.speciesOfFoodName
               );
-              if (checkSpeciesOfFeed) {
-                const checkIdentityNumber = await checkIdentityNumberForFeedAndProducts(
-                  PurchasedFeedForHerd,
-                  req.body.identityNumberOfPurchasedFeed,
+              if (checkSpeciesOfFood) {
+                const checkIdentityNumber = await checkIdentityNumberForFoodAndProducts(
+                  PurchasedFoodForHerd,
+                  req.body.identityNumberOfPurchasedFood,
                   authData.id
                 );
                 if (checkIdentityNumber === null) {
-                  const addNewFeed = await createNewPurchasedFeed(
-                    PurchasedFeedForHerd,
-                    req.body.identityNumberOfPurchasedFeed,
-                    req.body.quantityOfFeed,
-                    req.body.dateOfPurchasedFeed,
-                    checkSpeciesOfFeed.id,
+                  const addNewFood = await createNewPurchasedFood(
+                    PurchasedFoodForHerd,
+                    req.body.identityNumberOfPurchasedFood,
+                    req.body.quantityOfFood,
+                    req.body.dateOfPurchasedFood,
+                    checkSpeciesOfFood.id,
                     authData.id
                   );
-                  if (addNewFeed) {
+                  if (addNewFood) {
                     res.status(201).json({
                       Message: "Pomyślnie dodano zakupione pożywienie!",
                     });
@@ -194,20 +194,20 @@ router.post(
 
 /**
  * @swagger
- * /feed/takeFeedStatus:
+ * /food/takeFoodStatus:
  *    get:
  *      tags:
- *      - name: Feed
- *      summary: Take all feed status
+ *      - name: Food
+ *      summary: Take all food status
  *      responses:
  *        201:
- *          description: List with data about feed status.
+ *          description: List with data about food status.
  *        403:
  *          description: Authentication failed!
  *        404:
- *          description: User doesn't have feed assigned to his account! or User doesn't exist!
+ *          description: User doesn't have food assigned to his account! or User doesn't exist!
  */
-router.get("/takeFeedStatus", verifyToken, (req, res) => {
+router.get("/takeFoodStatus", verifyToken, (req, res) => {
   jwt.verify(
     req.token,
     process.env.S3_SECRETKEY,
@@ -217,11 +217,11 @@ router.get("/takeFeedStatus", verifyToken, (req, res) => {
       } else {
         const checkUser = await findUserById(Users, authData);
         if (checkUser) {
-          const findUserFeed = await findAllUserFeedStatus(
-            PurchasedFeedForHerd
+          const findUserFood = await findAllUserFoodStatus(
+            PurchasedFoodForHerd
           );
-          if (findUserFeed) {
-            res.status(200).json({ FeedStatus: findUserFeed });
+          if (findUserFood) {
+            res.status(200).json({ FoodStatus: findUserFood });
           } else {
             res.status(404).json({
               Error: "Użytkownik nie posiada żadnego przypisanego pożywienia!",
@@ -237,11 +237,11 @@ router.get("/takeFeedStatus", verifyToken, (req, res) => {
 
 /**
  * @swagger
- * /feed/takeFeedStatus/{typeName}:
+ * /food/takeFoodStatus/{typeName}:
  *    get:
  *      tags:
- *      - name: Feed
- *      summary: Take all feed status
+ *      - name: Food
+ *      summary: Take all food status
  *      parameters:
  *        - name: typeName
  *          in: formData
@@ -249,28 +249,28 @@ router.get("/takeFeedStatus", verifyToken, (req, res) => {
  *          type: string
  *      responses:
  *        201:
- *          description: List with data about feed status - but taking by feed type.
+ *          description: List with data about food status - but taking by food type.
  *        403:
  *          description: Authentication failed!
  *        404:
- *          description: User doesn't have feed assigned to his account! or User doesn't exist!
+ *          description: User doesn't have food assigned to his account! or User doesn't exist!
  */
-router.get("/takeFeedStatusByItsType/:typeName", verifyToken, () => {});
+router.get("/takeFoodStatusByItsType/:typeName", verifyToken, () => {});
 
 /**
  * @swagger
- * /feed/editSpeciesOfFeed:
+ * /food/editSpeciesOfFood:
  *    put:
  *      tags:
- *      - name: Feed
- *      summary: Edit species of feed
+ *      - name: Food
+ *      summary: Edit species of food
  *      parameters:
- *        - name: identityNumberOfPurchasedFeed
+ *        - name: identityNumberOfPurchasedFood
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
- *        - name: speciesOfFeedName
+ *        - name: speciesOfFoodName
  *          in: formData
  *          required: true
  *          type: string
@@ -285,16 +285,16 @@ router.get("/takeFeedStatusByItsType/:typeName", verifyToken, () => {});
  *          description: Errors about empty data.
  */
 router.put(
-  "/editSpeciesOfFeed",
+  "/editSpeciesOfFood",
   [
-    check("identityNumberOfPurchasedFeed")
+    check("identityNumberOfPurchasedFood")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isInt()
       .withMessage("Wprowadzona wartość nie jest jest liczbą!!"),
-    check("speciesOfFeedName")
+    check("speciesOfFoodName")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
@@ -308,18 +308,18 @@ router.put(
 
 /**
  * @swagger
- * /feed/editQuantityOfFeed:
+ * /food/editQuantityOfFood:
  *    put:
  *      tags:
- *      - name: Feed
- *      summary: Edit quantity of feed
+ *      - name: Food
+ *      summary: Edit quantity of food
  *      parameters:
- *        - name: identityNumberOfPurchasedFeed
+ *        - name: identityNumberOfPurchasedFood
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
- *        - name: quantityOfFeed
+ *        - name: quantityOfFood
  *          in: formData
  *          required: true
  *          type: number
@@ -335,16 +335,16 @@ router.put(
  *          description: Errors about empty data.
  */
 router.put(
-  "/editQuantityOfFeed",
+  "/editQuantityOfFood",
   [
-    check("identityNumberOfPurchasedFeed")
+    check("identityNumberOfPurchasedFood")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isInt()
       .withMessage("Wprowadzona wartość nie jest liczbą!"),
-    check("quantityOfFeed")
+    check("quantityOfFood")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
@@ -358,13 +358,13 @@ router.put(
 
 /**
  * @swagger
- * /feed/editDateOfPurchasedFeed:
+ * /food/editDateOfPurchasedFood:
  *    put:
  *      tags:
- *      - name: Feed
- *      summary: Edit date of purchased feed
+ *      - name: Food
+ *      summary: Edit date of purchased food
  *      parameters:
- *        - name: identityNumberOfPurchasedFeed
+ *        - name: identityNumberOfPurchasedFood
  *          in: formData
  *          required: true
  *          type: integer
@@ -390,9 +390,9 @@ router.put(
  *          description: Errors about empty data.
  */
 router.put(
-  "/editDateOfPurchasedFeed",
+  "/editDateOfPurchasedFood",
   [
-    check("identityNumberOfPurchasedFeed")
+    check("identityNumberOfPurchasedFood")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
@@ -424,34 +424,34 @@ router.put(
 
 /**
  * @swagger
- * /feed/assignFeedToHerd:
+ * /food/assignFoodToHerd:
  *    post:
  *      tags:
- *      - name: Feed
- *      summary: Assign feed to herd
+ *      - name: Food
+ *      summary: Assign food to herd
  *      parameters:
  *        - name: herdName
  *          in: formData
  *          required: true
  *          type: string
- *        - name: identityNumberOfFeedUsedForHerd
+ *        - name: identityNumberOfFoodUsedForHerd
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
- *        - name: quantityOfFeedUsedForHerd
+ *        - name: quantityOfFoodUsedForHerd
  *          in: formData
  *          required: true
  *          type: number
  *          format: float
- *        - name: dateWhenFeedWasUsed
+ *        - name: dateWhenFoodWasUsed
  *          in: formData
  *          required: true
  *          type: string
  *          format: date
  *      responses:
  *        201:
- *          description: New feed in herd has been added!
+ *          description: New food in herd has been added!
  *        400:
  *          description: Something went wrong!
  *        403:
@@ -460,7 +460,7 @@ router.put(
  *          description: User or herd doesn't exist!
  */
 router.post(
-  "/assignFeedToHerd",
+  "/assignFoodToHerd",
   [
     check("herdName")
       .exists()
@@ -469,21 +469,21 @@ router.post(
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 40 })
       .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
-    check("identityNumberOfFeedUsedForHerd")
+    check("identityNumberOfFoodUsedForHerd")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isInt()
       .withMessage("Wprowadzona wartość nie jest jest liczbą!!"),
-    check("quantityOfFeedUsedForHerd")
+    check("quantityOfFoodUsedForHerd")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isFloat()
       .withMessage("Wprowadzona wartość nie jest jest liczbą!!"),
-    check("dateWhenFeedWasUsed")
+    check("dateWhenFoodWasUsed")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
@@ -499,28 +499,28 @@ router.post(
 
 /**
  * @swagger
- * /feed/takeFeedStatusInHerd:
+ * /food/takeFoodStatusInHerd:
  *    get:
  *      tags:
- *      - name: Feed
- *      summary: Take all feed status in herd
+ *      - name: Food
+ *      summary: Take all food status in herd
  *      responses:
  *        201:
- *          description: List with data about feed status in herd.
+ *          description: List with data about food status in herd.
  *        403:
  *          description: Authentication failed!
  *        404:
- *          description: User doesn't have feed assigned to his herd! or User doesn't exist!
+ *          description: User doesn't have food assigned to his herd! or User doesn't exist!
  */
-router.get("/takeFeedStatusInHerd", verifyToken, () => {});
+router.get("/takeFoodStatusInHerd", verifyToken, () => {});
 
 /**
  * @swagger
- * /feed/takeFeedStatusInHerdByItsType/{typeName}:
+ * /food/takeFoodStatusInHerdByItsType/{typeName}:
  *    get:
  *      tags:
- *      - name: Feed
- *      summary: Take all feed status in herd by its type
+ *      - name: Food
+ *      summary: Take all food status in herd by its type
  *      parameters:
  *        - name: typeName
  *          in: formData
@@ -528,32 +528,32 @@ router.get("/takeFeedStatusInHerd", verifyToken, () => {});
  *          type: string
  *      responses:
  *        201:
- *          description: List with data about feed status - but taking by feed type.
+ *          description: List with data about food status - but taking by food type.
  *        403:
  *          description: Authentication failed!
  *        404:
- *          description: User doesn't have feed assigned to his herd! or User doesn't exist!
+ *          description: User doesn't have food assigned to his herd! or User doesn't exist!
  */
-router.get("/takeFeedStatusInHerdByItsType/:typeName", verifyToken, () => {});
+router.get("/takeFoodStatusInHerdByItsType/:typeName", verifyToken, () => {});
 
 /**
  * @swagger
- * /feed/editQuantityOfFeedUsedForAnimals:
+ * /food/editQuantityOfFoodUsedForAnimals:
  *    put:
  *      tags:
- *      - name: Feed
- *      summary: Edit quantity of feed used for animals
+ *      - name: Food
+ *      summary: Edit quantity of food used for animals
  *      parameters:
  *        - name: herdName
  *          in: formData
  *          required: true
  *          type: string
- *        - name: identityNumberOfFeedUsedForHerd
+ *        - name: identityNumberOfFoodUsedForHerd
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
- *        - name: newQuantityOfFeedUsedForHerd
+ *        - name: newQuantityOfFoodUsedForHerd
  *          in: formData
  *          required: true
  *          type: integer
@@ -569,7 +569,7 @@ router.get("/takeFeedStatusInHerdByItsType/:typeName", verifyToken, () => {});
  *          description: Errors about empty data.
  */
 router.put(
-  "/editQuantityOfFeedUsedForAnimals",
+  "/editQuantityOfFoodUsedForAnimals",
   [
     check("herdName")
       .exists()
@@ -578,14 +578,14 @@ router.put(
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 40 })
       .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
-    check("identityNumberOfFeedUsedForHerd")
+    check("identityNumberOfFoodUsedForHerd")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isInt()
       .withMessage("Wprowadzona wartość nie jest liczbą!"),
-    check("newQuantityOfFeedUsedForHerd")
+    check("newQuantityOfFoodUsedForHerd")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
@@ -599,17 +599,17 @@ router.put(
 
 /**
  * @swagger
- * /feed/editDateWhenUserUsedFeedForHerd:
+ * /food/editDateWhenUserUsedFoodForHerd:
  *    put:
  *      tags:
- *      - name: Feed
- *      summary: Edit date when user used feed for herd
+ *      - name: Food
+ *      summary: Edit date when user used food for herd
  *      parameters:
  *        - name: herdName
  *          in: formData
  *          required: true
  *          type: string
- *        - name: identityNumberOfFeedUsedForHerd
+ *        - name: identityNumberOfFoodUsedForHerd
  *          in: formData
  *          required: true
  *          type: integer
@@ -635,7 +635,7 @@ router.put(
  *          description: Errors about empty data.
  */
 router.put(
-  "/editDateWhenUserUsedFeedForHerd",
+  "/editDateWhenUserUsedFoodForHerd",
   [
     check("herdName")
       .exists()
@@ -644,7 +644,7 @@ router.put(
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 40 })
       .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
-    check("identityNumberOfFeedUsedForHerd")
+    check("identityNumberOfFoodUsedForHerd")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
@@ -676,31 +676,31 @@ router.put(
 
 /**
  * @swagger
- * /feed/deleteFeed:
+ * /food/deleteFood:
  *    delete:
  *      tags:
- *      - name: Feed
- *      summary: Delete feed
+ *      - name: Food
+ *      summary: Delete food
  *      parameters:
- *        - name: identityNumberOfPurchasedFeed
+ *        - name: identityNumberOfPurchasedFood
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
  *      responses:
  *        201:
- *          description: Feed deleted successfully!
+ *          description: Food deleted successfully!
  *        400:
- *          description: The feed couldn not be removed!
+ *          description: The food couldn not be removed!
  *        403:
  *          description: Authentication failed!
  *        404:
  *          description: Errors about empty data.
  */
 router.delete(
-  "/deleteFeed",
+  "/deleteFood",
   [
-    check("identityNumberOfPurchasedFeed")
+    check("identityNumberOfPurchasedFood")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
@@ -714,31 +714,31 @@ router.delete(
 
 /**
  * @swagger
- * /feed/deleteFeedUsedForHerd:
+ * /food/deleteFoodUsedForHerd:
  *    delete:
  *      tags:
- *      - name: Feed
- *      summary: Delete feed assigned to herd
+ *      - name: Food
+ *      summary: Delete food assigned to herd
  *      parameters:
- *        - name: identityNumberOfFeedUsedForHerd
+ *        - name: identityNumberOfFoodUsedForHerd
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
  *      responses:
  *        201:
- *          description: Feed deleted successfully!
+ *          description: Food deleted successfully!
  *        400:
- *          description: The feed couldn not be removed!
+ *          description: The food couldn not be removed!
  *        403:
  *          description: Authentication failed!
  *        404:
  *          description: Errors about empty data.
  */
 router.delete(
-  "/deleteFeedUsedForHerd",
+  "/deleteFoodUsedForHerd",
   [
-    check("identityNumberOfFeedUsedForHerd")
+    check("identityNumberOfFoodUsedForHerd")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()

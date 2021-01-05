@@ -2,37 +2,37 @@ const { DataTypes } = require("sequelize");
 
 const sequelize = require("../Functions/Database/connectionWithDatabase");
 const Herds = require("./Herds");
-const PurchasedFeedForHerd = require("./PurchasedFeedForHerd");
+const PurchasedFoodForHerd = require("./PurchasedFoodForHerd");
 
-const FeedUsedForHerd = sequelize.define(
-  "FeedUsedForHerd",
+const FoodUsedForHerd = sequelize.define(
+  "FoodUsedForHerd",
   {
     identityNumber: {
       type: DataTypes.BIGINT,
       allowNull: false,
-      field: "feedIdentityNumberUsedForHerd",
+      field: "foodIdentityNumberUsedForHerd",
     },
     quentity: {
       type: DataTypes.FLOAT,
       unique: true,
       allowNull: false,
-      field: "quantityOfFeedUsedForHerd",
+      field: "quantityOfFoodUsedForHerd",
     },
     date: {
       type: DataTypes.DATEONLY,
       allowNull: false,
-      field: "dateWhenFeedWasUsed",
+      field: "dateWhenFoodWasUsed",
     },
   },
   { timestamps: true }
 );
 
-Herds.belongsToMany(PurchasedFeedForHerd, {
-  through: FeedUsedForHerd,
+Herds.belongsToMany(PurchasedFoodForHerd, {
+  through: FoodUsedForHerd,
 });
 
-PurchasedFeedForHerd.belongsToMany(Herds, {
-  through: FeedUsedForHerd,
+PurchasedFoodForHerd.belongsToMany(Herds, {
+  through: FoodUsedForHerd,
 });
 
-module.exports = FeedUsedForHerd;
+module.exports = FoodUsedForHerd;

@@ -1,4 +1,4 @@
-async function checkIdentityNumberForFeedAndProducts(
+async function checkIdentityNumberForFoodAndProducts(
   Model,
   enteredIdentityNumber,
   userId
@@ -12,4 +12,4 @@ async function checkIdentityNumberForFeedAndProducts(
   return null;
 }
 
-module.exports = checkIdentityNumberForFeedAndProducts;
+module.exports = checkIdentityNumberForFoodAndProducts;

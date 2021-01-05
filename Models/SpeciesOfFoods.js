@@ -1,9 +1,10 @@
 const { Sequelize, DataTypes } = require("sequelize");
 
 const sequelize = require("../Functions/Database/connectionWithDatabase");
+const TypesOfFood = require("./TypesOfFood");
 
-const TypesOfFeed = sequelize.define(
-  "TypesOfFeed",
+const SpeciesOfFoods = sequelize.define(
+  "SpeciesOfFoods",
   {
     id: {
       type: DataTypes.UUID,
@@ -11,16 +12,24 @@ const TypesOfFeed = sequelize.define(
       primaryKey: true,
       unique: true,
       allowNull: false,
-      field: "idTypeOfFeed",
+      field: "idSpeciesOfFood",
     },
     name: {
       type: DataTypes.STRING(256),
       unique: true,
       allowNull: false,
-      field: "nameOfFeed",
+      field: "nameOfSpeciesFood",
     },
   },
   { timestamps: true }
 );
 
-module.exports = TypesOfFeed;
+TypesOfFood.hasMany(SpeciesOfFoods, {
+  foreignKey: {
+    allowNull: false,
+    field: "idTypeOfFood",
+  },
+});
+SpeciesOfFoods.belongsTo(TypesOfFood);
+
+module.exports = SpeciesOfFoods;
