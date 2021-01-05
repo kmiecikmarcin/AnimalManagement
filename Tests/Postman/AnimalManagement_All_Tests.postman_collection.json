@@ -2572,6 +2572,75 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Edit date of purchased food",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Data została zaktualizowana!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const take_new_date = new Date();\r",
+									"const new_date_of_purchased_food = take_new_date.getFullYear() + \"-\" + (\"0\" + (take_new_date.getMonth() + 2)).slice(-2) + \"-\" + (\"0\" + take_new_date.getDate()).slice(-2);\r",
+									"\r",
+									"pm.environment.set(\"new_date_of_purchased_food\", new_date_of_purchased_food);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfPurchasedFood\": \"{{identity_number_of_purchased_food}}\",\r\n    \"oldDate\": \"{{date_of_purchased_food}}\",\r\n    \"newDate\": \"{{new_date_of_purchased_food}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/v20/foods/editDateOfPurchasedFood",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v20",
+								"foods",
+								"editDateOfPurchasedFood"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
