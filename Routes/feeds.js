@@ -115,7 +115,8 @@ router.post(
                     req.body.identityNumberOfPurchasedFeed,
                     req.body.quantityOfFeed,
                     req.body.dateOfPurchasedFeed,
-                    checkSpeciesOfFeed.id
+                    checkSpeciesOfFeed.id,
+                    authData.id
                   );
                   if (addNewFeed) {
                     res.status(201).json({
