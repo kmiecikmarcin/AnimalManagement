@@ -218,7 +218,8 @@ router.get("/takeFoodStatus", verifyToken, (req, res) => {
         const checkUser = await findUserById(Users, authData);
         if (checkUser) {
           const findUserFood = await findAllUserFoodStatus(
-            PurchasedFoodForHerd
+            PurchasedFoodForHerd,
+            authData.id
           );
           if (findUserFood) {
             res.status(200).json({ FoodStatus: findUserFood });
