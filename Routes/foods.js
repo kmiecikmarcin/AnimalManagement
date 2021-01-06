@@ -8,6 +8,8 @@ require("dotenv").config();
 const Users = require("../Models/Users");
 const SpeciesOfFoods = require("../Models/SpeciesOfFoods");
 const PurchasedFoodForHerd = require("../Models/PurchasedFoodForHerd");
+const Herds = require("../Models/Herds");
+const FoodUsedForHerd = require("../Models/FoodUsedForHerd");
 const findUserById = require("../Functions/Users/findUserById");
 const findSpeciesOfFoods = require("../Functions/Foods/findSpeciesOfFoods");
 const checkIdentityNumberForFoodAndProducts = require("../Functions/Others/checkIdentityNumberForFoodAndProducts");
@@ -18,6 +20,10 @@ const findAllUserFoodsStatusByItsSpecies = require("../Functions/Foods/findAllUs
 const changeSpeciesOfFood = require("../Functions/Foods/changeSpeciesOfFood");
 const changeQuantityOfFood = require("../Functions/Foods/changeQuantityOfFood");
 const changeDateOfPurchasedFood = require("../Functions/Foods/changeDateOfPurchasedFood");
+const findHerdByName = require("../Functions/Herds/findHerdByName");
+const createNewFoodUsedForHerd = require("../Functions/Foods/createNewFoodUsedForHerd");
+const checkEnteredIdentityNumber = require("../Functions/Others/checkEnteredIdentityNumber");
+const changeCurrentQuantityOfFood = require("../Functions/Foods/changeCurrentQuantityOfFood");
 
 /**
  * @swagger
@@ -664,6 +670,13 @@ router.post(
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 40 })
       .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+    check("identityNumberOfPurchasedFood")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isInt()
+      .withMessage("Wprowadzona wartość nie jest jest liczbą!!"),
     check("identityNumberOfFoodUsedForHerd")
       .exists()
       .withMessage("Brak wymaganych danych!")
@@ -689,7 +702,98 @@ router.post(
       ),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkHerd = await findHerdByName(
+                Herds,
+                req.body.herdName,
+                authData.id
+              );
+              console.log(checkHerd.id);
+              if (checkHerd !== null) {
+                const checkPurchasedFood = await checkIdentityNumberForFoodAndProducts(
+                  PurchasedFoodForHerd,
+                  req.body.identityNumberOfPurchasedFood,
+                  authData.id
+                );
+                if (checkPurchasedFood !== null) {
+                  const checkIdentityNumber = await checkEnteredIdentityNumber(
+                    FoodUsedForHerd,
+                    req.body.identityNumberOfFoodUsedForHerd,
+                    checkHerd.id
+                  );
+                  if (checkIdentityNumber === null) {
+                    const updateCurrentQuantityInPurchasedFoodTable = await changeCurrentQuantityOfFood(
+                      PurchasedFoodForHerd,
+                      checkPurchasedFood.currentQuantity,
+                      req.body.quantityOfFoodUsedForHerd,
+                      checkPurchasedFood.id,
+                      authData.id
+                    );
+                    if (updateCurrentQuantityInPurchasedFoodTable !== null) {
+                      const addNewFoodUsedForHerd = await createNewFoodUsedForHerd(
+                        FoodUsedForHerd,
+                        checkHerd.id,
+                        checkPurchasedFood.id,
+                        checkPurchasedFood.currentQuantity,
+                        req.body.identityNumberOfFoodUsedForHerd,
+                        req.body.quantityOfFoodUsedForHerd,
+                        req.body.dateWhenFoodWasUsed
+                      );
+                      if (addNewFoodUsedForHerd !== null) {
+                        res.status(201).json({
+                          Message: "Udało się przypisać pożywienie do stada!",
+                        });
+                      } else {
+                        res.status(400).json({
+                          Error:
+                            "Stado posiada przypisane do siebie wybrane pożywienie!",
+                        });
+                      }
+                    } else {
+                      res.status(400).json({
+                        Error:
+                          "Pożywienie nie posiada wystarczającej ilości, by przypisać je do stada!",
+                      });
+                    }
+                  } else {
+                    res.status(404).json({
+                      Error:
+                        "Użytkownik posiada już przypisane pożywienie do stada o podanym numerze identyfikacyjnym!",
+                    });
+                  }
+                } else {
+                  res.status(404).json({
+                    Error:
+                      "Użytkownik nie posiada pożywienia z wprowadzonym numerem identyfikacyjnym!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error:
+                    "Użytkownik nie posiada hodowli o wprowadzonej nazwie!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 /**
