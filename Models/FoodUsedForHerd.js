@@ -14,7 +14,6 @@ const FoodUsedForHerd = sequelize.define(
     },
     quentity: {
       type: DataTypes.FLOAT,
-      unique: true,
       allowNull: false,
       field: "quantityOfFoodUsedForHerd",
     },
@@ -28,11 +27,16 @@ const FoodUsedForHerd = sequelize.define(
 );
 
 Herds.belongsToMany(PurchasedFoodForHerd, {
-  through: FoodUsedForHerd,
+  through: {
+    model: "FoodUsedForHerd",
+    unique: false,
+  },
 });
-
 PurchasedFoodForHerd.belongsToMany(Herds, {
-  through: FoodUsedForHerd,
+  through: {
+    model: "FoodUsedForHerd",
+    unique: false,
+  },
 });
 
 module.exports = FoodUsedForHerd;
