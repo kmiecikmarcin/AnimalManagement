@@ -2274,7 +2274,7 @@
 							"script": {
 								"exec": [
 									"const identity_number_of_purchased_food = _.random(0,10000);\r",
-									"const quantity_of_food = _.random(0,1000);\r",
+									"const quantity_of_food = 200;\r",
 									"\r",
 									"const species_name_array = [\"Przenica\", \"Marchewka\"]\r",
 									"const random_number = _.random(0,1);\r",
@@ -2527,7 +2527,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const new_quantity_of_food = _.random(0,1000);\r",
+									"const new_quantity_of_food = 100;\r",
 									"\r",
 									"pm.collectionVariables.set(\"new_quantity_of_food\", new_quantity_of_food);"
 								],
@@ -2637,6 +2637,76 @@
 								"v20",
 								"foods",
 								"editDateOfPurchasedFood"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Assign food to herd",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie przypisano pożywienie do stada!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const identity_number_of_food_used_for_herd = _.random(0,10000);\r",
+									"const quantity_of_food_used_for_herd = 50;\r",
+									"\r",
+									"pm.collectionVariables.set(\"identity_number_of_food_used_for_herd\", identity_number_of_food_used_for_herd);\r",
+									"pm.collectionVariables.set(\"quantity_of_food_used_for_herd\", quantity_of_food_used_for_herd);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"identityNumberOfPurchasedFood\": \"{{identity_number_of_purchased_food}}\",\r\n    \"identityNumberOfFoodUsedForHerd\": \"{{identity_number_of_food_used_for_herd}}\",\r\n    \"quantityOfFoodUsedForHerd\": \"{{quantity_of_food_used_for_herd}}\",\r\n    \"dateWhenFoodWasUsed\": \"{{date}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/v20/foods/assignFoodToHerd",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v20",
+								"foods",
+								"assignFoodToHerd"
 							]
 						}
 					},
@@ -2800,6 +2870,14 @@
 		},
 		{
 			"key": "new_species_of_feed",
+			"value": ""
+		},
+		{
+			"key": "identity_number_of_food_used_for_herd",
+			"value": ""
+		},
+		{
+			"key": "quantity_of_food_used_for_herd",
 			"value": ""
 		}
 	]
