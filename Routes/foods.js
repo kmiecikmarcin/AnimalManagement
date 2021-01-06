@@ -24,6 +24,8 @@ const findHerdByName = require("../Functions/Herds/findHerdByName");
 const createNewFoodUsedForHerd = require("../Functions/Foods/createNewFoodUsedForHerd");
 const checkEnteredIdentityNumber = require("../Functions/Others/checkEnteredIdentityNumber");
 const changeCurrentQuantityOfFood = require("../Functions/Foods/changeCurrentQuantityOfFood");
+const findAllUserHerds = require("../Functions/Herds/findAllUserHerds");
+const findAllUsedFoodByUser = require("../Functions/Foods/findAllUsedFoodByUser");
 
 /**
  * @swagger
@@ -811,7 +813,47 @@ router.post(
  *        404:
  *          description: User doesn't have food assigned to his herd! or User doesn't exist!
  */
-router.get("/takeFoodStatusInHerd", verifyToken, () => {});
+router.get("/takeFoodStatusInHerd", verifyToken, (req, res) => {
+  jwt.verify(
+    req.token,
+    process.env.S3_SECRETKEY,
+    async (jwtError, authData) => {
+      if (jwtError) {
+        res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+      } else {
+        const checkUser = await findUserById(Users, authData);
+        if (checkUser !== null) {
+          const findHerd = findAllUserHerds(Herds, authData.id);
+          if (findHerd !== null) {
+            const findPurchasedFood = await findAllUserFoodStatus(
+              PurchasedFoodForHerd,
+              authData.id
+            );
+            if (findPurchasedFood !== null) {
+              const findFood = await findAllUsedFoodByUser(
+                PurchasedFoodForHerd,
+                authData.id
+              );
+              if (findFood !== null) {
+                res.status(200).json(findFood);
+              } else {
+                res.status(404).json({});
+              }
+            } else {
+              res
+                .status(404)
+                .json({ Error: "Użytkownik nie posiada żadnego pożywienia!" });
+            }
+          } else {
+            res.status(404).json({ Error: "Użytkownik nie posiada hodowli!" });
+          }
+        } else {
+          res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+        }
+      }
+    }
+  );
+});
 
 /**
  * @swagger
