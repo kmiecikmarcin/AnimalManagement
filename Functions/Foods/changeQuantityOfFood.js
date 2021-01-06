@@ -7,9 +7,9 @@ async function changeQuantityOfFood(
   userId
 ) {
   const differenceInQuantity =
-    parseInt(quantityOfFood, 10) - parseInt(oldQuantityOfFood, 10);
+    parseFloat(quantityOfFood, 10) - parseFloat(oldQuantityOfFood, 10);
   const differenceCurrentQuantityOfFood =
-    differenceInQuantity + parseInt(currentQuantityOfFood, 10);
+    differenceInQuantity + parseFloat(currentQuantityOfFood, 10);
   const updateQuantity = await PurchasedFoodForHerd.update(
     {
       quantity: quantityOfFood,
@@ -22,7 +22,6 @@ async function changeQuantityOfFood(
       },
     }
   );
-  console.log(updateQuantity);
   if (updateQuantity.includes(1)) {
     return updateQuantity;
   }
