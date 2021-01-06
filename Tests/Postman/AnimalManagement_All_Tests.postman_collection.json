@@ -2651,7 +2651,7 @@
 								"exec": [
 									"pm.test(\"Response is correct\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie przypisano pożywienie do stada!\");\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Udało się przypisać pożywienie do stada!\");\r",
 									"});\r",
 									"pm.test(\"Successful POST request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
