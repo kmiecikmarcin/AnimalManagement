@@ -2808,7 +2808,7 @@
 							"variable": [
 								{
 									"key": "speciesName",
-									"value": "{{species_name}}"
+									"value": "{{new_species_of_feed}}"
 								}
 							]
 						}
