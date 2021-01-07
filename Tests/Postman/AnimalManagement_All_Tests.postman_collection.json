@@ -2814,6 +2814,74 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Edit quantity of food used for animals",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Ilość wykorzystywanego pożywienia dla stada została zaktualizowana!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const new_quantity_of_food_used_for_herd = 60;\r",
+									"\r",
+									"pm.environment.set(\"new_quantity_of_food_used_for_herd\", new_quantity_of_food_used_for_herd);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"identityNumberOfPurchasedFood\": \"{{identity_number_of_purchased_food}}\",\r\n    \"newQuantityOfFoodUsedForHerd\": \"{{new_quantity_of_food_used_for_herd}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/v20/foods/editQuantityOfFoodUsedForAnimals",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v20",
+								"foods",
+								"editQuantityOfFoodUsedForAnimals"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
