@@ -1,5 +1,6 @@
 const FoodUsedForHerd = require("../../Models/FoodUsedForHerd");
 const Herds = require("../../Models/Herds");
+const SpeciesOfFoods = require("../../Models/SpeciesOfFoods");
 
 async function findAllUsedFoodByUser(PurchasedFoodForHerd, userId) {
   const findFood = await PurchasedFoodForHerd.findAll({
@@ -21,18 +22,20 @@ async function findAllUsedFoodByUser(PurchasedFoodForHerd, userId) {
       {
         model: Herds,
         attributes: {
+          include: ["name"],
           exclude: [
             "id",
+            "creationDate",
             "createdAt",
             "updatedAt",
             "UserId",
             "KindsOfAnimalId",
-            "creationDate",
           ],
         },
         through: {
           model: FoodUsedForHerd,
           attributes: {
+            include: ["identityNumber", "quentity", "date"],
             exclude: [
               "createdAt",
               "updatedAt",
@@ -42,9 +45,10 @@ async function findAllUsedFoodByUser(PurchasedFoodForHerd, userId) {
           },
         },
       },
+      { model: SpeciesOfFoods, attributes: ["nameOfSpeciesFood"] },
     ],
   });
-  if (findFood) {
+  if (findFood.length !== 0) {
     return findFood;
   }
   return null;
