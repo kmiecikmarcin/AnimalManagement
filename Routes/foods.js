@@ -26,6 +26,7 @@ const checkEnteredIdentityNumber = require("../Functions/Others/checkEnteredIden
 const changeCurrentQuantityOfFood = require("../Functions/Foods/changeCurrentQuantityOfFood");
 const findAllUserHerds = require("../Functions/Herds/findAllUserHerds");
 const findAllUsedFoodByUser = require("../Functions/Foods/findAllUsedFoodByUser");
+const findAllUsedFoodByUserByFoodType = require("../Functions/Foods/findAllUsedFoodByUserByFoodType");
 
 /**
  * @swagger
@@ -723,7 +724,6 @@ router.post(
                 req.body.herdName,
                 authData.id
               );
-              console.log(checkHerd.id);
               if (checkHerd !== null) {
                 const checkPurchasedFood = await checkIdentityNumberForFoodAndProducts(
                   PurchasedFoodForHerd,
@@ -825,20 +825,12 @@ router.get("/takeFoodStatusInHerd", verifyToken, (req, res) => {
         if (checkUser !== null) {
           const findHerd = findAllUserHerds(Herds, authData.id);
           if (findHerd !== null) {
-            const findPurchasedFood = await findAllUserFoodStatus(
+            const findFood = await findAllUsedFoodByUser(
               PurchasedFoodForHerd,
               authData.id
             );
-            if (findPurchasedFood !== null) {
-              const findFood = await findAllUsedFoodByUser(
-                PurchasedFoodForHerd,
-                authData.id
-              );
-              if (findFood !== null) {
-                res.status(200).json(findFood);
-              } else {
-                res.status(404).json({});
-              }
+            if (findFood !== null) {
+              res.status(200).json(findFood);
             } else {
               res
                 .status(404)
@@ -875,7 +867,54 @@ router.get("/takeFoodStatusInHerd", verifyToken, (req, res) => {
  *        404:
  *          description: User doesn't have food assigned to his herd! or User doesn't exist!
  */
-router.get("/takeFoodStatusInHerdByItsType/:typeName", verifyToken, () => {});
+router.get(
+  "/takeFoodStatusInHerdByItsSpecies/:speciesName",
+  verifyToken,
+  (req, res) => {
+    if (req.params.speciesName) {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkFoodType = await findSpeciesOfFoods(
+                SpeciesOfFoods,
+                req.params.speciesName
+              );
+              if (checkFoodType !== null) {
+                const findFoodByType = await findAllUsedFoodByUserByFoodType(
+                  PurchasedFoodForHerd,
+                  authData.id,
+                  checkFoodType.id
+                );
+                if (findFoodByType !== null) {
+                  res.status(200).json(findFoodByType);
+                } else {
+                  res.status(404).json({
+                    Error: "Użytkownik nie posiada żadnego pożywienia!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error:
+                    "Wprowadzony rodzaj pożywienia nie istnieje w systemie!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    } else {
+      res.status(400).json({ Error: "Nie wprowadzono danych!" });
+    }
+  }
+);
 
 /**
  * @swagger
