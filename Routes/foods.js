@@ -27,6 +27,7 @@ const changeCurrentQuantityOfFood = require("../Functions/Foods/changeCurrentQua
 const findAllUserHerds = require("../Functions/Herds/findAllUserHerds");
 const findAllUsedFoodByUser = require("../Functions/Foods/findAllUsedFoodByUser");
 const findAllUsedFoodByUserByFoodType = require("../Functions/Foods/findAllUsedFoodByUserByFoodType");
+const changeQuantityOfFoodUsedForAnimals = require("../Functions/Foods/changeQuantityOfFoodUsedForAnimals");
 
 /**
  * @swagger
@@ -958,7 +959,7 @@ router.put(
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 40 })
       .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
-    check("identityNumberOfFoodUsedForHerd")
+    check("identityNumberOfPurchasedFood")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
@@ -974,7 +975,83 @@ router.put(
       .withMessage("Wprowadzona wartość nie jest liczbą!"),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkHerd = await findHerdByName(
+                Herds,
+                req.body.herdName,
+                authData.id
+              );
+              if (checkHerd !== null) {
+                const checkIdentityNumberOfPurchasedFood = await checkIdentityNumberForFoodAndProducts(
+                  PurchasedFoodForHerd,
+                  req.body.identityNumberOfPurchasedFood,
+                  authData.id,
+                  req.body.newQuantityOfFoodUsedForHerd
+                );
+                if (checkIdentityNumberOfPurchasedFood !== null) {
+                  const updateCurrentQuantityInPurchasedFoodTable = await changeCurrentQuantityOfFood(
+                    PurchasedFoodForHerd,
+                    checkIdentityNumberOfPurchasedFood.quantity,
+                    req.body.newQuantityOfFoodUsedForHerd,
+                    checkIdentityNumberOfPurchasedFood.id,
+                    authData.id
+                  );
+                  if (updateCurrentQuantityInPurchasedFoodTable !== null) {
+                    const updateQuantity = await changeQuantityOfFoodUsedForAnimals(
+                      FoodUsedForHerd,
+                      checkHerd.id,
+                      checkIdentityNumberOfPurchasedFood.id,
+                      req.body.newQuantityOfFoodUsedForHerd
+                    );
+                    if (updateQuantity !== null) {
+                      res.status(201).json({
+                        Message:
+                          "Ilość wykorzystywanego pożywienia dla stada została zaktualizowana!",
+                      });
+                    } else {
+                      res.status(400).json({
+                        Error:
+                          "Nie udało się zmienić ilości pożywienia wykorzystywanej dla stada!",
+                      });
+                    }
+                  } else {
+                    res.status(400).json({
+                      Error:
+                        "Brak pożywienia, by zmienić jego ilość wykorzystaną dla stada!",
+                    });
+                  }
+                } else {
+                  res.status(404).json({
+                    Error:
+                      "Użytkownik nie posiada pożywienia o wprowadzonym numerze identyfikacyjnym!",
+                  });
+                }
+              } else {
+                res
+                  .status(404)
+                  .json({ Error: "Użytkownik nie posiada żadnej hodowli!" });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 /**
