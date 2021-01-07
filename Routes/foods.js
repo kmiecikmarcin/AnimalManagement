@@ -28,6 +28,7 @@ const findAllUserHerds = require("../Functions/Herds/findAllUserHerds");
 const findAllUsedFoodByUser = require("../Functions/Foods/findAllUsedFoodByUser");
 const findAllUsedFoodByUserByFoodType = require("../Functions/Foods/findAllUsedFoodByUserByFoodType");
 const changeQuantityOfFoodUsedForAnimals = require("../Functions/Foods/changeQuantityOfFoodUsedForAnimals");
+const changeDateOfFoodUsedForHerd = require("../Functions/Foods/changeDateOfFoodUsedForHerd");
 
 /**
  * @swagger
@@ -1128,7 +1129,67 @@ router.put(
       ),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkHerd = await findHerdByName(
+                Herds,
+                req.body.herdName,
+                authData.id
+              );
+              if (checkHerd !== null) {
+                const checkIdentityNumber = await checkEnteredIdentityNumber(
+                  FoodUsedForHerd,
+                  req.body.identityNumberOfFoodUsedForHerd,
+                  checkHerd.id
+                );
+                if (checkIdentityNumber !== null) {
+                  const updateDateOfFoodUsedForHerd = await changeDateOfFoodUsedForHerd(
+                    FoodUsedForHerd,
+                    req.body.oldDate,
+                    req.body.newDate,
+                    checkHerd.id,
+                    checkIdentityNumber.PurchasedFoodForHerdId
+                  );
+                  if (updateDateOfFoodUsedForHerd !== null) {
+                    res
+                      .status(201)
+                      .json({ Message: "Data została zmieniona pomyślnie!" });
+                  } else {
+                    res
+                      .status(400)
+                      .json({ Error: "Nie udało się zaktualizować daty!" });
+                  }
+                } else {
+                  res.status(404).json({
+                    Error:
+                      "Użytkownik nie posiada przypisanego pożywienia do stada o wprowadzonym numerze identyfikacyjnym!",
+                  });
+                }
+              } else {
+                res
+                  .status(404)
+                  .json({ Error: "Użytkownik nie posiada żadnej hodowli!" });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 /**
