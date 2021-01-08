@@ -2446,7 +2446,7 @@
 									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie zmieniono gatunek pożywienia!\");\r",
 									"});\r",
 									"pm.test(\"Successful POST request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -2517,7 +2517,7 @@
 									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie zaktualizowano ilość zakupionego pokarmu!\");\r",
 									"});\r",
 									"pm.test(\"Successful POST request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -2585,7 +2585,7 @@
 									"    pm.expect(jsonData.Message).to.eql(\"Data została zaktualizowana!\");\r",
 									"});\r",
 									"pm.test(\"Successful POST request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -2827,7 +2827,7 @@
 									"    pm.expect(jsonData.Message).to.eql(\"Ilość wykorzystywanego pożywienia dla stada została zaktualizowana!\");\r",
 									"});\r",
 									"pm.test(\"Successful POST request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -2895,7 +2895,7 @@
 									"    pm.expect(jsonData.Message).to.eql(\"Data została zmieniona pomyślnie!\");\r",
 									"});\r",
 									"pm.test(\"Successful POST request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -2947,6 +2947,63 @@
 								"v20",
 								"foods",
 								"editDateWhenUserUsedFoodForHerd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete purchased food",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfPurchasedFood\": \"{{identity_number_of_purchased_food}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/v20/foods/deletePurchasedFood",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v20",
+								"foods",
+								"deletePurchasedFood"
 							]
 						}
 					},
@@ -3078,14 +3135,6 @@
 		},
 		{
 			"key": "date_of_purchased_feed",
-			"value": ""
-		},
-		{
-			"key": "identity_number_of_purchased_feed",
-			"value": ""
-		},
-		{
-			"key": "quantity_of_feed",
 			"value": ""
 		},
 		{
