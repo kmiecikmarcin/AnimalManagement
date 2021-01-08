@@ -1,4 +1,4 @@
-const checkPurchasedFoodIdInHerd = require("./checkPurchasedFoodIdInHerd");
+const checkPurchasedFoodIdAndHerdId = require("./checkPurchasedFoodIdInHerd");
 
 async function createNewFoodUsedForHerd(
   FoodUsedForHerd,
@@ -10,7 +10,7 @@ async function createNewFoodUsedForHerd(
   dateOfAdded
 ) {
   if (parseFloat(currentQuantityOfPurchasedFood, 10) > 0) {
-    const checkFoodId = await checkPurchasedFoodIdInHerd(
+    const checkFoodId = await checkPurchasedFoodIdAndHerdId(
       FoodUsedForHerd,
       purchasedFoodId,
       herdId

@@ -1,4 +1,4 @@
-async function checkPurchasedFoodIdInHerd(
+async function checkPurchasedFoodIdAndHerdId(
   FoodUsedForHerd,
   purchasedFoodId,
   herdId
@@ -12,4 +12,4 @@ async function checkPurchasedFoodIdInHerd(
   return null;
 }
 
-module.exports = checkPurchasedFoodIdInHerd;
+module.exports = checkPurchasedFoodIdAndHerdId;
