@@ -62,14 +62,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/users/register",
+							"raw": "localhost:3000/herdapi/v1.1/users/register",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"users",
 								"register"
 							]
@@ -123,14 +123,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/users/login",
+							"raw": "localhost:3000/herdapi/v1.1/users/login",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"users",
 								"login"
 							]
@@ -199,14 +199,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/users/changeAdressEmail",
+							"raw": "localhost:3000/herdapi/v1.1/users/changeAdressEmail",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"users",
 								"changeAdressEmail"
 							]
@@ -268,14 +268,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/users/deleteAccount",
+							"raw": "localhost:3000/herdapi/v1.1/users/deleteAccount",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"users",
 								"deleteAccount"
 							]
@@ -346,14 +346,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/users/changePassword",
+							"raw": "localhost:3000/herdapi/v1.1/users/changePassword",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"users",
 								"changePassword"
 							]
@@ -417,7 +417,6 @@
 									"\r",
 									"const take_date = new Date();\r",
 									"const date = take_date.getFullYear() + \"-\" + (\"0\" + (take_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_date.getDate()).slice(-2);\r",
-									"console.log(date)\r",
 									"\r",
 									"pm.collectionVariables.set(\"name_of_herd\", name_of_herd);\r",
 									"pm.collectionVariables.set(\"type_of_herd\", type_of_herd);\r",
@@ -457,14 +456,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/herds/addNewHerd",
+							"raw": "localhost:3000/herdapi/v1.1/herds/addNewHerd",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"herds",
 								"addNewHerd"
 							]
@@ -511,14 +510,14 @@
 							}
 						],
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/herds/findAllHerds",
+							"raw": "localhost:3000/herdapi/v1.1/herds/findAllHerds",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"herds",
 								"findAllHerds"
 							]
@@ -566,14 +565,14 @@
 							}
 						],
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/herds/findHerdByName/:name",
+							"raw": "localhost:3000/herdapi/v1.1/herds/findHerdByName/:name",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"herds",
 								"findHerdByName",
 								":name"
@@ -628,14 +627,14 @@
 							}
 						],
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/herds/findHerdByAnimalType/:typeOfAnimal",
+							"raw": "localhost:3000/herdapi/v1.1/herds/findHerdByAnimalType/:typeOfAnimal",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"herds",
 								"findHerdByAnimalType",
 								":typeOfAnimal"
@@ -711,14 +710,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/herds/changeHerdName",
+							"raw": "localhost:3000/herdapi/v1.1/herds/changeHerdName",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"herds",
 								"changeHerdName"
 							]
@@ -788,14 +787,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/herds/changeTypeofHerd",
+							"raw": "localhost:3000/herdapi/v1.1/herds/changeTypeofHerd",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"herds",
 								"changeTypeofHerd"
 							]
@@ -864,14 +863,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/herds/deleteHerd",
+							"raw": "localhost:3000/herdapi/v1.1/herds/deleteHerd",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"herds",
 								"deleteHerd"
 							]
@@ -937,14 +936,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/takeAllAnimalsGenders",
+							"raw": "localhost:3000/herdapi/v1.1/animals/takeAllAnimalsGenders",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"takeAllAnimalsGenders"
 							]
@@ -985,14 +984,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/takeAllKindsOfAnimals",
+							"raw": "localhost:3000/herdapi/v1.1/animals/takeAllKindsOfAnimals",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"takeAllKindsOfAnimals"
 							]
@@ -1033,14 +1032,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/takeAllJoinTypeToTheHerd",
+							"raw": "localhost:3000/herdapi/v1.1/animals/takeAllJoinTypeToTheHerd",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"takeAllJoinTypeToTheHerd"
 							]
@@ -1123,14 +1122,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/addNewAnimal",
+							"raw": "localhost:3000/herdapi/v1.1/animals/addNewAnimal",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"addNewAnimal"
 							]
@@ -1171,14 +1170,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/findAllAnimalsInHerd/:herdName",
+							"raw": "localhost:3000/herdapi/v1.1/animals/findAllAnimalsInHerd/:herdName",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"findAllAnimalsInHerd",
 								":herdName"
@@ -1248,14 +1247,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/editIdentityNumberOfAnimal",
+							"raw": "localhost:3000/herdapi/v1.1/animals/editIdentityNumberOfAnimal",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"editIdentityNumberOfAnimal"
 							]
@@ -1296,14 +1295,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/findOneAnimalInHerd/:herdName/:identityNumber",
+							"raw": "localhost:3000/herdapi/v1.1/animals/findOneAnimalInHerd/:herdName/:identityNumber",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"findOneAnimalInHerd",
 								":herdName",
@@ -1376,14 +1375,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/editBreedOfAnimal",
+							"raw": "localhost:3000/herdapi/v1.1/animals/editBreedOfAnimal",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"editBreedOfAnimal"
 							]
@@ -1445,14 +1444,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/editBirthDate",
+							"raw": "localhost:3000/herdapi/v1.1/animals/editBirthDate",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"editBirthDate"
 							]
@@ -1513,14 +1512,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/editAnimalWeight",
+							"raw": "localhost:3000/herdapi/v1.1/animals/editAnimalWeight",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"editAnimalWeight"
 							]
@@ -1585,14 +1584,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/addNewBornAnimal",
+							"raw": "localhost:3000/herdapi/v1.1/animals/addNewBornAnimal",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"addNewBornAnimal"
 							]
@@ -1654,14 +1653,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/editNewBornAnimalBirthDate",
+							"raw": "localhost:3000/herdapi/v1.1/animals/editNewBornAnimalBirthDate",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"editNewBornAnimalBirthDate"
 							]
@@ -1702,14 +1701,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/takeAllNewBornAnimalsInHerd/:herdName",
+							"raw": "localhost:3000/herdapi/v1.1/animals/takeAllNewBornAnimalsInHerd/:herdName",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"takeAllNewBornAnimalsInHerd",
 								":herdName"
@@ -1757,14 +1756,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/takeAllReasonsDeaths",
+							"raw": "localhost:3000/herdapi/v1.1/animals/takeAllReasonsDeaths",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"takeAllReasonsDeaths"
 							]
@@ -1831,14 +1830,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/addNewDeadAnimal",
+							"raw": "localhost:3000/herdapi/v1.1/animals/addNewDeadAnimal",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"addNewDeadAnimal"
 							]
@@ -1879,14 +1878,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/takeAllDeadsAnimalsInHerd/:herdName",
+							"raw": "localhost:3000/herdapi/v1.1/animals/takeAllDeadsAnimalsInHerd/:herdName",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"takeAllDeadsAnimalsInHerd",
 								":herdName"
@@ -1956,14 +1955,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/editNewDeadAnimalIdentityNumber",
+							"raw": "localhost:3000/herdapi/v1.1/animals/editNewDeadAnimalIdentityNumber",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"editNewDeadAnimalIdentityNumber"
 							]
@@ -2013,14 +2012,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/editNewDeadAnimalDateOfDeath",
+							"raw": "localhost:3000/herdapi/v1.1/animals/editNewDeadAnimalDateOfDeath",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"editNewDeadAnimalDateOfDeath"
 							]
@@ -2070,14 +2069,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/deleteAnimal",
+							"raw": "localhost:3000/herdapi/v1.1/animals/deleteAnimal",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"deleteAnimal"
 							]
@@ -2127,14 +2126,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/deleteNewBornAnimal",
+							"raw": "localhost:3000/herdapi/v1.1/animals/deleteNewBornAnimal",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"deleteNewBornAnimal"
 							]
@@ -2184,16 +2183,884 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/deleteDeadAnimal",
+							"raw": "localhost:3000/herdapi/v1.1/animals/deleteDeadAnimal",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"deleteDeadAnimal"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Food - scenario 1",
+			"item": [
+				{
+					"name": "Take all species of foods",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/v1.1/foods/takeAllSpeciesOfFood",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v1.1",
+								"foods",
+								"takeAllSpeciesOfFood"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add new food",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie dodano zakupione pożywienie!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const identity_number_of_purchased_food = _.random(0,10000);\r",
+									"const quantity_of_food = 200;\r",
+									"\r",
+									"const species_name_array = [\"Przenica\", \"Marchewka\"]\r",
+									"const random_number = _.random(0,1);\r",
+									"\r",
+									"const species_name = species_name_array[random_number];\r",
+									"\r",
+									"const take_date = new Date();\r",
+									"const date_of_purchased_food = take_date.getFullYear() + \"-\" + (\"0\" + (take_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_date.getDate()).slice(-2);\r",
+									"\r",
+									"pm.collectionVariables.set(\"identity_number_of_purchased_food\", identity_number_of_purchased_food);\r",
+									"pm.collectionVariables.set(\"species_name\", species_name);\r",
+									"pm.collectionVariables.set(\"quantity_of_food\", quantity_of_food);\r",
+									"pm.collectionVariables.set(\"date_of_purchased_food\", date_of_purchased_food);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfPurchasedFood\": \"{{identity_number_of_purchased_food}}\",\r\n    \"speciesOfFoodName\": \"{{species_name}}\",\r\n    \"quantityOfFood\": \"{{quantity_of_food}}\",\r\n    \"dateOfPurchasedFood\": \"{{date_of_purchased_food}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/v1.1/foods/addNewFood",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v1.1",
+								"foods",
+								"addNewFood"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Take food status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/v1.1/foods/takeFoodStatus",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v1.1",
+								"foods",
+								"takeFoodStatus"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Take food status by its type",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/v1.1/foods/takeFoodStatusByItsType/:speciesName",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v1.1",
+								"foods",
+								"takeFoodStatusByItsType",
+								":speciesName"
+							],
+							"variable": [
+								{
+									"key": "speciesName",
+									"value": "{{species_name}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit species of food",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie zmieniono gatunek pożywienia!\");\r",
+									"});\r",
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const new_species_of_feed_array = [\"Burak\", \"Żyto\"]\r",
+									"const random_number = _.random(0,1);\r",
+									"\r",
+									"const new_species_of_feed = new_species_of_feed_array[random_number];\r",
+									"\r",
+									"pm.collectionVariables.set(\"new_species_of_feed\",new_species_of_feed);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfPurchasedFood\": \"{{identity_number_of_purchased_food}}\",\r\n    \"speciesOfFoodName\": \"{{new_species_of_feed}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/v1.1/foods/editSpeciesOfFood",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v1.1",
+								"foods",
+								"editSpeciesOfFood"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit quantity of food",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie zaktualizowano ilość zakupionego pokarmu!\");\r",
+									"});\r",
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const new_quantity_of_food = 100;\r",
+									"\r",
+									"pm.collectionVariables.set(\"new_quantity_of_food\", new_quantity_of_food);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfPurchasedFood\": \"{{identity_number_of_purchased_food}}\",\r\n    \"quantityOfFood\": \"{{new_quantity_of_food}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/v1.1/foods/editQuantityOfFood",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v1.1",
+								"foods",
+								"editQuantityOfFood"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit date of purchased food",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Data została zaktualizowana!\");\r",
+									"});\r",
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const take_new_date = new Date();\r",
+									"const new_date_of_purchased_food = take_new_date.getFullYear() + \"-\" + (\"0\" + (take_new_date.getMonth() + 2)).slice(-2) + \"-\" + (\"0\" + take_new_date.getDate()).slice(-2);\r",
+									"\r",
+									"pm.environment.set(\"new_date_of_purchased_food\", new_date_of_purchased_food);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfPurchasedFood\": \"{{identity_number_of_purchased_food}}\",\r\n    \"oldDate\": \"{{date_of_purchased_food}}\",\r\n    \"newDate\": \"{{new_date_of_purchased_food}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/v1.1/foods/editDateOfPurchasedFood",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v1.1",
+								"foods",
+								"editDateOfPurchasedFood"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Assign food to herd",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Udało się przypisać pożywienie do stada!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const identity_number_of_food_used_for_herd = _.random(0,10000);\r",
+									"const quantity_of_food_used_for_herd = 50;\r",
+									"\r",
+									"pm.collectionVariables.set(\"identity_number_of_food_used_for_herd\", identity_number_of_food_used_for_herd);\r",
+									"pm.collectionVariables.set(\"quantity_of_food_used_for_herd\", quantity_of_food_used_for_herd);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"identityNumberOfPurchasedFood\": \"{{identity_number_of_purchased_food}}\",\r\n    \"identityNumberOfFoodUsedForHerd\": \"{{identity_number_of_food_used_for_herd}}\",\r\n    \"quantityOfFoodUsedForHerd\": \"{{quantity_of_food_used_for_herd}}\",\r\n    \"dateWhenFoodWasUsed\": \"{{date}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/v1.1/foods/assignFoodToHerd",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v1.1",
+								"foods",
+								"assignFoodToHerd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Take food status in herd",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/v1.1/foods/takeFoodStatusInHerd",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v1.1",
+								"foods",
+								"takeFoodStatusInHerd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Take food status in herd by its species",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/v1.1/foods/takeFoodStatusInHerdByItsSpecies/:speciesName",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v1.1",
+								"foods",
+								"takeFoodStatusInHerdByItsSpecies",
+								":speciesName"
+							],
+							"variable": [
+								{
+									"key": "speciesName",
+									"value": "{{new_species_of_feed}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit quantity of food used for animals",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Ilość wykorzystywanego pożywienia dla stada została zaktualizowana!\");\r",
+									"});\r",
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const new_quantity_of_food_used_for_herd = 60;\r",
+									"\r",
+									"pm.environment.set(\"new_quantity_of_food_used_for_herd\", new_quantity_of_food_used_for_herd);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"identityNumberOfPurchasedFood\": \"{{identity_number_of_purchased_food}}\",\r\n    \"newQuantityOfFoodUsedForHerd\": \"{{new_quantity_of_food_used_for_herd}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/v1.1/foods/editQuantityOfFoodUsedForAnimals",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v1.1",
+								"foods",
+								"editQuantityOfFoodUsedForAnimals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit date when user used food for herd",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Data została zmieniona pomyślnie!\");\r",
+									"});\r",
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const take_new_date = new Date();\r",
+									"const new_date_of_food_used_for_herd = take_new_date.getFullYear() + \"-\" + (\"0\" + (take_new_date.getMonth() + 2)).slice(-2) + \"-\" + (\"0\" + take_new_date.getDate()).slice(-2);\r",
+									"\r",
+									"pm.environment.set(\"new_date_of_food_used_for_herd\", new_date_of_food_used_for_herd);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"identityNumberOfFoodUsedForHerd\": \"{{identity_number_of_food_used_for_herd}}\",\r\n    \"oldDate\": \"{{date}}\",\r\n    \"newDate\": \"{{new_date_of_food_used_for_herd}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/v1.1/foods/editDateWhenUserUsedFoodForHerd",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v1.1",
+								"foods",
+								"editDateWhenUserUsedFoodForHerd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete purchased food",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfPurchasedFood\": \"{{identity_number_of_purchased_food}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/v1.1/foods/deletePurchasedFood",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v1.1",
+								"foods",
+								"deletePurchasedFood"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete food used for herd",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfFoodUsedForHerd\": \"{{identity_number_of_food_used_for_herd}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/v1.1/foods/deleteFoodUsedForHerd",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"v1.1",
+								"foods",
+								"deleteFoodUsedForHerd"
 							]
 						}
 					},
@@ -2321,6 +3188,42 @@
 		},
 		{
 			"key": "new_password",
+			"value": ""
+		},
+		{
+			"key": "date_of_purchased_feed",
+			"value": ""
+		},
+		{
+			"key": "species_name",
+			"value": ""
+		},
+		{
+			"key": "date_of_purchased_food",
+			"value": ""
+		},
+		{
+			"key": "identity_number_of_purchased_food",
+			"value": ""
+		},
+		{
+			"key": "quantity_of_food",
+			"value": ""
+		},
+		{
+			"key": "new_quantity_of_food",
+			"value": ""
+		},
+		{
+			"key": "new_species_of_feed",
+			"value": ""
+		},
+		{
+			"key": "identity_number_of_food_used_for_herd",
+			"value": ""
+		},
+		{
+			"key": "quantity_of_food_used_for_herd",
 			"value": ""
 		}
 	]
