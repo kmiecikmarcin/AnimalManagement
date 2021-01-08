@@ -31,6 +31,7 @@ const changeQuantityOfFoodUsedForAnimals = require("../Functions/Foods/changeQua
 const changeDateOfFoodUsedForHerd = require("../Functions/Foods/changeDateOfFoodUsedForHerd");
 const checkPurchasedFoodId = require("../Functions/Foods/checkPurchasedFoodId");
 const deletePurchasedFood = require("../Functions/Foods/deletePurchasedFood");
+const deleteFoodUsedForHerd = require("../Functions/Foods/deleteFoodUsedForHerd");
 
 /**
  * @swagger
@@ -1325,7 +1326,43 @@ router.delete(
       .withMessage("Wprowadzona wartość nie jest jest liczbą!"),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = findUserById(Users, authData);
+            if (checkUser !== null) {
+              const deleteFood = await deleteFoodUsedForHerd(
+                FoodUsedForHerd,
+                authData.id,
+                req.body.identityNumberOfFoodUsedForHerd
+              );
+              if (deleteFood != null) {
+                res
+                  .status(200)
+                  .json({ Error: "Pożywienie zostało usunięte ze stada!" });
+              } else {
+                res.status(400).json({
+                  Error:
+                    "Nie udało się usunąć pożywienia przypisanego do stada!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 module.exports = router;
