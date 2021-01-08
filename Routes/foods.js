@@ -29,6 +29,8 @@ const findAllUsedFoodByUser = require("../Functions/Foods/findAllUsedFoodByUser"
 const findAllUsedFoodByUserByFoodType = require("../Functions/Foods/findAllUsedFoodByUserByFoodType");
 const changeQuantityOfFoodUsedForAnimals = require("../Functions/Foods/changeQuantityOfFoodUsedForAnimals");
 const changeDateOfFoodUsedForHerd = require("../Functions/Foods/changeDateOfFoodUsedForHerd");
+const checkPurchasedFoodId = require("../Functions/Foods/checkPurchasedFoodId");
+const deletePurchasedFood = require("../Functions/Foods/deletePurchasedFood");
 
 /**
  * @swagger
@@ -38,7 +40,7 @@ const changeDateOfFoodUsedForHerd = require("../Functions/Foods/changeDateOfFood
  *      - name: Food
  *      summary: Take all species of food
  *      responses:
- *        201:
+ *        200:
  *          description: List of data about species of food.
  *        403:
  *          description: Authentication failed!
@@ -215,7 +217,7 @@ router.post(
  *      - name: Food
  *      summary: Take all food status
  *      responses:
- *        201:
+ *        200:
  *          description: List with data about food status.
  *        403:
  *          description: Authentication failed!
@@ -264,7 +266,7 @@ router.get("/takeFoodStatus", verifyToken, (req, res) => {
  *          required: true
  *          type: string
  *      responses:
- *        201:
+ *        200:
  *          description: List with data about food status - but taking by food type.
  *        403:
  *          description: Authentication failed!
@@ -334,7 +336,7 @@ router.get("/takeFoodStatusByItsType/:speciesName", verifyToken, (req, res) => {
  *          required: true
  *          type: string
  *      responses:
- *        201:
+ *        200:
  *          description: Data updated successfully!
  *        400:
  *          description: Data has not been updated!
@@ -388,7 +390,7 @@ router.put(
                   authData.id
                 );
                 if (updateSpecies !== null) {
-                  res.status(201).json({
+                  res.status(200).json({
                     Message: "Pomyślnie zmieniono gatunek pożywienia!",
                   });
                 } else {
@@ -431,7 +433,7 @@ router.put(
  *          type: number
  *          format: float
  *      responses:
- *        201:
+ *        200:
  *          description: Data updated successfully!
  *        400:
  *          description: Data has not been updated!
@@ -488,7 +490,7 @@ router.put(
                   authData.id
                 );
                 if (updateQuantity !== null) {
-                  res.status(201).json({
+                  res.status(200).json({
                     Message:
                       "Pomyślnie zaktualizowano ilość zakupionego pokarmu!",
                   });
@@ -537,7 +539,7 @@ router.put(
  *          type: string
  *          format: date
  *      responses:
- *        201:
+ *        200:
  *          description: Data updated successfully!
  *        400:
  *          description: Data has not been updated!
@@ -605,7 +607,7 @@ router.put(
                 );
                 if (updateDate !== null) {
                   res
-                    .status(201)
+                    .status(200)
                     .json({ Message: "Data została zaktualizowana!" });
                 } else {
                   res
@@ -808,7 +810,7 @@ router.post(
  *      - name: Food
  *      summary: Take all food status in herd
  *      responses:
- *        201:
+ *        200:
  *          description: List with data about food status in herd.
  *        403:
  *          description: Authentication failed!
@@ -862,7 +864,7 @@ router.get("/takeFoodStatusInHerd", verifyToken, (req, res) => {
  *          required: true
  *          type: string
  *      responses:
- *        201:
+ *        200:
  *          description: List with data about food status - but taking by food type.
  *        403:
  *          description: Authentication failed!
@@ -941,7 +943,7 @@ router.get(
  *          type: integer
  *          format: int64
  *      responses:
- *        201:
+ *        200:
  *          description: Data updated successfully!
  *        400:
  *          description: Data has not been updated!
@@ -1018,7 +1020,7 @@ router.put(
                       req.body.newQuantityOfFoodUsedForHerd
                     );
                     if (updateQuantity !== null) {
-                      res.status(201).json({
+                      res.status(200).json({
                         Message:
                           "Ilość wykorzystywanego pożywienia dla stada została zaktualizowana!",
                       });
@@ -1083,7 +1085,7 @@ router.put(
  *          type: string
  *          format: date
  *      responses:
- *        201:
+ *        200:
  *          description: Data updated successfully!
  *        400:
  *          description: Data has not been updated!
@@ -1164,7 +1166,7 @@ router.put(
                   );
                   if (updateDateOfFoodUsedForHerd !== null) {
                     res
-                      .status(201)
+                      .status(200)
                       .json({ Message: "Data została zmieniona pomyślnie!" });
                   } else {
                     res
@@ -1194,11 +1196,11 @@ router.put(
 
 /**
  * @swagger
- * /food/deleteFood:
+ * /food/deletePurchasedFood:
  *    delete:
  *      tags:
  *      - name: Food
- *      summary: Delete food
+ *      summary: Delete purchased food
  *      parameters:
  *        - name: identityNumberOfPurchasedFood
  *          in: formData
@@ -1206,7 +1208,7 @@ router.put(
  *          type: integer
  *          format: int64
  *      responses:
- *        201:
+ *        200:
  *          description: Food deleted successfully!
  *        400:
  *          description: The food couldn not be removed!
@@ -1216,7 +1218,7 @@ router.put(
  *          description: Errors about empty data.
  */
 router.delete(
-  "/deleteFood",
+  "/deletePurchasedFood",
   [
     check("identityNumberOfPurchasedFood")
       .exists()
@@ -1227,7 +1229,65 @@ router.delete(
       .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkIdentityNumber = await checkIdentityNumberForFoodAndProducts(
+                PurchasedFoodForHerd,
+                req.body.identityNumberOfPurchasedFood,
+                authData.id
+              );
+              if (checkIdentityNumber !== null) {
+                const checkFoodId = await checkPurchasedFoodId(
+                  FoodUsedForHerd,
+                  checkIdentityNumber.id
+                );
+                if (checkFoodId === null) {
+                  const deleteFood = await deletePurchasedFood(
+                    PurchasedFoodForHerd,
+                    authData.id,
+                    req.body.identityNumberOfPurchasedFood
+                  );
+                  if (deleteFood !== null) {
+                    res
+                      .status(200)
+                      .json({ Error: "Wybrane pożywienie zostało usunięte!" });
+                  } else {
+                    res
+                      .status(400)
+                      .json({ Error: "Nie udało się usunąć pożywienia!" });
+                  }
+                } else {
+                  res.status(404).json({
+                    Error:
+                      "Nie można usunąć pożywienia, ponieważ jest przypisane do stada!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error:
+                    "Użytkownik nie posiada pożywienia o wprowadzonym numerze identyfikacyjnym!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 /**
@@ -1244,7 +1304,7 @@ router.delete(
  *          type: integer
  *          format: int64
  *      responses:
- *        201:
+ *        200:
  *          description: Food deleted successfully!
  *        400:
  *          description: The food couldn not be removed!
