@@ -62,14 +62,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/users/register",
+							"raw": "localhost:3000/herdapi/v1.1/users/register",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"users",
 								"register"
 							]
@@ -123,14 +123,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/users/login",
+							"raw": "localhost:3000/herdapi/v1.1/users/login",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"users",
 								"login"
 							]
@@ -199,14 +199,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/users/changeAdressEmail",
+							"raw": "localhost:3000/herdapi/v1.1/users/changeAdressEmail",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"users",
 								"changeAdressEmail"
 							]
@@ -268,14 +268,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/users/deleteAccount",
+							"raw": "localhost:3000/herdapi/v1.1/users/deleteAccount",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"users",
 								"deleteAccount"
 							]
@@ -346,14 +346,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/users/changePassword",
+							"raw": "localhost:3000/herdapi/v1.1/users/changePassword",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"users",
 								"changePassword"
 							]
@@ -456,14 +456,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/herds/addNewHerd",
+							"raw": "localhost:3000/herdapi/v1.1/herds/addNewHerd",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"herds",
 								"addNewHerd"
 							]
@@ -510,14 +510,14 @@
 							}
 						],
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/herds/findAllHerds",
+							"raw": "localhost:3000/herdapi/v1.1/herds/findAllHerds",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"herds",
 								"findAllHerds"
 							]
@@ -565,14 +565,14 @@
 							}
 						],
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/herds/findHerdByName/:name",
+							"raw": "localhost:3000/herdapi/v1.1/herds/findHerdByName/:name",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"herds",
 								"findHerdByName",
 								":name"
@@ -627,14 +627,14 @@
 							}
 						],
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/herds/findHerdByAnimalType/:typeOfAnimal",
+							"raw": "localhost:3000/herdapi/v1.1/herds/findHerdByAnimalType/:typeOfAnimal",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"herds",
 								"findHerdByAnimalType",
 								":typeOfAnimal"
@@ -710,14 +710,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/herds/changeHerdName",
+							"raw": "localhost:3000/herdapi/v1.1/herds/changeHerdName",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"herds",
 								"changeHerdName"
 							]
@@ -787,14 +787,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/herds/changeTypeofHerd",
+							"raw": "localhost:3000/herdapi/v1.1/herds/changeTypeofHerd",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"herds",
 								"changeTypeofHerd"
 							]
@@ -863,14 +863,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/herds/deleteHerd",
+							"raw": "localhost:3000/herdapi/v1.1/herds/deleteHerd",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"herds",
 								"deleteHerd"
 							]
@@ -936,14 +936,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/takeAllAnimalsGenders",
+							"raw": "localhost:3000/herdapi/v1.1/animals/takeAllAnimalsGenders",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"takeAllAnimalsGenders"
 							]
@@ -984,14 +984,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/takeAllKindsOfAnimals",
+							"raw": "localhost:3000/herdapi/v1.1/animals/takeAllKindsOfAnimals",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"takeAllKindsOfAnimals"
 							]
@@ -1032,14 +1032,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/takeAllJoinTypeToTheHerd",
+							"raw": "localhost:3000/herdapi/v1.1/animals/takeAllJoinTypeToTheHerd",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"takeAllJoinTypeToTheHerd"
 							]
@@ -1122,14 +1122,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/addNewAnimal",
+							"raw": "localhost:3000/herdapi/v1.1/animals/addNewAnimal",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"addNewAnimal"
 							]
@@ -1170,14 +1170,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/findAllAnimalsInHerd/:herdName",
+							"raw": "localhost:3000/herdapi/v1.1/animals/findAllAnimalsInHerd/:herdName",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"findAllAnimalsInHerd",
 								":herdName"
@@ -1247,14 +1247,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/editIdentityNumberOfAnimal",
+							"raw": "localhost:3000/herdapi/v1.1/animals/editIdentityNumberOfAnimal",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"editIdentityNumberOfAnimal"
 							]
@@ -1295,14 +1295,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/findOneAnimalInHerd/:herdName/:identityNumber",
+							"raw": "localhost:3000/herdapi/v1.1/animals/findOneAnimalInHerd/:herdName/:identityNumber",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"findOneAnimalInHerd",
 								":herdName",
@@ -1375,14 +1375,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/editBreedOfAnimal",
+							"raw": "localhost:3000/herdapi/v1.1/animals/editBreedOfAnimal",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"editBreedOfAnimal"
 							]
@@ -1444,14 +1444,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/editBirthDate",
+							"raw": "localhost:3000/herdapi/v1.1/animals/editBirthDate",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"editBirthDate"
 							]
@@ -1512,14 +1512,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/editAnimalWeight",
+							"raw": "localhost:3000/herdapi/v1.1/animals/editAnimalWeight",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"editAnimalWeight"
 							]
@@ -1584,14 +1584,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/addNewBornAnimal",
+							"raw": "localhost:3000/herdapi/v1.1/animals/addNewBornAnimal",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"addNewBornAnimal"
 							]
@@ -1653,14 +1653,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/editNewBornAnimalBirthDate",
+							"raw": "localhost:3000/herdapi/v1.1/animals/editNewBornAnimalBirthDate",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"editNewBornAnimalBirthDate"
 							]
@@ -1701,14 +1701,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/takeAllNewBornAnimalsInHerd/:herdName",
+							"raw": "localhost:3000/herdapi/v1.1/animals/takeAllNewBornAnimalsInHerd/:herdName",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"takeAllNewBornAnimalsInHerd",
 								":herdName"
@@ -1756,14 +1756,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/takeAllReasonsDeaths",
+							"raw": "localhost:3000/herdapi/v1.1/animals/takeAllReasonsDeaths",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"takeAllReasonsDeaths"
 							]
@@ -1830,14 +1830,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/addNewDeadAnimal",
+							"raw": "localhost:3000/herdapi/v1.1/animals/addNewDeadAnimal",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"addNewDeadAnimal"
 							]
@@ -1878,14 +1878,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/takeAllDeadsAnimalsInHerd/:herdName",
+							"raw": "localhost:3000/herdapi/v1.1/animals/takeAllDeadsAnimalsInHerd/:herdName",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"takeAllDeadsAnimalsInHerd",
 								":herdName"
@@ -1955,14 +1955,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/editNewDeadAnimalIdentityNumber",
+							"raw": "localhost:3000/herdapi/v1.1/animals/editNewDeadAnimalIdentityNumber",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"editNewDeadAnimalIdentityNumber"
 							]
@@ -2012,14 +2012,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/editNewDeadAnimalDateOfDeath",
+							"raw": "localhost:3000/herdapi/v1.1/animals/editNewDeadAnimalDateOfDeath",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"editNewDeadAnimalDateOfDeath"
 							]
@@ -2069,14 +2069,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/deleteAnimal",
+							"raw": "localhost:3000/herdapi/v1.1/animals/deleteAnimal",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"deleteAnimal"
 							]
@@ -2126,14 +2126,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/deleteNewBornAnimal",
+							"raw": "localhost:3000/herdapi/v1.1/animals/deleteNewBornAnimal",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"deleteNewBornAnimal"
 							]
@@ -2183,14 +2183,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/animals/deleteDeadAnimal",
+							"raw": "localhost:3000/herdapi/v1.1/animals/deleteDeadAnimal",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"animals",
 								"deleteDeadAnimal"
 							]
@@ -2236,14 +2236,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/foods/takeAllSpeciesOfFood",
+							"raw": "localhost:3000/herdapi/v1.1/foods/takeAllSpeciesOfFood",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"foods",
 								"takeAllSpeciesOfFood"
 							]
@@ -2316,14 +2316,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/foods/addNewFood",
+							"raw": "localhost:3000/herdapi/v1.1/foods/addNewFood",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"foods",
 								"addNewFood"
 							]
@@ -2364,14 +2364,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/foods/takeFoodStatus",
+							"raw": "localhost:3000/herdapi/v1.1/foods/takeFoodStatus",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"foods",
 								"takeFoodStatus"
 							]
@@ -2412,14 +2412,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/foods/takeFoodStatusByItsType/:speciesName",
+							"raw": "localhost:3000/herdapi/v1.1/foods/takeFoodStatusByItsType/:speciesName",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"foods",
 								"takeFoodStatusByItsType",
 								":speciesName"
@@ -2490,14 +2490,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/foods/editSpeciesOfFood",
+							"raw": "localhost:3000/herdapi/v1.1/foods/editSpeciesOfFood",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"foods",
 								"editSpeciesOfFood"
 							]
@@ -2558,14 +2558,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/foods/editQuantityOfFood",
+							"raw": "localhost:3000/herdapi/v1.1/foods/editQuantityOfFood",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"foods",
 								"editQuantityOfFood"
 							]
@@ -2627,14 +2627,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/foods/editDateOfPurchasedFood",
+							"raw": "localhost:3000/herdapi/v1.1/foods/editDateOfPurchasedFood",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"foods",
 								"editDateOfPurchasedFood"
 							]
@@ -2697,14 +2697,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/foods/assignFoodToHerd",
+							"raw": "localhost:3000/herdapi/v1.1/foods/assignFoodToHerd",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"foods",
 								"assignFoodToHerd"
 							]
@@ -2745,14 +2745,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/foods/takeFoodStatusInHerd",
+							"raw": "localhost:3000/herdapi/v1.1/foods/takeFoodStatusInHerd",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"foods",
 								"takeFoodStatusInHerd"
 							]
@@ -2793,14 +2793,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/foods/takeFoodStatusInHerdByItsSpecies/:speciesName",
+							"raw": "localhost:3000/herdapi/v1.1/foods/takeFoodStatusInHerdByItsSpecies/:speciesName",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"foods",
 								"takeFoodStatusInHerdByItsSpecies",
 								":speciesName"
@@ -2868,14 +2868,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/foods/editQuantityOfFoodUsedForAnimals",
+							"raw": "localhost:3000/herdapi/v1.1/foods/editQuantityOfFoodUsedForAnimals",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"foods",
 								"editQuantityOfFoodUsedForAnimals"
 							]
@@ -2937,14 +2937,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/foods/editDateWhenUserUsedFoodForHerd",
+							"raw": "localhost:3000/herdapi/v1.1/foods/editDateWhenUserUsedFoodForHerd",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"foods",
 								"editDateWhenUserUsedFoodForHerd"
 							]
@@ -2994,14 +2994,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/foods/deletePurchasedFood",
+							"raw": "localhost:3000/herdapi/v1.1/foods/deletePurchasedFood",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"foods",
 								"deletePurchasedFood"
 							]
@@ -3051,14 +3051,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v20/foods/deleteFoodUsedForHerd",
+							"raw": "localhost:3000/herdapi/v1.1/foods/deleteFoodUsedForHerd",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v20",
+								"v1.1",
 								"foods",
 								"deleteFoodUsedForHerd"
 							]
