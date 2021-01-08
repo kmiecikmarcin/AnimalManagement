@@ -354,7 +354,7 @@ router.put(
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isInt()
-      .withMessage("Wprowadzona wartość nie jest jest liczbą!!"),
+      .withMessage("Wprowadzona wartość nie jest jest liczbą!"),
     check("speciesOfFoodName")
       .exists()
       .withMessage("Brak wymaganych danych!")
@@ -683,21 +683,21 @@ router.post(
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isInt()
-      .withMessage("Wprowadzona wartość nie jest jest liczbą!!"),
+      .withMessage("Wprowadzona wartość nie jest jest liczbą!"),
     check("identityNumberOfFoodUsedForHerd")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isInt()
-      .withMessage("Wprowadzona wartość nie jest jest liczbą!!"),
+      .withMessage("Wprowadzona wartość nie jest jest liczbą!"),
     check("quantityOfFoodUsedForHerd")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isFloat()
-      .withMessage("Wprowadzona wartość nie jest jest liczbą!!"),
+      .withMessage("Wprowadzona wartość nie jest jest liczbą!"),
     check("dateWhenFoodWasUsed")
       .exists()
       .withMessage("Brak wymaganych danych!")
@@ -1322,7 +1322,7 @@ router.delete(
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
       .isInt()
-      .withMessage("Wprowadzona wartość nie jest jest liczbą!!"),
+      .withMessage("Wprowadzona wartość nie jest jest liczbą!"),
   ],
   verifyToken,
   () => {}
