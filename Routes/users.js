@@ -37,16 +37,18 @@ const deleteUserAccount = require("../Functions/Users/deleteUserAccount");
  *          in: formData
  *          required: true
  *          type: string
+ *          format: password
  *        - name: confirmPassword
  *          in: formData
  *          required: true
  *          type: string
+ *          format: password
  *        - name: userGender
  *          in: formData
  *          required: true
  *          type: string
  *        - name: userVerification
- *          in: formData
+ *          in: boolean
  *          required: true
  *          type: boolean
  *      responses:
@@ -193,6 +195,7 @@ router.post(
  *          in: formData
  *          required: true
  *          type: string
+ *          format: password
  *      responses:
  *        201:
  *          description: System will return token!
@@ -283,6 +286,7 @@ router.post(
  *          in: formData
  *          required: true
  *          type: string
+ *          format: password
  *      responses:
  *        201:
  *          description: Adress e-mail will be updated!
@@ -372,14 +376,17 @@ router.put(
  *          in: formData
  *          required: true
  *          type: string
+ *          format: password
  *        - name: newUserPassword
  *          in: formData
  *          required: true
  *          type: string
+ *          format: password
  *        - name: confirmNewPassword
  *          in: formData
  *          required: true
  *          type: string
+ *          format: password
  *      responses:
  *        201:
  *          description: Password will be updated!
@@ -497,10 +504,12 @@ router.put(
  *          in: formData
  *          required: true
  *          type: string
+ *          format: password
  *        - name: confirmPassword
  *          in: formData
  *          required: true
  *          type: string
+ *          format: password
  *      responses:
  *        201:
  *          description: Account deleted!

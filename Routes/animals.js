@@ -36,6 +36,7 @@ const findNewBornAnimalByIdentityNumber = require("../Functions/Animals/findNewB
 const findDeadAnimalByHerdNameAndIdentityNumber = require("../Functions/Animals/findDeadAnimalByHerdNameAndIdentityNumber");
 const changeDateOfAnimalDead = require("../Functions/Animals/changeDateOfAnimalDead");
 const deleteAnimal = require("../Functions/Animals/deleteAnimal");
+const checkEnteredIdentityNumberForAnimals = require("../Functions/Others/checkEnteredIdentityNumberForAnimals");
 
 /**
  * @swagger
@@ -192,14 +193,11 @@ router.get("/takeAllJoinTypeToTheHerd", verifyToken, (req, res) => {
  *          in: formData
  *          required: true
  *          type: string
- *        - name: animalGender
- *          in: formData
- *          required: true
- *          type: string
  *        - name: identityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: string
+ *          type: integer
+ *          format: int64
  *        - name: breedOfAnimal
  *          in: formData
  *          required: true
@@ -207,15 +205,18 @@ router.get("/takeAllJoinTypeToTheHerd", verifyToken, (req, res) => {
  *        - name: dateOfJoinToTheHerd
  *          in: formData
  *          required: true
- *          type: date
+ *          type: string
+ *          format: date
  *        - name: birthDate
  *          in: formData
  *          required: true
- *          type: date
+ *          type: string
+ *          format: date
  *        - name: animalWeight
  *          in: formData
  *          required: true
- *          type: date
+ *          type: number
+ *          format: float
  *      responses:
  *        201:
  *          description: New animal has been added!
@@ -311,27 +312,49 @@ router.post(
           }
           const checkUser = await findUserById(Users, authData);
           if (checkUser !== null) {
-            const addNewAnimal = await createNewAnimal(
-              res,
-              AnimalsInHerd,
-              authData.id,
+            const checkHerd = await findHerdByName(
+              Herds,
               req.body.herdName,
-              req.body.joinTypeName,
-              req.body.kindOfAnimalName,
-              req.body.animalGender,
-              req.body.identityNumberOfAnimal,
-              req.body.breedOfAnimal,
-              req.body.dateOfJoinToTheHerd,
-              req.body.birthDate,
-              req.body.animalWeight
+              authData.id
             );
-            if (addNewAnimal) {
-              res
-                .status(201)
-                .json({ Message: "Zwierzę zostało dodane pomyślnie!" });
+            if (checkHerd) {
+              const checkAnimalIdentityNumber = await checkEnteredIdentityNumberForAnimals(
+                AnimalsInHerd,
+                req.body.identityNumberOfAnimal,
+                checkHerd.id
+              );
+              if (checkAnimalIdentityNumber === null) {
+                const addNewAnimal = await createNewAnimal(
+                  res,
+                  AnimalsInHerd,
+                  checkHerd.id,
+                  req.body.joinTypeName,
+                  req.body.kindOfAnimalName,
+                  req.body.animalGender,
+                  req.body.identityNumberOfAnimal,
+                  req.body.breedOfAnimal,
+                  req.body.dateOfJoinToTheHerd,
+                  req.body.birthDate,
+                  req.body.animalWeight
+                );
+                if (addNewAnimal) {
+                  res
+                    .status(201)
+                    .json({ Message: "Zwierzę zostało dodane pomyślnie!" });
+                } else {
+                  res.status(400).json({
+                    Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
+                  });
+                }
+              } else {
+                res.status(400).json({
+                  Error:
+                    "Posiadasz już zwierzę o wprowadzonym numerze identyfikacyjnym!",
+                });
+              }
             } else {
-              res.status(400).json({
-                Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
+              res.status(404).json({
+                Error: "Nie posiadasz hodowli o wprowadzonej nazwie!",
               });
             }
           } else {
@@ -423,7 +446,8 @@ router.get("/findAllAnimalsInHerd/:herdName", verifyToken, (req, res) => {
  *        - name: identityNumber
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *      responses:
  *        201:
  *          description: Data about this animal.
@@ -497,11 +521,13 @@ router.get(
  *        - name: oldIdentityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *        - name: newIdentityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *      responses:
  *        201:
  *          description: Data updated successfully!
@@ -558,33 +584,45 @@ router.put(
                 authData.id
               );
               if (checkHerd) {
-                const findAnimal = await findAnimalByHerdIdAndIdentityNumber(
+                const checkAnimalIdentityNumber = await checkEnteredIdentityNumberForAnimals(
                   AnimalsInHerd,
-                  checkHerd.id,
-                  req.body.oldIdentityNumberOfAnimal
+                  req.body.newIdentityNumberOfAnimal,
+                  checkHerd.id
                 );
-                if (findAnimal) {
-                  const updateAnimalIdentityNumber = await changeAnimalIdentityNumber(
+                if (checkAnimalIdentityNumber === null) {
+                  const findAnimal = await findAnimalByHerdIdAndIdentityNumber(
                     AnimalsInHerd,
-                    req.body.oldIdentityNumberOfAnimal,
-                    req.body.newIdentityNumberOfAnimal,
-                    checkHerd.id
+                    checkHerd.id,
+                    req.body.oldIdentityNumberOfAnimal
                   );
-                  if (updateAnimalIdentityNumber) {
-                    res.status(201).json({
-                      Message:
-                        "Numer identyfikacyjny zwierzęcia został zmieniony pomyślnie!",
-                    });
+                  if (findAnimal) {
+                    const updateAnimalIdentityNumber = await changeAnimalIdentityNumber(
+                      AnimalsInHerd,
+                      req.body.oldIdentityNumberOfAnimal,
+                      req.body.newIdentityNumberOfAnimal,
+                      checkHerd.id
+                    );
+                    if (updateAnimalIdentityNumber) {
+                      res.status(201).json({
+                        Message:
+                          "Numer identyfikacyjny zwierzęcia został zmieniony pomyślnie!",
+                      });
+                    } else {
+                      res.status(400).json({
+                        Error:
+                          "Nie udało się zmienić numeru identyfikacyjnego zwierzęcia!",
+                      });
+                    }
                   } else {
-                    res.status(400).json({
+                    res.status(404).json({
                       Error:
-                        "Nie udało się zmienić numeru identyfikacyjnego zwierzęcia!",
+                        "Zwierzę o wprowadzonym numerze identyfikacyjnym nie istnieje!",
                     });
                   }
                 } else {
-                  res.status(404).json({
+                  res.status(400).json({
                     Error:
-                      "Zwierzę o wprowadzonym numerze identyfikacyjnym nie istnieje!",
+                      "Wprowadzony numer identyfikacyjny jest już przypisany do innego zwierzęcia",
                   });
                 }
               } else {
@@ -617,7 +655,8 @@ router.put(
  *        - name: identityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *        - name: oldBreedOfAnimal
  *          in: formData
  *          required: true
@@ -747,15 +786,18 @@ router.put(
  *        - name: identityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *        - name: oldBirthDate
  *          in: formData
  *          required: true
- *          type: date
+ *          type: string
+ *          format: date
  *        - name: newBirthDate
  *          in: formData
  *          required: true
- *          type: date
+ *          type: string
+ *          format: datee
  *      responses:
  *        201:
  *          description: Data updated successfully!
@@ -882,15 +924,18 @@ router.put(
  *        - name: identityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *        - name: oldAnimalWeight
  *          in: formData
  *          required: true
- *          type: string
+ *          type: number
+ *          format: float
  *        - name: newAnimalWeight
  *          in: formData
  *          required: true
- *          type: string
+ *          type: number
+ *          format: float
  *      responses:
  *        201:
  *          description: Data updated successfully!
@@ -1012,7 +1057,8 @@ router.put(
  *        - name: parentIdentityNumber
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *        - name: herdName
  *          in: formData
  *          required: true
@@ -1020,11 +1066,13 @@ router.put(
  *        - name: birthDate
  *          in: formData
  *          required: true
- *          type: date
+ *          type: string
+ *          format: date
  *        - name: temporaryIdentityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *      responses:
  *        201:
  *          description: New born animal has been added!
@@ -1091,23 +1139,45 @@ router.post(
           } else {
             const checkUser = await findUserById(Users, authData);
             if (checkUser) {
-              const addNewBornAnimal = await createNewBornAnimal(
-                res,
-                AnimalsBirths,
-                authData.id,
+              const checkHerdName = await findHerdByName(
+                Herds,
                 req.body.herdName,
-                req.body.kindOfAnimalName,
-                req.body.parentIdentityNumber,
-                req.body.birthDate,
-                req.body.temporaryIdentityNumberOfAnimal
+                authData.id
               );
-              if (addNewBornAnimal) {
-                res.status(201).json({
-                  Message: "Pomyślnie dodano nowo narodzone zwierzę!",
-                });
+              if (checkHerdName) {
+                const checkAnimalIdentityNumber = await checkEnteredIdentityNumberForAnimals(
+                  AnimalsBirths,
+                  req.body.temporaryIdentityNumberOfAnimal,
+                  checkHerdName.id
+                );
+                if (checkAnimalIdentityNumber === null) {
+                  const addNewBornAnimal = await createNewBornAnimal(
+                    res,
+                    AnimalsBirths,
+                    checkHerdName.id,
+                    req.body.kindOfAnimalName,
+                    req.body.parentIdentityNumber,
+                    req.body.birthDate,
+                    req.body.temporaryIdentityNumberOfAnimal
+                  );
+                  if (addNewBornAnimal) {
+                    res.status(201).json({
+                      Message: "Pomyślnie dodano nowo narodzone zwierzę!",
+                    });
+                  } else {
+                    res.status(400).json({
+                      Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
+                    });
+                  }
+                } else {
+                  res.status(400).json({
+                    Error:
+                      "Wprowadzony numer identyfikacyjny jest już przypisany do innego zwierzęcia!",
+                  });
+                }
               } else {
-                res.status(400).json({
-                  Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
+                res.status(404).json({
+                  Error: "Hodowla o wprowadzonej nazwie nie istnieje!",
                 });
               }
             } else {
@@ -1135,15 +1205,18 @@ router.post(
  *        - name: animalChildIdentityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *        - name: oldBirthDate
  *          in: formData
  *          required: true
- *          type: date
+ *          type: string
+ *          format: date
  *        - name: newBirthDate
  *          in: formData
  *          required: true
- *          type: date
+ *          type: string
+ *          format: date
  *      responses:
  *        201:
  *          description: Data updated successfully!
@@ -1382,11 +1455,13 @@ router.get("/takeAllReasonsDeaths", verifyToken, (req, res) => {
  *        - name: identityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *        - name: dateOfDeath
  *          in: formData
  *          required: true
- *          type: date
+ *          type: string
+ *          format: date
  *        - name: reasonDeath
  *          in: formData
  *          required: true
@@ -1461,23 +1536,45 @@ router.post(
           } else {
             const checkUser = await findUserById(Users, authData);
             if (checkUser) {
-              const addNewDeadAnimal = await createNewDeadAnimal(
-                res,
-                AnimalsDeads,
-                authData.id,
+              const checkHerdName = await findHerdByName(
+                Herds,
                 req.body.herdName,
-                req.body.identityNumberOfAnimal,
-                req.body.dateOfDeath,
-                req.body.reasonDeath,
-                req.body.description
+                authData.id
               );
-              if (addNewDeadAnimal) {
-                res.status(201).json({
-                  Message: "Pomyślnie dodano nowe zmarłe zwierzę!",
-                });
+              if (checkHerdName) {
+                const checkAnimalIdentityNumber = await checkEnteredIdentityNumberForAnimals(
+                  AnimalsDeads,
+                  req.body.identityNumberOfAnimal,
+                  checkHerdName.id
+                );
+                if (checkAnimalIdentityNumber === null) {
+                  const addNewDeadAnimal = await createNewDeadAnimal(
+                    res,
+                    AnimalsDeads,
+                    checkHerdName.id,
+                    req.body.identityNumberOfAnimal,
+                    req.body.dateOfDeath,
+                    req.body.reasonDeath,
+                    req.body.description
+                  );
+                  if (addNewDeadAnimal) {
+                    res.status(201).json({
+                      Message: "Pomyślnie dodano nowe zmarłe zwierzę!",
+                    });
+                  } else {
+                    res.status(400).json({
+                      Error: "Coś poszło nie tak!Sprawdź wprowadzone dane!",
+                    });
+                  }
+                } else {
+                  res.status(400).json({
+                    Error:
+                      "Wprowadzony numer identyfikacyjny jest już przypisany do innego zwierzęcia!",
+                  });
+                }
               } else {
-                res.status(400).json({
-                  Error: "Coś poszło nie tak!Sprawdź wprowadzone dane!",
+                res.status(404).json({
+                  Error: "Hodowla o wprowadzonej nazwie nie istnieje!",
                 });
               }
             } else {
@@ -1570,11 +1667,13 @@ router.get("/takeAllDeadsAnimalsInHerd/:herdName", verifyToken, (req, res) => {
  *        - name: oldIdentityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *        - name: newIdentityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *      responses:
  *        201:
  *          description: Data updated successfully!
@@ -1631,33 +1730,45 @@ router.put(
                 authData.id
               );
               if (checkHerd) {
-                const findAnimal = await findDeadAnimalByHerdNameAndIdentityNumber(
+                const checkAnimalIdentityNumber = await checkEnteredIdentityNumberForAnimals(
                   AnimalsDeads,
-                  checkHerd.id,
-                  req.body.oldIdentityNumberOfAnimal
+                  req.body.newIdentityNumberOfAnimal,
+                  checkHerd.id
                 );
-                if (findAnimal) {
-                  const updateDeadAnimalIdentityNumber = await changeAnimalIdentityNumber(
+                if (checkAnimalIdentityNumber === null) {
+                  const findAnimal = await findDeadAnimalByHerdNameAndIdentityNumber(
                     AnimalsDeads,
-                    req.body.oldIdentityNumberOfAnimal,
-                    req.body.newIdentityNumberOfAnimal,
-                    checkHerd.id
+                    checkHerd.id,
+                    req.body.oldIdentityNumberOfAnimal
                   );
-                  if (updateDeadAnimalIdentityNumber) {
-                    res.status(201).json({
-                      Message:
-                        "Numer identyfikacyjny zwierzęcia został zmieniony pomyślnie!",
-                    });
+                  if (findAnimal) {
+                    const updateDeadAnimalIdentityNumber = await changeAnimalIdentityNumber(
+                      AnimalsDeads,
+                      req.body.oldIdentityNumberOfAnimal,
+                      req.body.newIdentityNumberOfAnimal,
+                      checkHerd.id
+                    );
+                    if (updateDeadAnimalIdentityNumber) {
+                      res.status(201).json({
+                        Message:
+                          "Numer identyfikacyjny zwierzęcia został zmieniony pomyślnie!",
+                      });
+                    } else {
+                      res.status(400).json({
+                        Error:
+                          "Nie udało się zmienić numeru identyfikacyjnego zwierzęcia!",
+                      });
+                    }
                   } else {
-                    res.status(400).json({
+                    res.status(404).json({
                       Error:
-                        "Nie udało się zmienić numeru identyfikacyjnego zwierzęcia!",
+                        "Nie znaleziono zwierzęcia o wprowadzonym numerze identyfikacyjnym!",
                     });
                   }
                 } else {
-                  res.status(404).json({
+                  res.status(400).json({
                     Error:
-                      "Nie udało się zmienić numeru identyfikacyjnego zwierzęcia!",
+                      "Wprowadzony numer identyfikacyjny jest już przypisany do innego zwierzęcia!",
                   });
                 }
               } else {
@@ -1690,15 +1801,18 @@ router.put(
  *        - name: identityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *        - name: oldDate
  *          in: formData
  *          required: true
- *          type: date
+ *          type: string
+ *          format: date
  *        - name: newDate
  *          in: formData
  *          required: true
- *          type: date
+ *          type: string
+ *          format: date
  *      responses:
  *        201:
  *          description: Data updated successfully!
@@ -1824,11 +1938,13 @@ router.put(
  *        - name: temporaryIdentityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *        - name: confirmTemporaryIdentityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *      responses:
  *        201:
  *          description: The new born animal deleted successfully!
@@ -1950,11 +2066,13 @@ router.delete(
  *        - name: identityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *        - name: confirmIdentityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *      responses:
  *        201:
  *          description: The dead animal deleted successfully!
@@ -2076,11 +2194,13 @@ router.delete(
  *        - name: identityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *        - name: confirmIdentityNumberOfAnimal
  *          in: formData
  *          required: true
- *          type: int
+ *          type: integer
+ *          format: int64
  *      responses:
  *        201:
  *          description: Animal deleted successfully!

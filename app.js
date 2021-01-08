@@ -36,7 +36,7 @@ const swaggerOptions = {
       version: "v1.1",
     },
     host: "localhost:3000",
-    basePath: "/herdapi/v20",
+    basePath: "/herdapi/v1.1",
     securityDefinitions: {
       bearerAuth: {
         type: "apiKey",
