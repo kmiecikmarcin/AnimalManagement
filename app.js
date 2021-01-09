@@ -7,6 +7,7 @@ const RoutesUsers = require("./Routes/users");
 const RoutesHerds = require("./Routes/herds");
 const RoutesAnimals = require("./Routes/animals");
 const RoutesFoods = require("./Routes/foods");
+const RoutesAdministrators = require("./Routes/administrators");
 const Genders = require("./Models/Genders");
 const GenderOfAnimal = require("./Models/GenderOfAnimal");
 const TypesOfUsersRoles = require("./Models/TypesOfUsersRoles");
@@ -77,6 +78,7 @@ app.use("/herdapi/v1.1/users", RoutesUsers);
 app.use("/herdapi/v1.1/herds", RoutesHerds);
 app.use("/herdapi/v1.1/animals", RoutesAnimals);
 app.use("/herdapi/v1.1/foods", RoutesFoods);
+app.use("/herdapi/v1.1/administrators", RoutesAdministrators);
 
 app.listen(port);
 
