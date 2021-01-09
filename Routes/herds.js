@@ -137,7 +137,7 @@ router.post(
  *      - name: Herds
  *      summary: Take all herds for user
  *      responses:
- *        201:
+ *        200:
  *          description: List of all herds!
  *        403:
  *          description: Authentication failed!
@@ -182,7 +182,7 @@ router.get("/findAllHerds", verifyToken, (req, res) => {
  *          in: path
  *          type: string
  *      responses:
- *        201:
+ *        200:
  *          description: Data about herd!
  *        403:
  *          description: Authentication failed!
@@ -235,7 +235,7 @@ router.get("/findHerdByName/:name", verifyToken, (req, res) => {
  *          in: path
  *          type: string
  *      responses:
- *        201:
+ *        200:
  *          description: Data about herd!
  *        403:
  *          description: Authentication failed!
@@ -294,7 +294,7 @@ router.get("/findHerdByAnimalType/:typeOfAnimal", verifyToken, (req, res) => {
  *          required: true
  *          type: string
  *      responses:
- *        201:
+ *        200:
  *          description: Name of herd changed successfully!
  *        403:
  *          description: Authentication failed!
@@ -353,7 +353,7 @@ router.put(
                     authData.id
                   );
                   if (updateHerdName) {
-                    res.status(201).json({
+                    res.status(200).json({
                       Message: "Nazwa hodowli została zaktualizowana!",
                     });
                   } else {
@@ -362,12 +362,10 @@ router.put(
                     });
                   }
                 } else {
-                  res
-                    .status(400)
-                    .json({
-                      Error:
-                        "Posiadasz już hodowlę o wprowadzonej przez Ciebie nazwie!",
-                    });
+                  res.status(400).json({
+                    Error:
+                      "Posiadasz już hodowlę o wprowadzonej przez Ciebie nazwie!",
+                  });
                 }
               } else {
                 res.status(404).json({
@@ -397,7 +395,7 @@ router.put(
  *          required: true
  *          type: string
  *      responses:
- *        201:
+ *        200:
  *          description: Type of herd changed successfully!
  *        403:
  *          description: Authentication failed!
@@ -441,7 +439,7 @@ router.put(
                   authData.id
                 );
                 if (updateType) {
-                  res.status(201).json({
+                  res.status(200).json({
                     Message: "Pomyślnie zaktualizowano typ zwierząt w hodowli!",
                   });
                 } else {
@@ -487,7 +485,7 @@ router.put(
  *          type: string
  *          format: password
  *      responses:
- *        201:
+ *        200:
  *          description: The herd deleted successfully!
  *        403:
  *          description: Authentication failed!
