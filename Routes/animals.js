@@ -46,7 +46,7 @@ const checkEnteredIdentityNumberForAnimals = require("../Functions/Others/checkE
  *      - name: Animals
  *      summary: Take all animals genders
  *      responses:
- *        201:
+ *        200:
  *          description: List of animals genders.
  *        403:
  *          description: Authentication failed!
@@ -90,7 +90,7 @@ router.get("/takeAllAnimalsGenders", verifyToken, (req, res) => {
  *      - name: Animals
  *      summary: Take all kinds of animals
  *      responses:
- *        201:
+ *        200:
  *          description: List kinds of animals.
  *        403:
  *          description: Authentication failed!
@@ -133,7 +133,7 @@ router.get("/takeAllKindsOfAnimals", verifyToken, (req, res) => {
  *      - name: Animals
  *      summary: Take all types of animals join to the herd
  *      responses:
- *        201:
+ *        200:
  *          description: List about types of animals join to the herd.
  *        403:
  *          description: Authentication failed!
@@ -379,7 +379,7 @@ router.post(
  *          required: true
  *          type: string
  *      responses:
- *        201:
+ *        200:
  *          description: List of animals in herd.
  *        403:
  *          description: Authentication failed!
@@ -449,7 +449,7 @@ router.get("/findAllAnimalsInHerd/:herdName", verifyToken, (req, res) => {
  *          type: integer
  *          format: int64
  *      responses:
- *        201:
+ *        200:
  *          description: Data about this animal.
  *        403:
  *          description: Authentication failed!
@@ -529,7 +529,7 @@ router.get(
  *          type: integer
  *          format: int64
  *      responses:
- *        201:
+ *        200:
  *          description: Data updated successfully!
  *        400:
  *          description: Data has not been updated!
@@ -603,7 +603,7 @@ router.put(
                       checkHerd.id
                     );
                     if (updateAnimalIdentityNumber) {
-                      res.status(201).json({
+                      res.status(200).json({
                         Message:
                           "Numer identyfikacyjny zwierzęcia został zmieniony pomyślnie!",
                       });
@@ -666,7 +666,7 @@ router.put(
  *          required: true
  *          type: string
  *      responses:
- *        201:
+ *        200:
  *          description: Data updated successfully!
  *        400:
  *          description: Something went wrong!
@@ -742,7 +742,7 @@ router.put(
                     req.body.newBreedOfAnimal
                   );
                   if (updateBreedOfAnimal) {
-                    res.status(201).json({
+                    res.status(200).json({
                       Message: "Gatunek zwierzęcia został pomyślnie zmieniony!",
                     });
                   } else {
@@ -799,7 +799,7 @@ router.put(
  *          type: string
  *          format: datee
  *      responses:
- *        201:
+ *        200:
  *          description: Data updated successfully!
  *        400:
  *          description: Something went wrong!
@@ -879,7 +879,7 @@ router.put(
                     req.body.newBirthDate
                   );
                   if (updateBirthDateOfAnimal) {
-                    res.status(201).json({
+                    res.status(200).json({
                       Message:
                         "Data narodzin zwierzęcia została pomyślnie zmieniona!",
                     });
@@ -937,7 +937,7 @@ router.put(
  *          type: number
  *          format: float
  *      responses:
- *        201:
+ *        200:
  *          description: Data updated successfully!
  *        400:
  *          description: Something went wrong!
@@ -1013,7 +1013,7 @@ router.put(
                     req.body.newAnimalWeight
                   );
                   if (updateWeightOfAnimal) {
-                    res.status(201).json({
+                    res.status(200).json({
                       Message: "Waga zwierzęcia została pomyślnie zmieniona!",
                     });
                   } else {
@@ -1218,7 +1218,7 @@ router.post(
  *          type: string
  *          format: date
  *      responses:
- *        201:
+ *        200:
  *          description: Data updated successfully!
  *        400:
  *          description: Something went wrong!
@@ -1298,7 +1298,7 @@ router.put(
                     req.body.newBirthDate
                   );
                   if (updateBirthDateOfNewBornAnimal) {
-                    res.status(201).json({
+                    res.status(200).json({
                       Message:
                         "Data narodzin zwierzęcia została pomyślnie zmieniona!",
                     });
@@ -1341,7 +1341,7 @@ router.put(
  *          required: true
  *          type: string
  *      responses:
- *        201:
+ *        200:
  *          description: List of new born animals.
  *        403:
  *          description: Authentication failed!
@@ -1407,7 +1407,7 @@ router.get(
  *      - name: Animals
  *      summary: Take all reasons of death
  *      responses:
- *        201:
+ *        200:
  *          description: List of reasons deaths.
  *        403:
  *          description: Authentication failed!
@@ -1600,7 +1600,7 @@ router.post(
  *          required: true
  *          type: string
  *      responses:
- *        201:
+ *        200:
  *          description: List of deads animals.
  *        403:
  *          description: Authentication failed!
@@ -1675,7 +1675,7 @@ router.get("/takeAllDeadsAnimalsInHerd/:herdName", verifyToken, (req, res) => {
  *          type: integer
  *          format: int64
  *      responses:
- *        201:
+ *        200:
  *          description: Data updated successfully!
  *        400:
  *          description: Something went wrong!
@@ -1749,7 +1749,7 @@ router.put(
                       checkHerd.id
                     );
                     if (updateDeadAnimalIdentityNumber) {
-                      res.status(201).json({
+                      res.status(200).json({
                         Message:
                           "Numer identyfikacyjny zwierzęcia został zmieniony pomyślnie!",
                       });
@@ -1814,7 +1814,7 @@ router.put(
  *          type: string
  *          format: date
  *      responses:
- *        201:
+ *        200:
  *          description: Data updated successfully!
  *        400:
  *          description: Something went wrong!
@@ -1895,7 +1895,7 @@ router.put(
                   );
                   if (updateDateOfDead) {
                     res
-                      .status(201)
+                      .status(200)
                       .json({ Message: "Pomyślnie zmieniono datę śmierci!" });
                   } else {
                     res
@@ -1946,7 +1946,7 @@ router.put(
  *          type: integer
  *          format: int64
  *      responses:
- *        201:
+ *        200:
  *          description: The new born animal deleted successfully!
  *        400:
  *          description: The animal couldn not be removed!
@@ -2074,7 +2074,7 @@ router.delete(
  *          type: integer
  *          format: int64
  *      responses:
- *        201:
+ *        200:
  *          description: The dead animal deleted successfully!
  *        400:
  *          description: The animal couldn not be removed!
@@ -2202,7 +2202,7 @@ router.delete(
  *          type: integer
  *          format: int64
  *      responses:
- *        201:
+ *        200:
  *          description: Animal deleted successfully!
  *        400:
  *          description: The animal couldn not be removed!

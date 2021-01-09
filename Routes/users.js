@@ -288,7 +288,7 @@ router.post(
  *          type: string
  *          format: password
  *      responses:
- *        201:
+ *        200:
  *          description: Adress e-mail will be updated!
  *        400:
  *          description: Something went wrong!
@@ -350,7 +350,7 @@ router.put(
                 req.body.userPassword
               );
               if (updateUserEmailAdress) {
-                res.status(201).json({
+                res.status(200).json({
                   Message: "Twój adress e-mail został zaktualizowany!",
                 });
               } else {
@@ -388,7 +388,7 @@ router.put(
  *          type: string
  *          format: password
  *      responses:
- *        201:
+ *        200:
  *          description: Password will be updated!
  *        400:
  *          description: Something went wrong!
@@ -476,7 +476,7 @@ router.put(
                 checkUserById.password
               );
               if (updateUserPassword) {
-                res.status(201).json({
+                res.status(200).json({
                   Message: "Twoje hasło zostało zaktualizowane!",
                 });
               } else {
@@ -511,7 +511,7 @@ router.put(
  *          type: string
  *          format: password
  *      responses:
- *        201:
+ *        200:
  *          description: Account deleted!
  *        400:
  *          description: Something went wrong!
@@ -571,7 +571,7 @@ router.put(
               );
               if (deleteAccount) {
                 console.log(deleteAccount);
-                res.status(201).json({
+                res.status(200).json({
                   Message: "Twoje konto zostało usunięte!",
                 });
               } else {
