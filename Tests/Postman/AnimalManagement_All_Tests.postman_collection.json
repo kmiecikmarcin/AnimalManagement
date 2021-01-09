@@ -162,7 +162,7 @@
 									"    pm.expect(jsonData.Message).to.eql(\"Twój adress e-mail został zaktualizowany!\");\r",
 									"});\r",
 									"pm.test(\"Successful PUT request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -309,7 +309,7 @@
 									"    pm.expect(jsonData.Message).not.eql(null);\r",
 									"});\r",
 									"pm.test(\"Successful PUT request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -673,7 +673,7 @@
 									"    pm.expect(jsonData.Message).to.eql(\"Nazwa hodowli została zaktualizowana!\");\r",
 									"});\r",
 									"pm.test(\"Successful PUT request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -750,7 +750,7 @@
 									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie zaktualizowano typ zwierząt w hodowli!\");\r",
 									"});\r",
 									"pm.test(\"Successful PUT request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1204,7 +1204,7 @@
 									"    pm.expect(jsonData.Message).not.eql(null);\r",
 									"});\r",
 									"pm.test(\"Successful PUT request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1334,7 +1334,7 @@
 									"    pm.expect(jsonData.Message).not.eql(null);\r",
 									"});\r",
 									"pm.test(\"Successful PUT request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1402,7 +1402,7 @@
 									"    pm.expect(jsonData.Message).not.eql(null);\r",
 									"});\r",
 									"pm.test(\"Successful PUT request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1471,7 +1471,7 @@
 									"    pm.expect(jsonData.Message).not.eql(null);\r",
 									"});\r",
 									"pm.test(\"Successful PUT request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1611,7 +1611,7 @@
 									"    pm.expect(jsonData.Message).not.eql(null);\r",
 									"});\r",
 									"pm.test(\"Successful PUT request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1912,7 +1912,7 @@
 									"    pm.expect(jsonData.Message).not.eql(null);\r",
 									"});\r",
 									"pm.test(\"Successful PUT request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1982,7 +1982,7 @@
 									"    pm.expect(jsonData.Message).not.eql(null);\r",
 									"});\r",
 									"pm.test(\"Successful PUT request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});"
 								],
 								"type": "text/javascript"
