@@ -2380,7 +2380,7 @@
 					"response": []
 				},
 				{
-					"name": "Take food status by its type",
+					"name": "Take food status by its species",
 					"event": [
 						{
 							"listen": "test",
@@ -2412,7 +2412,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v1.1/foods/takeFoodStatusByItsType/:speciesName",
+							"raw": "localhost:3000/herdapi/v1.1/foods/takeFoodStatusByItsSpecies/:speciesName",
 							"host": [
 								"localhost"
 							],
@@ -2421,7 +2421,7 @@
 								"herdapi",
 								"v1.1",
 								"foods",
-								"takeFoodStatusByItsType",
+								"takeFoodStatusByItsSpecies",
 								":speciesName"
 							],
 							"variable": [
