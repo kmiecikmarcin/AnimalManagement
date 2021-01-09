@@ -82,25 +82,29 @@ router.get("/takeAllSpeciesOfFood", verifyToken, (req, res) => {
  *      - name: Food
  *      summary: Add new food
  *      parameters:
- *        - name: identityNumberOfPurchasedFood
+ *        - name: identity number of purchased food
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
- *        - name: speciesOfFoodName
+ *          example: 1234
+ *        - name: species of food name
  *          in: formData
  *          required: true
  *          type: string
- *        - name: quantityOfFood
+ *          example: Przenica
+ *        - name: quantity of food
  *          in: formData
  *          required: true
  *          type: number
  *          format: float
- *        - name: dateOfPurchasedFood
+ *          example: 50 (kg)
+ *        - name: date of purchased food
  *          in: formData
  *          required: true
  *          type: string
  *          format: date
+ *          example: 01-01-2021
  *      responses:
  *        201:
  *          description: New food has been added!
@@ -256,16 +260,17 @@ router.get("/takeFoodStatus", verifyToken, (req, res) => {
 
 /**
  * @swagger
- * /food/takeFoodStatus/{typeName}:
+ * /food/takeFoodStatusByItsSpecies/{speciesName}:
  *    get:
  *      tags:
  *      - name: Food
  *      summary: Take all food status
  *      parameters:
- *        - name: typeName
+ *        - name: type name
  *          in: formData
  *          required: true
  *          type: string
+ *          example: Przenica
  *      responses:
  *        200:
  *          description: List with data about food status - but taking by food type.
@@ -274,50 +279,57 @@ router.get("/takeFoodStatus", verifyToken, (req, res) => {
  *        404:
  *          description: User doesn't have food assigned to his account! or User doesn't exist!
  */
-router.get("/takeFoodStatusByItsType/:speciesName", verifyToken, (req, res) => {
-  console.log(req.params.speciesName);
-  if (req.params.speciesName) {
-    jwt.verify(
-      req.token,
-      process.env.S3_SECRETKEY,
-      async (jwtError, authData) => {
-        if (jwtError) {
-          res.status(403).json({ Error: "Błąd uwierzytelniania!" });
-        } else {
-          const checkUser = await findUserById(Users, authData);
-          if (checkUser !== null) {
-            const findSpecies = await findSpeciesOfFoods(
-              SpeciesOfFoods,
-              req.params.speciesName
-            );
-            if (findSpecies !== null) {
-              const findFoodsStatusBySpecies = await findAllUserFoodsStatusByItsSpecies(
-                PurchasedFoodForHerd,
-                authData.id,
-                findSpecies.id
+router.get(
+  "/takeFoodStatusByItsSpecies/:speciesName",
+  verifyToken,
+  (req, res) => {
+    console.log(req.params.speciesName);
+    if (req.params.speciesName) {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const findSpecies = await findSpeciesOfFoods(
+                SpeciesOfFoods,
+                req.params.speciesName
               );
-              if (findFoodsStatusBySpecies !== null) {
-                res.status(200).json({ FoodsStatus: findFoodsStatusBySpecies });
+              if (findSpecies !== null) {
+                const findFoodsStatusBySpecies = await findAllUserFoodsStatusByItsSpecies(
+                  PurchasedFoodForHerd,
+                  authData.id,
+                  findSpecies.id
+                );
+                if (findFoodsStatusBySpecies !== null) {
+                  res
+                    .status(200)
+                    .json({ FoodsStatus: findFoodsStatusBySpecies });
+                } else {
+                  res.status(404).json({
+                    Error:
+                      "Użytkownik nie posiada pożywienia wybranego gatunku!",
+                  });
+                }
               } else {
                 res.status(404).json({
-                  Error: "Użytkownik nie posiada pożywienia wybranego gatunku!",
+                  Error: "Wprowadzony gatunek pożywienia nie istnieje!",
                 });
               }
             } else {
-              res.status(404).json({
-                Error: "Wprowadzony gatunek pożywienia nie istnieje!",
-              });
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
             }
-          } else {
-            res.status(404).json({ Error: "Użytkownik nie istnieje!" });
           }
         }
-      }
-    );
-  } else {
-    res.status(400).json({ Error: "Nie wprowadzono danych!" });
+      );
+    } else {
+      res.status(400).json({ Error: "Nie wprowadzono danych!" });
+    }
   }
-});
+);
 
 /**
  * @swagger
@@ -327,15 +339,17 @@ router.get("/takeFoodStatusByItsType/:speciesName", verifyToken, (req, res) => {
  *      - name: Food
  *      summary: Edit species of food
  *      parameters:
- *        - name: identityNumberOfPurchasedFood
+ *        - name: identity number of purchased food
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
- *        - name: speciesOfFoodName
+ *          example: 1234
+ *        - name: species of food name
  *          in: formData
  *          required: true
  *          type: string
+ *          example: Burak
  *      responses:
  *        200:
  *          description: Data updated successfully!
@@ -423,16 +437,18 @@ router.put(
  *      - name: Food
  *      summary: Edit quantity of food
  *      parameters:
- *        - name: identityNumberOfPurchasedFood
+ *        - name: identity number of purchased food
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
+ *          example: 1234
  *        - name: quantityOfFood
  *          in: formData
  *          required: true
  *          type: number
  *          format: float
+ *          example: 40 (kg)
  *      responses:
  *        200:
  *          description: Data updated successfully!
@@ -524,21 +540,24 @@ router.put(
  *      - name: Food
  *      summary: Edit date of purchased food
  *      parameters:
- *        - name: identityNumberOfPurchasedFood
+ *        - name: identity number of purchased food
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
+ *          example: 1234
  *        - name: oldDate
  *          in: formData
  *          required: true
  *          type: string
  *          format: date
+ *          example: 01-01-2021
  *        - name: newDate
  *          in: formData
  *          required: true
  *          type: string
  *          format: date
+ *          example: 02-01-2021
  *      responses:
  *        200:
  *          description: Data updated successfully!
@@ -639,25 +658,28 @@ router.put(
  *      - name: Food
  *      summary: Assign food to herd
  *      parameters:
- *        - name: herdName
+ *        - name: herd name
  *          in: formData
  *          required: true
  *          type: string
- *        - name: identityNumberOfFoodUsedForHerd
+ *        - name: identity number of food used for herd
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
- *        - name: quantityOfFoodUsedForHerd
+ *          exmaple: 4321
+ *        - name: quantity of food used for herd
  *          in: formData
  *          required: true
  *          type: number
  *          format: float
- *        - name: dateWhenFoodWasUsed
+ *          example: 30 (kg)
+ *        - name: date when food was used
  *          in: formData
  *          required: true
  *          type: string
  *          format: date
+ *          example: 01-01-2021
  *      responses:
  *        201:
  *          description: New food in herd has been added!
@@ -854,16 +876,17 @@ router.get("/takeFoodStatusInHerd", verifyToken, (req, res) => {
 
 /**
  * @swagger
- * /food/takeFoodStatusInHerdByItsType/{typeName}:
+ * /food/takeFoodStatusInHerdByItsSpecies/{speciesName}:
  *    get:
  *      tags:
  *      - name: Food
  *      summary: Take all food status in herd by its type
  *      parameters:
- *        - name: typeName
+ *        - name: species name
  *          in: formData
  *          required: true
  *          type: string
+ *          example: Przenica
  *      responses:
  *        200:
  *          description: List with data about food status - but taking by food type.
@@ -929,20 +952,23 @@ router.get(
  *      - name: Food
  *      summary: Edit quantity of food used for animals
  *      parameters:
- *        - name: herdName
+ *        - name: herd name
  *          in: formData
  *          required: true
  *          type: string
- *        - name: identityNumberOfFoodUsedForHerd
+ *          example: thebestherd
+ *        - name: identity number of food used for herd
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
- *        - name: newQuantityOfFoodUsedForHerd
+ *          example: 4321
+ *        - name: new quantity of food used for herd
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
+ *          example: 30 (kg)
  *      responses:
  *        200:
  *          description: Data updated successfully!
@@ -1066,25 +1092,29 @@ router.put(
  *      - name: Food
  *      summary: Edit date when user used food for herd
  *      parameters:
- *        - name: herdName
+ *        - name: herd name
  *          in: formData
  *          required: true
  *          type: string
- *        - name: identityNumberOfFoodUsedForHerd
+ *          example: thebestherd
+ *        - name: identity number of food used for herd
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
+ *          example: 4321
  *        - name: oldDate
  *          in: formData
  *          required: true
  *          type: string
  *          format: date
+ *          example: 01-01-2021
  *        - name: newDate
  *          in: formData
  *          required: true
  *          type: string
  *          format: date
+ *          example: 02-01-2021
  *      responses:
  *        200:
  *          description: Data updated successfully!
@@ -1203,11 +1233,12 @@ router.put(
  *      - name: Food
  *      summary: Delete purchased food
  *      parameters:
- *        - name: identityNumberOfPurchasedFood
+ *        - name: identity number of purchased food
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
+ *          example: 1234
  *      responses:
  *        200:
  *          description: Food deleted successfully!
@@ -1299,11 +1330,12 @@ router.delete(
  *      - name: Food
  *      summary: Delete food assigned to herd
  *      parameters:
- *        - name: identityNumberOfFoodUsedForHerd
+ *        - name: identity number of food used for herd
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
+ *          example: 4321
  *      responses:
  *        200:
  *          description: Food deleted successfully!
