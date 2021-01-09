@@ -51,6 +51,7 @@ const deleteUserAccount = require("../Functions/Users/deleteUserAccount");
  *          in: boolean
  *          required: true
  *          type: boolean
+ *          default: false
  *      responses:
  *        201:
  *          description: Successfully registered!
@@ -115,7 +116,7 @@ router.post(
     check("userGender")
       .exists()
       .withMessage("Brak wymaganych danych!")
-      .isLength({ min: 1 })
+      .isLength({ min: 1, max: 20 })
       .withMessage("Nie wprowadzono danych!")
       .custom((value) => {
         if (checkUserGenderInRegister(value) === false) {
