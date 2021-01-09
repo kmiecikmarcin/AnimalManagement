@@ -27,19 +27,22 @@ const checkEnteredName = require("../Functions/Others/checkEnteredName");
  *      - name: Herds
  *      summary: Add new herd by user
  *      parameters:
- *        - name: herdName
+ *        - name: herd name
  *          in: formData
  *          required: true
  *          type: string
- *        - name: herdType
+ *          example: thebestherd
+ *        - name: kind of herd
  *          in: formData
  *          required: true
  *          type: string
- *        - name: creationDate
+ *          example: Kura
+ *        - name: creation date
  *          in: formData
  *          required: true
  *          type: string
  *          format: date
+ *          example: 01-01-2021
  *      responses:
  *        201:
  *          description: New herd has been added!
@@ -285,14 +288,16 @@ router.get("/findHerdByAnimalType/:typeOfAnimal", verifyToken, (req, res) => {
  *      - name: Herds
  *      summary: Change name of herd
  *      parameters:
- *        - name: oldHerdName
+ *        - name: old herd name
  *          in: formData
  *          required: true
  *          type: string
- *        - name: newHerdName
+ *          example: thebestherd
+ *        - name: new herd name
  *          in: formData
  *          required: true
  *          type: string
+ *          example: mynewherd
  *      responses:
  *        200:
  *          description: Name of herd changed successfully!
@@ -390,10 +395,11 @@ router.put(
  *      - name: Herds
  *      summary: Change type of herd
  *      parameters:
- *        - name: newTypeOfHerd
+ *        - name: new kind of herd
  *          in: formData
  *          required: true
  *          type: string
+ *          example: Królik
  *      responses:
  *        200:
  *          description: Type of herd changed successfully!
@@ -470,20 +476,23 @@ router.put(
  *      - name: Herds
  *      summary: Delete the herd
  *      parameters:
- *        - name: herdName
+ *        - name: herd name
  *          in: formData
  *          required: true
  *          type: string
- *        - name: userPassword
- *          in: formData
- *          required: true
- *          type: string
- *          format: password
- *        - name: confirmPassword
+ *          example: thebestherd
+ *        - name: user password
  *          in: formData
  *          required: true
  *          type: string
  *          format: password
+ *          example: userpassword#
+ *        - name: confirm password
+ *          in: formData
+ *          required: true
+ *          type: string
+ *          format: password
+ *          example: userpassword#
  *      responses:
  *        200:
  *          description: The herd deleted successfully!
