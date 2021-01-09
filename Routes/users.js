@@ -29,29 +29,34 @@ const deleteUserAccount = require("../Functions/Users/deleteUserAccount");
  *      - name: Users
  *      summary: Register in system
  *      parameters:
- *        - name: userEmail
+ *        - name: user e-mail
  *          in: formData
  *          required: true
  *          type: string
- *        - name: userPassword
- *          in: formData
- *          required: true
- *          type: string
- *          format: password
- *        - name: confirmPassword
+ *          example: user@gmail.com
+ *        - name: user password
  *          in: formData
  *          required: true
  *          type: string
  *          format: password
- *        - name: userGender
+ *          example: userpassword#
+ *        - name: confirm password
  *          in: formData
  *          required: true
  *          type: string
- *        - name: userVerification
+ *          format: password
+ *          example: userpassword#
+ *        - name: user gender
+ *          in: formData
+ *          required: true
+ *          type: string
+ *          example: Kobieta or Mężczyzna
+ *        - name: user verification
  *          in: boolean
  *          required: true
  *          type: boolean
  *          default: false
+ *          example: true
  *      responses:
  *        201:
  *          description: Successfully registered!
@@ -188,15 +193,17 @@ router.post(
  *      - name: Users
  *      summary: Login in system
  *      parameters:
- *        - name: userEmail
+ *        - name: user e-mail
  *          in: formData
  *          required: true
  *          type: string
- *        - name: userPassword
+ *          example: user@gmail.com
+ *        - name: user password
  *          in: formData
  *          required: true
  *          type: string
  *          format: password
+ *          example: userpassword#
  *      responses:
  *        201:
  *          description: System will return token!
@@ -275,19 +282,22 @@ router.post(
  *      - name: Users
  *      summary: Change adress e-mail by user
  *      parameters:
- *        - name: oldUserEmailAdress
+ *        - name: old user e-mail
  *          in: formData
  *          required: true
  *          type: string
- *        - name: newUserEmailAdress
+ *          example: user@gmail.com
+ *        - name: new user e-mail
  *          in: formData
  *          required: true
  *          type: string
- *        - name: userPassword
+ *          example: newuser@gmail.com
+ *        - name: user password
  *          in: formData
  *          required: true
  *          type: string
  *          format: password
+ *          example: userpassword#
  *      responses:
  *        200:
  *          description: Adress e-mail will be updated!
@@ -373,21 +383,24 @@ router.put(
  *      - name: Users
  *      summary: Change password by user
  *      parameters:
- *        - name: oldUserPassword
+ *        - name: old user password
  *          in: formData
  *          required: true
  *          type: string
  *          format: password
- *        - name: newUserPassword
+ *          example: userpassword#
+ *        - name: new user password
  *          in: formData
  *          required: true
  *          type: string
  *          format: password
- *        - name: confirmNewPassword
+ *          example: newuserpassword#
+ *        - name: confirm new password
  *          in: formData
  *          required: true
  *          type: string
  *          format: password
+ *          example: newuserpassword#
  *      responses:
  *        200:
  *          description: Password will be updated!
@@ -501,16 +514,18 @@ router.put(
  *      - name: Users
  *      summary: Delete account by user
  *      parameters:
- *        - name: userPassword
+ *        - name: user password
  *          in: formData
  *          required: true
  *          type: string
  *          format: password
- *        - name: confirmPassword
+ *          example: userpassword#
+ *        - name: confirm password
  *          in: formData
  *          required: true
  *          type: string
  *          format: password
+ *          example: userpassword#
  *      responses:
  *        200:
  *          description: Account deleted!
