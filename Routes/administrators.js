@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 
 const router = express.Router();
 require("dotenv").config();
+const { check } = require("express-validator");
 const verifyToken = require("../Functions/Users/verifyJwtToken");
 const Users = require("../Models/Users");
 const TypesOfAnimals = require("../Models/TypesOfAnimals");
@@ -56,13 +57,65 @@ router.get("/takeAllTypesOfAnimals", verifyToken, (req, res) => {
   );
 });
 
-router.post("/addNewTypeOfAnimal", verifyToken, () => {});
+router.post(
+  "/addNewTypeOfAnimal",
+  [
+    check("newTypeOfAnimal")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 1, max: 256 })
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+  ],
+  verifyToken,
+  () => {}
+);
 
-router.delete("/deleteTypeOfAnimal", verifyToken, () => {});
+router.delete(
+  "/deleteTypeOfAnimal",
+  [
+    check("typeOfAnimal")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 1, max: 256 })
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+  ],
+  verifyToken,
+  () => {}
+);
 
-router.post("/addNewKindOfAnimal", verifyToken, () => {});
+router.post(
+  "/addNewKindOfAnimal",
+  [
+    check("newKindOfAnimal")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 1, max: 256 })
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+  ],
+  verifyToken,
+  () => {}
+);
 
-router.delete("/deleteKindOfAnimal", verifyToken, () => {});
+router.delete(
+  "/deleteKindOfAnimal",
+  [
+    check("newKindOfAnimal")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 1, max: 256 })
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+  ],
+  verifyToken,
+  () => {}
+);
 
 /**
  * @swagger
@@ -109,13 +162,65 @@ router.get("/takeAllTypesOfFoods", verifyToken, (req, res) => {
   );
 });
 
-router.post("/addNewTypeOfFeed", verifyToken, () => {});
+router.post(
+  "/addNewTypeOfFood",
+  [
+    check("newTypeOfFood")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 1, max: 256 })
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+  ],
+  verifyToken,
+  () => {}
+);
 
-router.delete("/deleteTypeOfFeed", verifyToken, () => {});
+router.delete(
+  "/deleteTypeOfFood",
+  [
+    check("typeOfFood")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 1, max: 256 })
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+  ],
+  verifyToken,
+  () => {}
+);
 
-router.post("/addNewSepciesOfFeed", verifyToken, () => {});
+router.post(
+  "/addNewSpeciesOfFood",
+  [
+    check("newSpeciesOfFood")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 1, max: 256 })
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+  ],
+  verifyToken,
+  () => {}
+);
 
-router.delete("/deleteSpeciesOfFeed", verifyToken, () => {});
+router.delete(
+  "/deleteSpeciesOfFood",
+  [
+    check("speciesOfFood")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 1, max: 256 })
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+  ],
+  verifyToken,
+  () => {}
+);
 
 /**
  * @swagger
@@ -162,23 +267,147 @@ router.get("/takeTypesOfUsersRoles", verifyToken, (req, res) => {
   );
 });
 
-router.post("/addNewTypeOfUserRole", verifyToken, () => {});
+router.post(
+  "/addNewTypeOfUserRole",
+  [
+    check("newTypeOfUserRole")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 1, max: 20 })
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+  ],
+  verifyToken,
+  () => {}
+);
 
-router.delete("/deleteTypeOfUserRole", verifyToken, () => {});
+router.delete(
+  "/deleteTypeOfUserRole",
+  [
+    check("typeOfUserRole")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 1, max: 20 })
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+  ],
+  verifyToken,
+  () => {}
+);
 
-router.put("/editUserPermissions", verifyToken, () => {});
+router.put(
+  "/editUserPermissions",
+  [
+    check("oldTypeOfUserRole")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 1, max: 20 })
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+    check("newTypeOfUserRole")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 1, max: 20 })
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+  ],
+  verifyToken,
+  () => {}
+);
 
-router.post("/addNewReasonOfAnimalDeath", verifyToken, () => {});
+router.post(
+  "/addNewReasonOfAnimalDeath",
+  [
+    check("newReasonOfAnimalDeath")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 1, max: 256 })
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+  ],
+  verifyToken,
+  () => {}
+);
 
-router.delete("/deleteReasonOfAnimalDeath", verifyToken, () => {});
+router.delete(
+  "/deleteReasonOfAnimalDeath",
+  [
+    check("reasonOfAnimalDeath")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 1, max: 256 })
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+  ],
+  verifyToken,
+  () => {}
+);
 
-router.post("/addNewTypeOfJoinToHerd", verifyToken, () => {});
+router.post(
+  "/addNewTypeOfJoinToHerd",
+  [
+    check("newTypeOfJoinToHerd")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 1, max: 256 })
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+  ],
+  verifyToken,
+  () => {}
+);
 
-router.delete("/deleteTypeOfJoinToHerd", verifyToken, () => {});
+router.delete(
+  "/deleteTypeOfJoinToHerd",
+  [
+    check("typeOfJoinToHerd")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 1, max: 256 })
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+  ],
+  verifyToken,
+  () => {}
+);
 
-router.post("/addNewTypeOfProduct", verifyToken, () => {});
+router.post(
+  "/addNewTypeOfProduct",
+  [
+    check("newTypeOfProduct")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 1, max: 64 })
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+  ],
+  verifyToken,
+  () => {}
+);
 
-router.delete("/deleteTypeOfProduct", verifyToken, () => {});
+router.delete(
+  "/deleteTypeOfProduct",
+  [
+    check("typeOfProduct")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 1, max: 64 })
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+  ],
+  verifyToken,
+  () => {}
+);
 
 /**
  * @swagger
@@ -223,8 +452,21 @@ router.get("/takeListOfUsers", verifyToken, (req, res) => {
       }
     }
   );
-}); //
+});
 
-router.delete("/deleteUserAccount", verifyToken, () => {});
+router.delete(
+  "/deleteUserAccount",
+  [
+    check("userId")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isUUID()
+      .withMessage("Wprowadzony typ danych jest nieprawidłowy!"),
+  ],
+  verifyToken,
+  () => {}
+);
 
 module.exports = router;
