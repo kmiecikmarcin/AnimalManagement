@@ -10,12 +10,14 @@ const TypesOfAnimals = require("../Models/TypesOfAnimals");
 const TypesOfFood = require("../Models/TypesOfFood");
 const TypesOfUsersRoles = require("../Models/TypesOfUsersRoles");
 const KindsOfAnimals = require("../Models/KindsOfAnimals");
+const SpeciesOfFoods = require("../Models/SpeciesOfFoods");
 const findUserById = require("../Functions/Users/findUserById");
 const takeAllSelectedTypesOfData = require("../Functions/Administrators/takeAllSelectedTypesOfData");
 const addNewDataByAdministrator = require("../Functions/Administrators/addNewDataByAdministrator");
 const checkEnteredDataByAdministrator = require("../Functions/Administrators/checkEnteredDataByAdministrator");
 const deleteDataByAdministrator = require("../Functions/Administrators/deleteDataByAdministrator");
 const addNewKindOfAnimal = require("../Functions/Administrators/addNewKindOfAnimal");
+const addNewSpeciesOfFood = require("../Functions/Administrators/addNewSpeciesOfFood");
 
 /**
  * @swagger
@@ -649,6 +651,11 @@ router.delete(
  *      - name: Administrators
  *      summary: Add new species of food
  *      parameters:
+ *        - name: type of food
+ *          in: formData
+ *          required: true
+ *          type: string
+ *          example: Sianokos
  *        - name: new species of food
  *          in: formData
  *          required: true
@@ -658,15 +665,22 @@ router.delete(
  *        201:
  *          description: New species of food has been added!
  *        400:
- *          description: User doesn't have permissions!
+ *          description: User doesn't have permissions!, System has this species of food!, Validation error!
  *        403:
  *          description: Authentication failed!
  *        404:
- *          description: System has this species of food! or User doesn't exists!
+ *          description: User doesn't exists! System has no entered type of food!
  */
 router.post(
   "/addNewSpeciesOfFood",
   [
+    check("typeOfFood")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 1, max: 256 })
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
     check("newSpeciesOfFood")
       .exists()
       .withMessage("Brak wymaganych danych!")
@@ -676,7 +690,64 @@ router.post(
       .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkTypeOfFood = await checkEnteredDataByAdministrator(
+                TypesOfFood,
+                req.body.typeOfFood
+              );
+              if (checkTypeOfFood !== null) {
+                const checkSpeciesOfFood = await checkEnteredDataByAdministrator(
+                  SpeciesOfFoods,
+                  req.body.newSpeciesOfFood
+                );
+                if (checkSpeciesOfFood === null) {
+                  const addNewTypeOfAnimal = await addNewSpeciesOfFood(
+                    res,
+                    SpeciesOfFoods,
+                    authData.name,
+                    req.body.newSpeciesOfFood,
+                    checkTypeOfFood.id
+                  );
+                  if (addNewTypeOfAnimal !== null) {
+                    res.status(201).json({
+                      Message: "Pomyślnie utworzono nowy gatunek pożywienia!",
+                    });
+                  } else {
+                    res.status(400).json({
+                      Error: "Nie posiadasz uprawnień do utworzenia danych!",
+                    });
+                  }
+                } else {
+                  res.status(400).json({
+                    Error: "Wprowadzony gatunek pożywienia już istnieje!",
+                  });
+                }
+              } else {
+                res
+                  .status(404)
+                  .json({ Error: "Wprowadzony typ pożywienia nie istnieje!" });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 /**
@@ -696,7 +767,7 @@ router.post(
  *        200:
  *          description: Species of food has been deleted!
  *        400:
- *          description: User doesn't have permissions!
+ *          description: User doesn't have permissions!, Validation error!
  *        403:
  *          description: Authentication failed!
  *        404:
