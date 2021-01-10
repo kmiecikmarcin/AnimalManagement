@@ -165,7 +165,7 @@ router.post(
  *        200:
  *          description: Type of animal has been deleted!
  *        400:
- *          description: User doesn't have permissions!
+ *          description: User doesn't have permissions! Validation error!
  *        403:
  *          description: Authentication failed!
  *        404:
@@ -219,7 +219,7 @@ router.delete(
                   });
                 }
               } else {
-                res.status(400).json({
+                res.status(404).json({
                   Error: "Wprowadzony typ zwierzęcia nie istnieje!",
                 });
               }
@@ -357,11 +357,11 @@ router.post(
  *        200:
  *          description: Kind of animal has been deleted!
  *        400:
- *          description: User doesn't have permissions!, System has no this kind of animal!, Validation error!
+ *          description: User doesn't have permissions!, Validation error!
  *        403:
  *          description: Authentication failed!
  *        404:
- *          description: User doesn't exists!
+ *          description: User doesn't exists!, System has no this kind of animal!
  */
 router.delete(
   "/deleteKindOfAnimal",
@@ -411,7 +411,7 @@ router.delete(
                   });
                 }
               } else {
-                res.status(400).json({
+                res.status(404).json({
                   Error: "Wprowadzony rodzaj zwierzęcia nie istnieje!",
                 });
               }
