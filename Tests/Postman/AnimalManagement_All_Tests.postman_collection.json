@@ -3460,6 +3460,135 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Add new kind of animal",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const type_of_animal = \"Drób\";\r",
+									"const new_kind_of_animal = \"Kaczka\";\r",
+									"\r",
+									"pm.collectionVariables.set(\"type_of_animal\", type_of_animal);\r",
+									"pm.collectionVariables.set(\"new_kind_of_animal\", new_kind_of_animal);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie utworzono nowy rodzaj zwierzęcia!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{administrator_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"typeOfAnimal\": \"{{type_of_animal}}\",\r\n    \"newKindOfAnimal\": \"{{new_kind_of_animal}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/addNewKindOfAnimal",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"administrators",
+								"addNewKindOfAnimal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete kind of animal",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie usunięto wybrany rodzaj zwierzęcia!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{administrator_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"kindOfAnimal\": \"{{new_kind_of_animal}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/deleteKindOfAnimal",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"administrators",
+								"deleteKindOfAnimal"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
@@ -3633,6 +3762,22 @@
 		},
 		{
 			"key": "new_type_of_animal",
+			"value": ""
+		},
+		{
+			"key": "Drób",
+			"value": ""
+		},
+		{
+			"key": "Kaczka",
+			"value": ""
+		},
+		{
+			"key": "new_kind_of_animal",
+			"value": ""
+		},
+		{
+			"key": "type_of_animal",
 			"value": ""
 		}
 	]
