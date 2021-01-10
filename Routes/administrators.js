@@ -489,11 +489,11 @@ router.get("/takeAllTypesOfFoods", verifyToken, (req, res) => {
  *        201:
  *          description: New type of food has been added!
  *        400:
- *          description: User doesn't have permissions!
+ *          description: User doesn't have permissions!, Validation error!, System has this type of food!
  *        403:
  *          description: Authentication failed!
  *        404:
- *          description: System has this type of food! or User doesn't exists!
+ *          description: User doesn't exists!
  */
 router.post(
   "/addNewTypeOfFood",
@@ -507,7 +507,53 @@ router.post(
       .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkTypeOfFood = await checkEnteredDataByAdministrator(
+                TypesOfFood,
+                req.body.newTypeOfFood
+              );
+              if (checkTypeOfFood === null) {
+                const addNewTypeOfFood = await addNewDataByAdministrator(
+                  res,
+                  TypesOfFood,
+                  authData.name,
+                  req.body.newTypeOfFood
+                );
+                if (addNewTypeOfFood !== null) {
+                  res.status(201).json({
+                    Message: "Pomyślnie utworzono nowy typ pożywienia!",
+                  });
+                } else {
+                  res.status(400).json({
+                    Error: "Nie posiadasz uprawnień do utworzenia danych!",
+                  });
+                }
+              } else {
+                res
+                  .status(400)
+                  .json({ Error: "Wprowadzony typ pożywienia już istnieje!" });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 /**
@@ -527,7 +573,7 @@ router.post(
  *        200:
  *          description: Type of food has been deleted!
  *        400:
- *          description: User doesn't have permissions!
+ *          description: User doesn't have permissions!, Validation error!
  *        403:
  *          description: Authentication failed!
  *        404:
@@ -545,7 +591,54 @@ router.delete(
       .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checktypeOfFood = await checkEnteredDataByAdministrator(
+                TypesOfFood,
+                req.body.typeOfFood
+              );
+              if (checktypeOfFood !== null) {
+                const deleteTypeOfFood = await deleteDataByAdministrator(
+                  res,
+                  TypesOfFood,
+                  authData.name,
+                  checktypeOfFood.id,
+                  checktypeOfFood.name
+                );
+                if (deleteTypeOfFood !== null) {
+                  res.status(200).json({
+                    Message: "Pomyślnie usunięto wybrany typ pożywienia!",
+                  });
+                } else {
+                  res.status(400).json({
+                    Error: "Nie posiadasz uprawnień do utworzenia danych!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error: "Wprowadzony typ pożywienia nie istnieje!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 /**
