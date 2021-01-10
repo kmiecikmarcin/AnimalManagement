@@ -9,11 +9,13 @@ const Users = require("../Models/Users");
 const TypesOfAnimals = require("../Models/TypesOfAnimals");
 const TypesOfFood = require("../Models/TypesOfFood");
 const TypesOfUsersRoles = require("../Models/TypesOfUsersRoles");
+const KindsOfAnimals = require("../Models/KindsOfAnimals");
 const findUserById = require("../Functions/Users/findUserById");
 const takeAllSelectedTypesOfData = require("../Functions/Administrators/takeAllSelectedTypesOfData");
 const addNewDataByAdministrator = require("../Functions/Administrators/addNewDataByAdministrator");
 const checkEnteredDataByAdministrator = require("../Functions/Administrators/checkEnteredDataByAdministrator");
 const deleteDataByAdministrator = require("../Functions/Administrators/deleteDataByAdministrator");
+const addNewKindOfAnimal = require("../Functions/Administrators/addNewKindOfAnimal");
 
 /**
  * @swagger
@@ -111,11 +113,11 @@ router.post(
           } else {
             const checkUser = await findUserById(Users, authData);
             if (checkUser !== null) {
-              const checkTypeOfanimal = await checkEnteredDataByAdministrator(
+              const checkTypeOfAnimal = await checkEnteredDataByAdministrator(
                 TypesOfAnimals,
                 req.body.newTypeOfAnimal
               );
-              if (checkTypeOfanimal === null) {
+              if (checkTypeOfAnimal === null) {
                 const addNewTypeOfAnimal = await addNewDataByAdministrator(
                   res,
                   TypesOfAnimals,
@@ -195,17 +197,17 @@ router.delete(
           } else {
             const checkUser = await findUserById(Users, authData);
             if (checkUser !== null) {
-              const checkTypeOfanimal = await checkEnteredDataByAdministrator(
+              const checkTypeOfAnimal = await checkEnteredDataByAdministrator(
                 TypesOfAnimals,
                 req.body.typeOfAnimal
               );
-              if (checkTypeOfanimal !== null) {
+              if (checkTypeOfAnimal !== null) {
                 const deleteTypeOfanimal = await deleteDataByAdministrator(
                   res,
                   TypesOfAnimals,
                   authData.name,
-                  checkTypeOfanimal.id,
-                  checkTypeOfanimal.name
+                  checkTypeOfAnimal.id,
+                  checkTypeOfAnimal.name
                 );
                 if (deleteTypeOfanimal !== null) {
                   res.status(200).json({
@@ -239,6 +241,11 @@ router.delete(
  *      - name: Administrators
  *      summary: Add new kind of animal
  *      parameters:
+ *        - name: type of animal
+ *          in: formData
+ *          required: true
+ *          type: string
+ *          example: Drób
  *        - name: new kind of animal
  *          in: formData
  *          required: true
@@ -252,11 +259,18 @@ router.delete(
  *        403:
  *          description: Authentication failed!
  *        404:
- *          description: User doesn't exists!
+ *          description: User doesn't exists! System has no entered type of animal!
  */
 router.post(
   "/addNewKindOfAnimal",
   [
+    check("typeOfAnimal")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 1, max: 256 })
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
     check("newKindOfAnimal")
       .exists()
       .withMessage("Brak wymaganych danych!")
@@ -266,7 +280,64 @@ router.post(
       .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkTypeOfAnimal = await checkEnteredDataByAdministrator(
+                TypesOfAnimals,
+                req.body.typeOfAnimal
+              );
+              if (checkTypeOfAnimal !== null) {
+                const checkKindOfAnimal = await checkEnteredDataByAdministrator(
+                  KindsOfAnimals,
+                  req.body.newKindOfAnimal
+                );
+                if (checkKindOfAnimal === null) {
+                  const addNewTypeOfAnimal = await addNewKindOfAnimal(
+                    res,
+                    KindsOfAnimals,
+                    authData.name,
+                    req.body.newKindOfAnimal,
+                    checkTypeOfAnimal.id
+                  );
+                  if (addNewTypeOfAnimal !== null) {
+                    res.status(201).json({
+                      Message: "Pomyślnie utworzono nowy rodzaj zwierzęcia!",
+                    });
+                  } else {
+                    res.status(400).json({
+                      Error: "Nie posiadasz uprawnień do utworzenia danych!",
+                    });
+                  }
+                } else {
+                  res.status(400).json({
+                    Error: "Wprowadzony rodzaj zwierzęcia już istnieje!",
+                  });
+                }
+              } else {
+                res
+                  .status(404)
+                  .json({ Error: "Wprowadzony typ zwierzęcia nie istnieje!" });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 /**
@@ -286,16 +357,16 @@ router.post(
  *        200:
  *          description: Kind of animal has been deleted!
  *        400:
- *          description: User doesn't have permissions!
+ *          description: User doesn't have permissions!, System has no this kind of animal!, Validation error!
  *        403:
  *          description: Authentication failed!
  *        404:
- *          description: System has no this kind of animal! or User doesn't exists!
+ *          description: User doesn't exists!
  */
 router.delete(
   "/deleteKindOfAnimal",
   [
-    check("newKindOfAnimal")
+    check("kindOfAnimal")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
@@ -304,7 +375,54 @@ router.delete(
       .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkKindOfAnimal = await checkEnteredDataByAdministrator(
+                KindsOfAnimals,
+                req.body.kindOfAnimal
+              );
+              if (checkKindOfAnimal !== null) {
+                const deleteKindOfanimal = await deleteDataByAdministrator(
+                  res,
+                  KindsOfAnimals,
+                  authData.name,
+                  checkKindOfAnimal.id,
+                  checkKindOfAnimal.name
+                );
+                if (deleteKindOfanimal !== null) {
+                  res.status(200).json({
+                    Message: "Pomyślnie usunięto wybrany rodzaj zwierzęcia!",
+                  });
+                } else {
+                  res.status(400).json({
+                    Error: "Nie posiadasz uprawnień do utworzenia danych!",
+                  });
+                }
+              } else {
+                res.status(400).json({
+                  Error: "Wprowadzony rodzaj zwierzęcia nie istnieje!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 /**
