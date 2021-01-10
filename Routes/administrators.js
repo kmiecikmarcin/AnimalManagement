@@ -899,11 +899,11 @@ router.get("/takeTypesOfUsersRoles", verifyToken, (req, res) => {
  *        201:
  *          description: Type of user role has been added!
  *        400:
- *          description: User doesn't have permissions!
+ *          description: User doesn't have permissions!, Validation error!, System has this type of user role!
  *        403:
  *          description: Authentication failed!
  *        404:
- *          description: System has this type of user role! or User doesn't exists!
+ *          description: User doesn't exists!
  */
 router.post(
   "/addNewTypeOfUserRole",
@@ -937,7 +937,7 @@ router.post(
  *        200:
  *          description: Type of user role has been deleted!
  *        400:
- *          description: User doesn't have permissions!
+ *          description: User doesn't have permissions!, Validation error!
  *        403:
  *          description: Authentication failed!
  *        404:
@@ -980,7 +980,7 @@ router.delete(
  *        201:
  *          description: User permissions updated successfully!
  *        400:
- *          description: User doesn't have permissions!
+ *          description: User doesn't have permissions!, Validation error!
  *        403:
  *          description: Authentication failed!
  *        404:
@@ -1025,11 +1025,11 @@ router.put(
  *        201:
  *          description: New reason of animal death role has been added!
  *        400:
- *          description: User doesn't have permissions!
+ *          description: User doesn't have permissions!, Validation error!, System has this reason of animal death!
  *        403:
  *          description: Authentication failed!
  *        404:
- *          description: System has this reason of animal death! or User doesn't exists!
+ *          description: User doesn't exists!
  */
 router.post(
   "/addNewReasonOfAnimalDeath",
@@ -1063,7 +1063,7 @@ router.post(
  *        200:
  *          description: Reason of animal death has been deleted!
  *        400:
- *          description: User doesn't have permissions!
+ *          description: User doesn't have permissions!, Validation error!
  *        403:
  *          description: Authentication failed!
  *        404:
@@ -1101,7 +1101,7 @@ router.delete(
  *        201:
  *          description: New type of join to herd role has been added!
  *        400:
- *          description: User doesn't have permissions!
+ *          description: User doesn't have permissions!, Validation error!, System has this type of join to herd!
  *        403:
  *          description: Authentication failed!
  *        404:
@@ -1139,7 +1139,7 @@ router.post(
  *        200:
  *          description: Type of join to herd has been deleted!
  *        400:
- *          description: User doesn't have permissions!
+ *          description: User doesn't have permissions!, Validation error!
  *        403:
  *          description: Authentication failed!
  *        404:
@@ -1177,11 +1177,11 @@ router.delete(
  *        201:
  *          description: New type of product to herd role has been added!
  *        400:
- *          description: User doesn't have permissions!
+ *          description: User doesn't have permissions!, Validation error!, System has this type of product!
  *        403:
  *          description: Authentication failed!
  *        404:
- *          description: System has this type of product! or User doesn't exists!
+ *          description: User doesn't exists!
  */
 router.post(
   "/addNewTypeOfProduct",
@@ -1215,7 +1215,7 @@ router.post(
  *        200:
  *          description: Type of product has been deleted!
  *        400:
- *          description: User doesn't have permissions!
+ *          description: User doesn't have permissions!, Validation error!
  *        403:
  *          description: Authentication failed!
  *        404:
@@ -1300,7 +1300,7 @@ router.get("/takeListOfUsers", verifyToken, (req, res) => {
  *        200:
  *          description: User account has been deleted!
  *        400:
- *          description: User doesn't have permissions!
+ *          description: User doesn't have permissions!, Validation error!
  *        403:
  *          description: Authentication failed!
  *        404:
