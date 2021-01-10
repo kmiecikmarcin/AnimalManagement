@@ -607,17 +607,17 @@ router.delete(
           } else {
             const checkUser = await findUserById(Users, authData);
             if (checkUser !== null) {
-              const checktypeOfFood = await checkEnteredDataByAdministrator(
+              const checkTypeOfFood = await checkEnteredDataByAdministrator(
                 TypesOfFood,
                 req.body.typeOfFood
               );
-              if (checktypeOfFood !== null) {
+              if (checkTypeOfFood !== null) {
                 const deleteTypeOfFood = await deleteDataByAdministrator(
                   res,
                   TypesOfFood,
                   authData.name,
-                  checktypeOfFood.id,
-                  checktypeOfFood.name
+                  checkTypeOfFood.id,
+                  checkTypeOfFood.name
                 );
                 if (deleteTypeOfFood !== null) {
                   res.status(200).json({
@@ -785,7 +785,54 @@ router.delete(
       .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkSpeciesOfFood = await checkEnteredDataByAdministrator(
+                SpeciesOfFoods,
+                req.body.speciesOfFood
+              );
+              if (checkSpeciesOfFood !== null) {
+                const deleteSpeciesOfFood = await deleteDataByAdministrator(
+                  res,
+                  SpeciesOfFoods,
+                  authData.name,
+                  checkSpeciesOfFood.id,
+                  checkSpeciesOfFood.name
+                );
+                if (deleteSpeciesOfFood !== null) {
+                  res.status(200).json({
+                    Message: "Pomyślnie usunięto wybrany gatunek pożywienia!",
+                  });
+                } else {
+                  res.status(400).json({
+                    Error: "Nie posiadasz uprawnień do utworzenia danych!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error: "Wprowadzony gatunek pożywienia nie istnieje!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 /**
