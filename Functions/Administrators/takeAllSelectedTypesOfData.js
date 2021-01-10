@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 async function takeAllSelectedTypesOfData(
   res,
   TypesOfAnimals,

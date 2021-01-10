@@ -11,7 +11,7 @@ async function addNewDataByAdministrator(
     }
     return res
       .status(400)
-      .json({ Error: "Nie udało się dodać nowego typu zwierzęcia!" });
+      .json({ Error: "Proces dodawanie nie powiodło się!" });
   }
   return null;
 }
