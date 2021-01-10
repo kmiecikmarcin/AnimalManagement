@@ -20,12 +20,14 @@ const takeAllSelectedTypesOfData = require("../Functions/Administrators/takeAllS
  *      - name: Administrators
  *      summary: Take all types of animals
  *      responses:
- *        201:
+ *        200:
  *          description: Types of animals list.
+ *        400:
+ *          description: User doesn't have permissions!
  *        403:
  *          description: Authentication failed!
  *        404:
- *          description: System has no types of animals!, User doesn't have permissions! or User doesn't exists!
+ *          description: System has no types of animals! or User doesn't exists!
  */
 router.get("/takeAllTypesOfAnimals", verifyToken, (req, res) => {
   jwt.verify(
@@ -57,6 +59,29 @@ router.get("/takeAllTypesOfAnimals", verifyToken, (req, res) => {
   );
 });
 
+/**
+ * @swagger
+ * /administrators/addNewTypeOfAnimal:
+ *    post:
+ *      tags:
+ *      - name: Administrators
+ *      summary: Add new type of animal
+ *      parameters:
+ *        - name: new type of animal
+ *          in: formData
+ *          required: true
+ *          type: string
+ *          example: Koniowate
+ *      responses:
+ *        201:
+ *          description: New type of animal has been added!
+ *        400:
+ *          description: User doesn't have permissions!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: System has this type of animal! or User doesn't exists!
+ */
 router.post(
   "/addNewTypeOfAnimal",
   [
@@ -72,6 +97,29 @@ router.post(
   () => {}
 );
 
+/**
+ * @swagger
+ * /administrators/deleteTypeOfAnimal:
+ *    delete:
+ *      tags:
+ *      - name: Administrators
+ *      summary: Delete type of animal
+ *      parameters:
+ *        - name: type of animal
+ *          in: formData
+ *          required: true
+ *          type: string
+ *          example: Koniowate
+ *      responses:
+ *        200:
+ *          description: Type of animal has been deleted!
+ *        400:
+ *          description: User doesn't have permissions!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: System has no this type of animal! or User doesn't exists!
+ */
 router.delete(
   "/deleteTypeOfAnimal",
   [
@@ -87,6 +135,29 @@ router.delete(
   () => {}
 );
 
+/**
+ * @swagger
+ * /administrators/addNewKindOfAnimal:
+ *    post:
+ *      tags:
+ *      - name: Administrators
+ *      summary: Add new kind of animal
+ *      parameters:
+ *        - name: new kind of animal
+ *          in: formData
+ *          required: true
+ *          type: string
+ *          example: Kaczka
+ *      responses:
+ *        201:
+ *          description: New kind of animal has been added!
+ *        400:
+ *          description: User doesn't have permissions!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: System has this kind of animal! or User doesn't exists!
+ */
 router.post(
   "/addNewKindOfAnimal",
   [
@@ -102,6 +173,29 @@ router.post(
   () => {}
 );
 
+/**
+ * @swagger
+ * /administrators/deleteKindOfAnimal:
+ *    delete:
+ *      tags:
+ *      - name: Administrators
+ *      summary: Delete kind of animal
+ *      parameters:
+ *        - name: kind of animal
+ *          in: formData
+ *          required: true
+ *          type: string
+ *          example: Kaczka
+ *      responses:
+ *        200:
+ *          description: Kind of animal has been deleted!
+ *        400:
+ *          description: User doesn't have permissions!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: System has no this kind of animal! or User doesn't exists!
+ */
 router.delete(
   "/deleteKindOfAnimal",
   [
@@ -125,12 +219,14 @@ router.delete(
  *      - name: Administrators
  *      summary: Take all types of foods
  *      responses:
- *        201:
+ *        200:
  *          description: Types of foods list.
+ *        400:
+ *          description: User doesn't have permissions!
  *        403:
  *          description: Authentication failed!
  *        404:
- *          description: System has no types of foods!, User doesn't have permissions! or User doesn't exists!
+ *          description: System has no types of foods! or User doesn't exists!
  */
 router.get("/takeAllTypesOfFoods", verifyToken, (req, res) => {
   jwt.verify(
@@ -162,6 +258,29 @@ router.get("/takeAllTypesOfFoods", verifyToken, (req, res) => {
   );
 });
 
+/**
+ * @swagger
+ * /administrators/addNewTypeOfFood:
+ *    post:
+ *      tags:
+ *      - name: Administrators
+ *      summary: Add new type of food
+ *      parameters:
+ *        - name: new type of food
+ *          in: formData
+ *          required: true
+ *          type: string
+ *          example: Sianokos
+ *      responses:
+ *        201:
+ *          description: New type of food has been added!
+ *        400:
+ *          description: User doesn't have permissions!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: System has this type of food! or User doesn't exists!
+ */
 router.post(
   "/addNewTypeOfFood",
   [
@@ -177,6 +296,29 @@ router.post(
   () => {}
 );
 
+/**
+ * @swagger
+ * /administrators/deleteTypeOfFood:
+ *    delete:
+ *      tags:
+ *      - name: Administrators
+ *      summary: Delete type of food
+ *      parameters:
+ *        - name: type of food
+ *          in: formData
+ *          required: true
+ *          type: string
+ *          example: Sianokos
+ *      responses:
+ *        200:
+ *          description: Type of food has been deleted!
+ *        400:
+ *          description: User doesn't have permissions!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: System has no this type of food! or User doesn't exists!
+ */
 router.delete(
   "/deleteTypeOfFood",
   [
@@ -192,6 +334,29 @@ router.delete(
   () => {}
 );
 
+/**
+ * @swagger
+ * /administrators/addNewSpeciesOfFood:
+ *    post:
+ *      tags:
+ *      - name: Administrators
+ *      summary: Add new species of food
+ *      parameters:
+ *        - name: new species of food
+ *          in: formData
+ *          required: true
+ *          type: string
+ *          example: Siano
+ *      responses:
+ *        201:
+ *          description: New species of food has been added!
+ *        400:
+ *          description: User doesn't have permissions!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: System has this species of food! or User doesn't exists!
+ */
 router.post(
   "/addNewSpeciesOfFood",
   [
@@ -207,6 +372,29 @@ router.post(
   () => {}
 );
 
+/**
+ * @swagger
+ * /administrators/deleteSpeciesOfFood:
+ *    delete:
+ *      tags:
+ *      - name: Administrators
+ *      summary: Delete species of food
+ *      parameters:
+ *        - name: species of food
+ *          in: formData
+ *          required: true
+ *          type: string
+ *          example: Siano
+ *      responses:
+ *        200:
+ *          description: Species of food has been deleted!
+ *        400:
+ *          description: User doesn't have permissions!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: System has no this species of food! or User doesn't exists!
+ */
 router.delete(
   "/deleteSpeciesOfFood",
   [
@@ -230,12 +418,14 @@ router.delete(
  *      - name: Administrators
  *      summary: Take all types of users roles
  *      responses:
- *        201:
+ *        200:
  *          description: Types of users roles list.
+ *        400:
+ *          description: User doesn't have permissions!
  *        403:
  *          description: Authentication failed!
  *        404:
- *          description: System has no types of users roles!, User doesn't have permissions! or User doesn't exists!
+ *          description: System has no types of users roles! or User doesn't exists!
  */
 router.get("/takeTypesOfUsersRoles", verifyToken, (req, res) => {
   jwt.verify(
@@ -267,6 +457,29 @@ router.get("/takeTypesOfUsersRoles", verifyToken, (req, res) => {
   );
 });
 
+/**
+ * @swagger
+ * /administrators/addNewTypeOfUserRole:
+ *    post:
+ *      tags:
+ *      - name: Administrators
+ *      summary: Add new type of user role
+ *      parameters:
+ *        - name: new type of user role
+ *          in: formData
+ *          required: true
+ *          type: string
+ *          example: Hodowca
+ *      responses:
+ *        201:
+ *          description: Type of user role has been added!
+ *        400:
+ *          description: User doesn't have permissions!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: System has this type of user role! or User doesn't exists!
+ */
 router.post(
   "/addNewTypeOfUserRole",
   [
@@ -282,6 +495,29 @@ router.post(
   () => {}
 );
 
+/**
+ * @swagger
+ * /administrators/deleteTypeOfUserRole:
+ *    delete:
+ *      tags:
+ *      - name: Administrators
+ *      summary: Delete type of user role
+ *      parameters:
+ *        - name: type of user role
+ *          in: formData
+ *          required: true
+ *          type: string
+ *          example: Hodowca
+ *      responses:
+ *        200:
+ *          description: Type of user role has been deleted!
+ *        400:
+ *          description: User doesn't have permissions!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: System has no this type of user role! or User doesn't exists!
+ */
 router.delete(
   "/deleteTypeOfUserRole",
   [
@@ -297,6 +533,34 @@ router.delete(
   () => {}
 );
 
+/**
+ * @swagger
+ * /administrators/editUserPermissions:
+ *    put:
+ *      tags:
+ *      - name: Administrators
+ *      summary: Edit user permissions
+ *      parameters:
+ *        - name: old type of user role
+ *          in: formData
+ *          required: true
+ *          type: string
+ *          example: Administrator
+ *        - name: new type of user role
+ *          in: formData
+ *          required: true
+ *          type: string
+ *          example: Hodowca
+ *      responses:
+ *        201:
+ *          description: User permissions updated successfully!
+ *        400:
+ *          description: User doesn't have permissions!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: System has no type of user role! or User doesn't exists!
+ */
 router.put(
   "/editUserPermissions",
   [
@@ -319,6 +583,29 @@ router.put(
   () => {}
 );
 
+/**
+ * @swagger
+ * /administrators/addNewReasonOfAnimalDeath:
+ *    post:
+ *      tags:
+ *      - name: Administrators
+ *      summary: Add new reason of animal death
+ *      parameters:
+ *        - name: new reason of animal death
+ *          in: formData
+ *          required: true
+ *          type: string
+ *          example: Choroba
+ *      responses:
+ *        201:
+ *          description: New reason of animal death role has been added!
+ *        400:
+ *          description: User doesn't have permissions!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: System has this reason of animal death! or User doesn't exists!
+ */
 router.post(
   "/addNewReasonOfAnimalDeath",
   [
@@ -334,6 +621,29 @@ router.post(
   () => {}
 );
 
+/**
+ * @swagger
+ * /administrators/deleteReasonOfAnimalDeath:
+ *    delete:
+ *      tags:
+ *      - name: Administrators
+ *      summary: Delete reason of animal death
+ *      parameters:
+ *        - name: reason of animal death
+ *          in: formData
+ *          required: true
+ *          type: string
+ *          example: Choroba
+ *      responses:
+ *        200:
+ *          description: Reason of animal death has been deleted!
+ *        400:
+ *          description: User doesn't have permissions!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: System has no this reason of animal death! or User doesn't exists!
+ */
 router.delete(
   "/deleteReasonOfAnimalDeath",
   [
@@ -349,6 +659,29 @@ router.delete(
   () => {}
 );
 
+/**
+ * @swagger
+ * /administrators/addNewTypeOfJoinToHerd:
+ *    post:
+ *      tags:
+ *      - name: Administrators
+ *      summary: Add new type of join to herd
+ *      parameters:
+ *        - name: new type of join to herd
+ *          in: formData
+ *          required: true
+ *          type: string
+ *          example: Narodziny w hodowli
+ *      responses:
+ *        201:
+ *          description: New type of join to herd role has been added!
+ *        400:
+ *          description: User doesn't have permissions!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: System has this type of join to herd! or User doesn't exists!
+ */
 router.post(
   "/addNewTypeOfJoinToHerd",
   [
@@ -364,6 +697,29 @@ router.post(
   () => {}
 );
 
+/**
+ * @swagger
+ * /administrators/deleteTypeOfJoinToHerd:
+ *    delete:
+ *      tags:
+ *      - name: Administrators
+ *      summary: Delete type of join to herd
+ *      parameters:
+ *        - name: type of join to herd
+ *          in: formData
+ *          required: true
+ *          type: string
+ *          example: Kupiony
+ *      responses:
+ *        200:
+ *          description: Type of join to herd has been deleted!
+ *        400:
+ *          description: User doesn't have permissions!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: System has no this type of join to herd! or User doesn't exists!
+ */
 router.delete(
   "/deleteTypeOfJoinToHerd",
   [
@@ -379,6 +735,29 @@ router.delete(
   () => {}
 );
 
+/**
+ * @swagger
+ * /administrators/addNewTypeOfProduct:
+ *    post:
+ *      tags:
+ *      - name: Administrators
+ *      summary: Add new type of product
+ *      parameters:
+ *        - name: new type of product
+ *          in: formData
+ *          required: true
+ *          type: string
+ *          example: Jajko
+ *      responses:
+ *        201:
+ *          description: New type of product to herd role has been added!
+ *        400:
+ *          description: User doesn't have permissions!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: System has this type of product! or User doesn't exists!
+ */
 router.post(
   "/addNewTypeOfProduct",
   [
@@ -394,6 +773,29 @@ router.post(
   () => {}
 );
 
+/**
+ * @swagger
+ * /administrators/deleteTypeOfProduct:
+ *    delete:
+ *      tags:
+ *      - name: Administrators
+ *      summary: Delete type of product
+ *      parameters:
+ *        - name: type of product
+ *          in: formData
+ *          required: true
+ *          type: string
+ *          example: Choroba
+ *      responses:
+ *        200:
+ *          description: Type of product has been deleted!
+ *        400:
+ *          description: User doesn't have permissions!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: System has no this type of product! or User doesn't exists!
+ */
 router.delete(
   "/deleteTypeOfProduct",
   [
@@ -417,12 +819,14 @@ router.delete(
  *      - name: Administrators
  *      summary: Take all users account in system
  *      responses:
- *        201:
+ *        200:
  *          description: List of users.
+ *        400:
+ *          description: User doesn't have permissions!
  *        403:
  *          description: Authentication failed!
  *        404:
- *          description: System has no users!, User doesn't have permissions! or User doesn't exists!
+ *          description: System has no users! or User doesn't exists!
  */
 router.get("/takeListOfUsers", verifyToken, (req, res) => {
   jwt.verify(
@@ -454,6 +858,29 @@ router.get("/takeListOfUsers", verifyToken, (req, res) => {
   );
 });
 
+/**
+ * @swagger
+ * /administrators/deleteUserAccount:
+ *    delete:
+ *      tags:
+ *      - name: Administrators
+ *      summary: Delete user account
+ *      parameters:
+ *        - name: user id
+ *          in: formData
+ *          required: true
+ *          type: string
+ *          example: 2dc59f7a-8605-4a37-84f3-af2cd9a2d3e7
+ *      responses:
+ *        200:
+ *          description: User account has been deleted!
+ *        400:
+ *          description: User doesn't have permissions!
+ *        403:
+ *          description: Authentication failed!
+ *        404:
+ *          description: System has no this user! or User doesn't exists!
+ */
 router.delete(
   "/deleteUserAccount",
   [
