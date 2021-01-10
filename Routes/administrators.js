@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 
 const router = express.Router();
 require("dotenv").config();
-const { check } = require("express-validator");
+const { check, validationResult } = require("express-validator");
 const verifyToken = require("../Functions/Users/verifyJwtToken");
 const Users = require("../Models/Users");
 const TypesOfAnimals = require("../Models/TypesOfAnimals");
@@ -11,6 +11,8 @@ const TypesOfFood = require("../Models/TypesOfFood");
 const TypesOfUsersRoles = require("../Models/TypesOfUsersRoles");
 const findUserById = require("../Functions/Users/findUserById");
 const takeAllSelectedTypesOfData = require("../Functions/Administrators/takeAllSelectedTypesOfData");
+const addNewDataByAdministrator = require("../Functions/Administrators/addNewDataByAdministrator");
+const checkEnteredDataByAdministrator = require("../Functions/Administrators/checkEnteredDataByAdministrator");
 
 /**
  * @swagger
@@ -76,11 +78,11 @@ router.get("/takeAllTypesOfAnimals", verifyToken, (req, res) => {
  *        201:
  *          description: New type of animal has been added!
  *        400:
- *          description: User doesn't have permissions!
+ *          description: User doesn't have permissions!, System has this type of animal!, Validation error!
  *        403:
  *          description: Authentication failed!
  *        404:
- *          description: System has this type of animal! or User doesn't exists!
+ *          description: User doesn't exists!
  */
 router.post(
   "/addNewTypeOfAnimal",
@@ -94,7 +96,53 @@ router.post(
       .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkTypeOfanimal = await checkEnteredDataByAdministrator(
+                TypesOfAnimals,
+                req.body.newTypeOfAnimal
+              );
+              if (checkTypeOfanimal === null) {
+                const addNewTypeOfAnimal = await addNewDataByAdministrator(
+                  res,
+                  TypesOfAnimals,
+                  authData.name,
+                  req.body.newTypeOfAnimal
+                );
+                if (addNewTypeOfAnimal !== null) {
+                  res.status(201).json({
+                    Message: "Pomyślnie utworzono nowy typ zwierzęcia!",
+                  });
+                } else {
+                  res.status(400).json({
+                    Error: "Nie posiadasz uprawnień do utworzenia danych!",
+                  });
+                }
+              } else {
+                res
+                  .status(400)
+                  .json({ Error: "Wprowadzony typ zwierzęcia już istnieje!" });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 /**
