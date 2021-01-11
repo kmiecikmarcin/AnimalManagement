@@ -8,7 +8,7 @@ function fillDataForReasonOfDeath(ReasonOfDeath) {
       .then((reasonOfDeath) => {
         if (reasonOfDeath === null) {
           ReasonOfDeath.create({
-            description: arrayWithReasonsOfDeath[i],
+            name: arrayWithReasonsOfDeath[i],
           }).catch((error) => {
             throw new Error(error);
           });
