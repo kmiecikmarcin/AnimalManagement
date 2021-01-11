@@ -10,7 +10,7 @@ const ProductFromAnAnimal = sequelize.define(
     date: {
       type: DataTypes.DATEONLY,
       allowNull: false,
-      field: "dateOfAddedProductFromAnAnimal",
+      field: "dateWhenProductWasAdded",
     },
   },
   { timestamps: true }
