@@ -917,7 +917,53 @@ router.post(
       .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkTypeOfUserRole = await checkEnteredDataByAdministrator(
+                TypesOfUsersRoles,
+                req.body.newTypeOfUserRole
+              );
+              if (checkTypeOfUserRole === null) {
+                const addNewTypeOfUserRole = await addNewDataByAdministrator(
+                  res,
+                  TypesOfUsersRoles,
+                  authData.name,
+                  req.body.newTypeOfUserRole
+                );
+                if (addNewTypeOfUserRole !== null) {
+                  res.status(201).json({
+                    Message: "Pomyślnie utworzono nowy typ użytkownika!",
+                  });
+                } else {
+                  res.status(400).json({
+                    Error: "Nie posiadasz uprawnień do utworzenia danych!",
+                  });
+                }
+              } else {
+                res
+                  .status(400)
+                  .json({ Error: "Wprowadzony typ użytkownika już istnieje!" });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 /**
@@ -955,7 +1001,54 @@ router.delete(
       .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkTypeOfUserRole = await checkEnteredDataByAdministrator(
+                TypesOfUsersRoles,
+                req.body.typeOfUserRole
+              );
+              if (checkTypeOfUserRole !== null) {
+                const deleteTypeOfUserRole = await deleteDataByAdministrator(
+                  res,
+                  TypesOfUsersRoles,
+                  authData.name,
+                  checkTypeOfUserRole.id,
+                  checkTypeOfUserRole.name
+                );
+                if (deleteTypeOfUserRole !== null) {
+                  res.status(200).json({
+                    Message: "Pomyślnie usunięto wybrany typ użytkownika!",
+                  });
+                } else {
+                  res.status(400).json({
+                    Error: "Nie posiadasz uprawnień do utworzenia danych!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error: "Wprowadzony typ użytkownika nie istnieje!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 /**
