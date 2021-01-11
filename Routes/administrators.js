@@ -13,6 +13,7 @@ const KindsOfAnimals = require("../Models/KindsOfAnimals");
 const SpeciesOfFoods = require("../Models/SpeciesOfFoods");
 const ReasonOfDeath = require("../Models/ReasonOfDeath");
 const TypesOfJoinToTheHerd = require("../Models/TypesOfJoinToTheHerd");
+const TypesOfProducts = require("../Models/TypesOfProducts");
 const findUserById = require("../Functions/Users/findUserById");
 const takeAllSelectedTypesOfData = require("../Functions/Administrators/takeAllSelectedTypesOfData");
 const addNewDataByAdministrator = require("../Functions/Administrators/addNewDataByAdministrator");
@@ -20,6 +21,8 @@ const checkEnteredDataByAdministrator = require("../Functions/Administrators/che
 const deleteDataByAdministrator = require("../Functions/Administrators/deleteDataByAdministrator");
 const addNewKindOfAnimal = require("../Functions/Administrators/addNewKindOfAnimal");
 const addNewSpeciesOfFood = require("../Functions/Administrators/addNewSpeciesOfFood");
+const deleteUserAccountByAdministrator = require("../Functions/Administrators/deleteUserAccountByAdministrator");
+const checkUserEmail = require("../Functions/Users/checkUserEmail");
 
 /**
  * @swagger
@@ -1480,7 +1483,53 @@ router.post(
       .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkTypeOfProduct = await checkEnteredDataByAdministrator(
+                TypesOfProducts,
+                req.body.newTypeOfProduct
+              );
+              if (checkTypeOfProduct === null) {
+                const addNewTypeOfProduct = await addNewDataByAdministrator(
+                  res,
+                  TypesOfProducts,
+                  authData.name,
+                  req.body.newTypeOfProduct
+                );
+                if (addNewTypeOfProduct !== null) {
+                  res.status(201).json({
+                    Message: "Pomyślnie dodano nowy typ produktu!",
+                  });
+                } else {
+                  res.status(400).json({
+                    Error: "Nie posiadasz uprawnień do utworzenia danych!",
+                  });
+                }
+              } else {
+                res.status(400).json({
+                  Error: "Wprowadzony typ produktu już istnieje!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 /**
@@ -1518,7 +1567,54 @@ router.delete(
       .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkTypeOfProduct = await checkEnteredDataByAdministrator(
+                TypesOfProducts,
+                req.body.typeOfProduct
+              );
+              if (checkTypeOfProduct !== null) {
+                const deleteTypeOfProduct = await deleteDataByAdministrator(
+                  res,
+                  TypesOfProducts,
+                  authData.name,
+                  checkTypeOfProduct.id,
+                  checkTypeOfProduct.name
+                );
+                if (deleteTypeOfProduct !== null) {
+                  res.status(200).json({
+                    Message: "Pomyślnie usunięto wybrany typ produktu!",
+                  });
+                } else {
+                  res.status(400).json({
+                    Error: "Nie posiadasz uprawnień do utworzenia danych!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error: "Wprowadzony typ produktu nie istnieje!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 /**
@@ -1594,16 +1690,63 @@ router.get("/takeListOfUsers", verifyToken, (req, res) => {
 router.delete(
   "/deleteUserAccount",
   [
-    check("userId")
+    check("userEmail")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
-      .isUUID()
-      .withMessage("Wprowadzony typ danych jest nieprawidłowy!"),
+      .isEmail()
+      .withMessage("Wprowadzony e-mail jest nieprawidłowy!"),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkUserAccount = await checkUserEmail(
+                Users,
+                req.body.userEmail
+              );
+              if (checkUserAccount !== null) {
+                const deleteUserAccount = await deleteUserAccountByAdministrator(
+                  res,
+                  Users,
+                  authData.name,
+                  checkUser.id,
+                  checkUser.email
+                );
+                if (deleteUserAccount !== null) {
+                  res.status(200).json({
+                    Message: "Pomyślnie usunięto konto wybranego użytkownika!",
+                  });
+                } else {
+                  res.status(400).json({
+                    Error: "Nie posiadasz uprawnień do utworzenia danych!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error: "Wybrane konto użytkownika nie istnieje!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 module.exports = router;
