@@ -148,7 +148,7 @@
 									"const random_number = _.random(1000, 9000);\r",
 									"const new_email = \"user\" + random_number + \"@example.com\";\r",
 									"\r",
-									"pm.environment.set(\"new_email\", new_email);"
+									"pm.collectionVariables.set(\"new_email\", new_email);"
 								],
 								"type": "text/javascript"
 							}
@@ -3926,6 +3926,74 @@
 					"response": []
 				},
 				{
+					"name": "Edit user permissions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie zmieniono rodzaj użytkownika!\");\r",
+									"});\r",
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const new_type_of_user_role = \"Hodowca\";\r",
+									"\r",
+									"pm.environment.set(\"new_type_of_user_role\", new_type_of_user_role);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{administrator_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userEmail\": \"{{new_email}}\",\r\n    \"newTypeOfUserRole\": \"{{new_type_of_user_role}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/editUserPermissions",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"administrators",
+								"editUserPermissions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Add new reason of animal death",
 					"event": [
 						{
@@ -4624,6 +4692,10 @@
 		},
 		{
 			"key": "new_type_of_product",
+			"value": ""
+		},
+		{
+			"key": "new_email",
 			"value": ""
 		}
 	]
