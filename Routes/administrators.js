@@ -1722,8 +1722,8 @@ router.delete(
                   res,
                   Users,
                   authData.name,
-                  checkUser.id,
-                  checkUser.email
+                  checkUserAccount.id,
+                  checkUserAccount.email
                 );
                 if (deleteUserAccount !== null) {
                   res.status(200).json({
