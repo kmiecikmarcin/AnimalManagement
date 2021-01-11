@@ -13,7 +13,7 @@ const ReasonOfDeath = sequelize.define(
       allowNull: false,
       field: "idReasonDeath",
     },
-    description: {
+    name: {
       type: DataTypes.STRING(256),
       unique: true,
       allowNull: false,
