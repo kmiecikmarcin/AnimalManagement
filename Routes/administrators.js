@@ -12,6 +12,7 @@ const TypesOfUsersRoles = require("../Models/TypesOfUsersRoles");
 const KindsOfAnimals = require("../Models/KindsOfAnimals");
 const SpeciesOfFoods = require("../Models/SpeciesOfFoods");
 const ReasonOfDeath = require("../Models/ReasonOfDeath");
+const TypesOfJoinToTheHerd = require("../Models/TypesOfJoinToTheHerd");
 const findUserById = require("../Functions/Users/findUserById");
 const takeAllSelectedTypesOfData = require("../Functions/Administrators/takeAllSelectedTypesOfData");
 const addNewDataByAdministrator = require("../Functions/Administrators/addNewDataByAdministrator");
@@ -1310,7 +1311,53 @@ router.post(
       .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkTypeOfJoinToHerd = await checkEnteredDataByAdministrator(
+                TypesOfJoinToTheHerd,
+                req.body.newTypeOfJoinToHerd
+              );
+              if (checkTypeOfJoinToHerd === null) {
+                const addNewTypeOfJoinToHerd = await addNewDataByAdministrator(
+                  res,
+                  TypesOfJoinToTheHerd,
+                  authData.name,
+                  req.body.newTypeOfJoinToHerd
+                );
+                if (addNewTypeOfJoinToHerd !== null) {
+                  res.status(201).json({
+                    Message: "Pomyślnie dodano nowy typ dołączenia do stada!",
+                  });
+                } else {
+                  res.status(400).json({
+                    Error: "Nie posiadasz uprawnień do utworzenia danych!",
+                  });
+                }
+              } else {
+                res.status(400).json({
+                  Error: "Wprowadzony typ dołączenia do stada już istnieje!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 /**
@@ -1348,7 +1395,54 @@ router.delete(
       .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkTypeOfJoinToHerd = await checkEnteredDataByAdministrator(
+                TypesOfJoinToTheHerd,
+                req.body.typeOfJoinToHerd
+              );
+              if (checkTypeOfJoinToHerd !== null) {
+                const deleteTypeOfJoinToHerd = await deleteDataByAdministrator(
+                  res,
+                  TypesOfJoinToTheHerd,
+                  authData.name,
+                  checkTypeOfJoinToHerd.id,
+                  checkTypeOfJoinToHerd.name
+                );
+                if (deleteTypeOfJoinToHerd !== null) {
+                  res.status(200).json({
+                    Message: "Pomyślnie usunięto typ dołączenia do stada!",
+                  });
+                } else {
+                  res.status(400).json({
+                    Error: "Nie posiadasz uprawnień do utworzenia danych!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error: "Wprowadzony typ dołączenia do stada nie istnieje!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 /**
