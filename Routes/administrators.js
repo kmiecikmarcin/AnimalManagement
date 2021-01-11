@@ -23,6 +23,7 @@ const addNewKindOfAnimal = require("../Functions/Administrators/addNewKindOfAnim
 const addNewSpeciesOfFood = require("../Functions/Administrators/addNewSpeciesOfFood");
 const deleteUserAccountByAdministrator = require("../Functions/Administrators/deleteUserAccountByAdministrator");
 const checkUserEmail = require("../Functions/Users/checkUserEmail");
+const changeUserPermissions = require("../Functions/Administrators/changeUserPermissions");
 
 /**
  * @swagger
@@ -1078,7 +1079,7 @@ router.delete(
  *        201:
  *          description: User permissions updated successfully!
  *        400:
- *          description: User doesn't have permissions!, Validation error!
+ *          description: User doesn't have permissions!, Validation error!, System has type of user role!
  *        403:
  *          description: Authentication failed!
  *        404:
@@ -1087,13 +1088,13 @@ router.delete(
 router.put(
   "/editUserPermissions",
   [
-    check("oldTypeOfUserRole")
+    check("userEmail")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
       .withMessage("Wymagane pole jest puste!")
-      .isLength({ min: 1, max: 20 })
-      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+      .isEmail()
+      .withMessage("Wprowadzony e-mail jest nieprawidłowy!"),
     check("newTypeOfUserRole")
       .exists()
       .withMessage("Brak wymaganych danych!")
@@ -1103,7 +1104,66 @@ router.put(
       .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkEmail = await checkUserEmail(
+                Users,
+                req.body.userEmail
+              );
+              if (checkEmail !== null) {
+                const checkTypeOfUserRole = await checkEnteredDataByAdministrator(
+                  TypesOfUsersRoles,
+                  req.body.newTypeOfUserRole
+                );
+                if (checkTypeOfUserRole !== null) {
+                  const updateUserPermissions = await changeUserPermissions(
+                    res,
+                    Users,
+                    authData.name,
+                    checkEmail.id,
+                    checkEmail.TypesOfUsersRoleId,
+                    checkTypeOfUserRole.id
+                  );
+                  if (updateUserPermissions !== null) {
+                    res.status(200).json({
+                      Message: "Pomyślnie zmieniono rodzaj użytkownika!",
+                    });
+                  } else {
+                    res.status(400).json({
+                      Error:
+                        "Nie posiadasz uprawnień do utworzenia danych lub nie udało się zmienić rodzaju użytkownika!",
+                    });
+                  }
+                } else {
+                  res.status(404).json({
+                    Error: "Wprowadzony typ użytkownika nie istnieje!",
+                  });
+                }
+              } else {
+                res.status(400).json({
+                  Error: "Wybrany użytkownik nie istnieje!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 /**
