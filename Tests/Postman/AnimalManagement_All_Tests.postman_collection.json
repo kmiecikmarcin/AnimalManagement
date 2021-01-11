@@ -3270,7 +3270,7 @@
 									"    var jsonData = pm.response.json();\r",
 									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie usunięto wybrany typ zwierzęcia!\");\r",
 									"});\r",
-									"pm.test(\"Successful POST request\", function () {\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});\r",
 									""
@@ -3399,7 +3399,7 @@
 									"    var jsonData = pm.response.json();\r",
 									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie usunięto wybrany rodzaj zwierzęcia!\");\r",
 									"});\r",
-									"pm.test(\"Successful POST request\", function () {\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});\r",
 									""
@@ -3574,7 +3574,7 @@
 									"    var jsonData = pm.response.json();\r",
 									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie usunięto wybrany typ pożywienia!\");\r",
 									"});\r",
-									"pm.test(\"Successful POST request\", function () {\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});\r",
 									""
@@ -3703,7 +3703,7 @@
 									"    var jsonData = pm.response.json();\r",
 									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie usunięto wybrany gatunek pożywienia!\");\r",
 									"});\r",
-									"pm.test(\"Successful POST request\", function () {\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});\r",
 									""
@@ -3878,7 +3878,7 @@
 									"    var jsonData = pm.response.json();\r",
 									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie usunięto wybrany typ użytkownika!\");\r",
 									"});\r",
-									"pm.test(\"Successful POST request\", function () {\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});\r",
 									""
@@ -4005,7 +4005,7 @@
 									"    var jsonData = pm.response.json();\r",
 									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie usunięto wybraną przyczynę śmierci zwierzęcia!\");\r",
 									"});\r",
-									"pm.test(\"Successful POST request\", function () {\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});\r",
 									""
@@ -4132,7 +4132,7 @@
 									"    var jsonData = pm.response.json();\r",
 									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie usunięto typ dołączenia do stada!\");\r",
 									"});\r",
-									"pm.test(\"Successful POST request\", function () {\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});\r",
 									""
@@ -4259,7 +4259,7 @@
 									"    var jsonData = pm.response.json();\r",
 									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie usunięto wybrany typ produktu!\");\r",
 									"});\r",
-									"pm.test(\"Successful POST request\", function () {\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});\r",
 									""
@@ -4365,7 +4365,7 @@
 									"    var jsonData = pm.response.json();\r",
 									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie usunięto konto wybranego użytkownika!\");\r",
 									"});\r",
-									"pm.test(\"Successful POST request\", function () {\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});\r",
 									""
@@ -4389,7 +4389,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userEmail\": \"{{email}}\"\r\n}",
+							"raw": "{\r\n    \"userEmail\": \"{{new_email}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
