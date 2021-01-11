@@ -11,6 +11,7 @@ const TypesOfFood = require("../Models/TypesOfFood");
 const TypesOfUsersRoles = require("../Models/TypesOfUsersRoles");
 const KindsOfAnimals = require("../Models/KindsOfAnimals");
 const SpeciesOfFoods = require("../Models/SpeciesOfFoods");
+const ReasonOfDeath = require("../Models/ReasonOfDeath");
 const findUserById = require("../Functions/Users/findUserById");
 const takeAllSelectedTypesOfData = require("../Functions/Administrators/takeAllSelectedTypesOfData");
 const addNewDataByAdministrator = require("../Functions/Administrators/addNewDataByAdministrator");
@@ -1136,7 +1137,55 @@ router.post(
       .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkReasonOfAnimalDeath = await checkEnteredDataByAdministrator(
+                ReasonOfDeath,
+                req.body.newReasonOfAnimalDeath
+              );
+              if (checkReasonOfAnimalDeath === null) {
+                const addNewReasonOfAnimalDeath = await addNewDataByAdministrator(
+                  res,
+                  ReasonOfDeath,
+                  authData.name,
+                  req.body.newReasonOfAnimalDeath
+                );
+                if (addNewReasonOfAnimalDeath !== null) {
+                  res.status(201).json({
+                    Message:
+                      "Pomyślnie dodano nową przyczynę śmierci zwierzęcia!",
+                  });
+                } else {
+                  res.status(400).json({
+                    Error: "Nie posiadasz uprawnień do utworzenia danych!",
+                  });
+                }
+              } else {
+                res.status(400).json({
+                  Error:
+                    "Wprowadzona przyczyna śmierci zwierzęcia już istnieje!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 /**
@@ -1174,7 +1223,56 @@ router.delete(
       .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
   ],
   verifyToken,
-  () => {}
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkReasonOfAnimalDeath = await checkEnteredDataByAdministrator(
+                ReasonOfDeath,
+                req.body.reasonOfAnimalDeath
+              );
+              if (checkReasonOfAnimalDeath !== null) {
+                const deleteReasonOfAnimalDeath = await deleteDataByAdministrator(
+                  res,
+                  ReasonOfDeath,
+                  authData.name,
+                  checkReasonOfAnimalDeath.id,
+                  checkReasonOfAnimalDeath.name
+                );
+                if (deleteReasonOfAnimalDeath !== null) {
+                  res.status(200).json({
+                    Message:
+                      "Pomyślnie usunięto wybraną przyczynę śmierci zwierzęcia!",
+                  });
+                } else {
+                  res.status(400).json({
+                    Error: "Nie posiadasz uprawnień do utworzenia danych!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error:
+                    "Wprowadzona przyczyna śmierci zwierzęcia nie istnieje!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
 );
 
 /**
