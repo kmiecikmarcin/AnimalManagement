@@ -34,10 +34,10 @@ const swaggerOptions = {
       title: "Animal herds management - API",
       description:
         "API for easy work with documentation which describe data based on life of animals.",
-      version: "v1.1",
+      version: "v1.2",
     },
     host: "localhost:3000",
-    basePath: "/herdapi/v1.1",
+    basePath: "/herdapi/v1.2",
     securityDefinitions: {
       bearerAuth: {
         type: "apiKey",
@@ -74,11 +74,11 @@ sequelize
 
 const port = process.env.PORT || 3000;
 
-app.use("/herdapi/v1.1/users", RoutesUsers);
-app.use("/herdapi/v1.1/herds", RoutesHerds);
-app.use("/herdapi/v1.1/animals", RoutesAnimals);
-app.use("/herdapi/v1.1/foods", RoutesFoods);
-app.use("/herdapi/v1.1/administrators", RoutesAdministrators);
+app.use("/herdapi/v1.2/users", RoutesUsers);
+app.use("/herdapi/v1.2/herds", RoutesHerds);
+app.use("/herdapi/v1.2/animals", RoutesAnimals);
+app.use("/herdapi/v1.2/foods", RoutesFoods);
+app.use("/herdapi/v1.2/administrators", RoutesAdministrators);
 
 app.listen(port);
 
