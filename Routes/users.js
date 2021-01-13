@@ -283,17 +283,17 @@ router.post(
  *      - name: Users
  *      summary: Change adress e-mail by user
  *      parameters:
- *        - name: old user e-mail
+ *        - name: oldUserEmailAdress
  *          in: formData
  *          required: true
  *          type: string
  *          example: user@gmail.com
- *        - name: new user e-mail
+ *        - name: newUserEmailAdress
  *          in: formData
  *          required: true
  *          type: string
  *          example: newuser@gmail.com
- *        - name: user password
+ *        - name: userPassword
  *          in: formData
  *          required: true
  *          type: string
@@ -384,19 +384,19 @@ router.put(
  *      - name: Users
  *      summary: Change password by user
  *      parameters:
- *        - name: old user password
+ *        - name: oldUserPassword
  *          in: formData
  *          required: true
  *          type: string
  *          format: password
  *          example: userpassword#
- *        - name: new user password
+ *        - name: newUserPassword
  *          in: formData
  *          required: true
  *          type: string
  *          format: password
  *          example: newuserpassword#
- *        - name: confirm new password
+ *        - name: confirmNewPassword
  *          in: formData
  *          required: true
  *          type: string
@@ -515,13 +515,13 @@ router.put(
  *      - name: Users
  *      summary: Delete account by user
  *      parameters:
- *        - name: user password
+ *        - name: userPassword
  *          in: formData
  *          required: true
  *          type: string
  *          format: password
  *          example: userpassword#
- *        - name: confirm password
+ *        - name: confirmPassword
  *          in: formData
  *          required: true
  *          type: string
