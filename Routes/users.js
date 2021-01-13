@@ -20,6 +20,7 @@ const findUserById = require("../Functions/Users/findUserById");
 const changeUserEmailAdress = require("../Functions/Users/changeUserEmailAdress");
 const changeUserPassword = require("../Functions/Users/changeUserPassword");
 const deleteUserAccount = require("../Functions/Users/deleteUserAccount");
+const checkUserVerification = require("../Functions/Others/checkUserVerification");
 
 /**
  * @swagger
@@ -52,10 +53,9 @@ const deleteUserAccount = require("../Functions/Users/deleteUserAccount");
  *          type: string
  *          example: Kobieta or Mężczyzna
  *        - name: userVerification
- *          in: boolean
+ *          in: formData
  *          required: true
  *          type: boolean
- *          default: false
  *          example: true
  *      responses:
  *        201:
@@ -135,9 +135,10 @@ router.post(
       .exists()
       .withMessage("Brak wymaganych danych!")
       .isBoolean()
-      .withMessage("Wprowadzona wartośc jest nieprawidłowa!")
+      .withMessage("Wprowadzona wartość jest nieprawidłowa!")
       .custom((value) => {
-        if (!value) {
+        const verification = checkUserVerification(value);
+        if (verification === false) {
           throw new Error("Nie zatwierdzono weryfikacji użytkownika!");
         } else {
           return value;
@@ -193,12 +194,12 @@ router.post(
  *      - name: Users
  *      summary: Login in system
  *      parameters:
- *        - name: user e-mail
+ *        - name: userEmail
  *          in: formData
  *          required: true
  *          type: string
  *          example: user@gmail.com
- *        - name: user password
+ *        - name: userPassword
  *          in: formData
  *          required: true
  *          type: string
