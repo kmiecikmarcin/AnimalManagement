@@ -448,7 +448,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"herdName\": \"{{name_of_herd}}\", \r\n    \"herdType\": \"{{type_of_herd}}\",\r\n    \"creationDate\": \"{{date}}\"\r\n}",
+							"raw": "{\r\n    \"herdName\": \"{{name_of_herd}}\", \r\n    \"kindOfAnimalsInHerd\": \"{{type_of_herd}}\",\r\n    \"creationDate\": \"{{date}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -779,7 +779,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"newTypeOfHerd\": \"{{new_type_of_herd}}\"\r\n}",
+							"raw": "{\r\n    \"newKindsOfAnimalsInHerd\": \"{{new_type_of_herd}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
