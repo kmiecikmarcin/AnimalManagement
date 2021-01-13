@@ -80,7 +80,7 @@ router.get("/takeAllTypesOfAnimals", verifyToken, (req, res) => {
  *      - name: Administrators
  *      summary: Add new type of animal
  *      parameters:
- *        - name: new type of animal
+ *        - name: newTypeOfAnimal
  *          in: formData
  *          required: true
  *          type: string
@@ -164,7 +164,7 @@ router.post(
  *      - name: Administrators
  *      summary: Delete type of animal
  *      parameters:
- *        - name: type of animal
+ *        - name: typeOfAnimal
  *          in: formData
  *          required: true
  *          type: string
@@ -249,12 +249,12 @@ router.delete(
  *      - name: Administrators
  *      summary: Add new kind of animal
  *      parameters:
- *        - name: type of animal
+ *        - name: typeOfAnimal
  *          in: formData
  *          required: true
  *          type: string
  *          example: Drób
- *        - name: new kind of animal
+ *        - name: newKindOfAnimal
  *          in: formData
  *          required: true
  *          type: string
@@ -356,7 +356,7 @@ router.post(
  *      - name: Administrators
  *      summary: Delete kind of animal
  *      parameters:
- *        - name: kind of animal
+ *        - name: kindOfAnimal
  *          in: formData
  *          required: true
  *          type: string
@@ -488,7 +488,7 @@ router.get("/takeAllTypesOfFoods", verifyToken, (req, res) => {
  *      - name: Administrators
  *      summary: Add new type of food
  *      parameters:
- *        - name: new type of food
+ *        - name: newTypeOfFood
  *          in: formData
  *          required: true
  *          type: string
@@ -572,7 +572,7 @@ router.post(
  *      - name: Administrators
  *      summary: Delete type of food
  *      parameters:
- *        - name: type of food
+ *        - name: typeOfFood
  *          in: formData
  *          required: true
  *          type: string
@@ -657,12 +657,12 @@ router.delete(
  *      - name: Administrators
  *      summary: Add new species of food
  *      parameters:
- *        - name: type of food
+ *        - name: typeOfFood
  *          in: formData
  *          required: true
  *          type: string
  *          example: Sianokos
- *        - name: new species of food
+ *        - name: newSpeciesOfFood
  *          in: formData
  *          required: true
  *          type: string
@@ -764,7 +764,7 @@ router.post(
  *      - name: Administrators
  *      summary: Delete species of food
  *      parameters:
- *        - name: species of food
+ *        - name: speciesOfFood
  *          in: formData
  *          required: true
  *          type: string
@@ -896,7 +896,7 @@ router.get("/takeTypesOfUsersRoles", verifyToken, (req, res) => {
  *      - name: Administrators
  *      summary: Add new type of user role
  *      parameters:
- *        - name: new type of user role
+ *        - name: newTypeOfUserRole
  *          in: formData
  *          required: true
  *          type: string
@@ -980,7 +980,7 @@ router.post(
  *      - name: Administrators
  *      summary: Delete type of user role
  *      parameters:
- *        - name: type of user role
+ *        - name: typeOfUserRole
  *          in: formData
  *          required: true
  *          type: string
@@ -1065,12 +1065,12 @@ router.delete(
  *      - name: Administrators
  *      summary: Edit user permissions
  *      parameters:
- *        - name: old type of user role
+ *        - name: userEmail
  *          in: formData
  *          required: true
  *          type: string
  *          example: Administrator
- *        - name: new type of user role
+ *        - name: newTypeOfUserRole
  *          in: formData
  *          required: true
  *          type: string
@@ -1174,7 +1174,7 @@ router.put(
  *      - name: Administrators
  *      summary: Add new reason of animal death
  *      parameters:
- *        - name: new reason of animal death
+ *        - name: newReasonOfAnimalDeath
  *          in: formData
  *          required: true
  *          type: string
@@ -1260,7 +1260,7 @@ router.post(
  *      - name: Administrators
  *      summary: Delete reason of animal death
  *      parameters:
- *        - name: reason of animal death
+ *        - name: reasonOfAnimalDeath
  *          in: formData
  *          required: true
  *          type: string
@@ -1347,7 +1347,7 @@ router.delete(
  *      - name: Administrators
  *      summary: Add new type of join to herd
  *      parameters:
- *        - name: new type of join to herd
+ *        - name: newTypeOfJoinToHerd
  *          in: formData
  *          required: true
  *          type: string
@@ -1431,7 +1431,7 @@ router.post(
  *      - name: Administrators
  *      summary: Delete type of join to herd
  *      parameters:
- *        - name: type of join to herd
+ *        - name: typeOfJoinToHerd
  *          in: formData
  *          required: true
  *          type: string
@@ -1516,7 +1516,7 @@ router.delete(
  *      - name: Administrators
  *      summary: Add new type of product
  *      parameters:
- *        - name: new type of product
+ *        - name: newTypeOfProduct
  *          in: formData
  *          required: true
  *          type: string
@@ -1600,7 +1600,7 @@ router.post(
  *      - name: Administrators
  *      summary: Delete type of product
  *      parameters:
- *        - name: type of product
+ *        - name: typeOfProduct
  *          in: formData
  *          required: true
  *          type: string
@@ -1732,11 +1732,11 @@ router.get("/takeListOfUsers", verifyToken, (req, res) => {
  *      - name: Administrators
  *      summary: Delete user account
  *      parameters:
- *        - name: user id
+ *        - name: userEmail
  *          in: formData
  *          required: true
  *          type: string
- *          example: 2dc59f7a-8605-4a37-84f3-af2cd9a2d3e7
+ *          example: user@e1xample.com
  *      responses:
  *        200:
  *          description: User account has been deleted!
