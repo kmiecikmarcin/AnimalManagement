@@ -177,50 +177,50 @@ router.get("/takeAllJoinTypeToTheHerd", verifyToken, (req, res) => {
  *      - name: Animals
  *      summary: Add new animal by user
  *      parameters:
- *        - name: herd name
+ *        - name: herdName
  *          in: formData
  *          required: true
  *          type: string
  *          example: thebestherd
- *        - name: join type name
+ *        - name: joinTypeName
  *          in: formData
  *          required: true
  *          type: string
  *          example: Urodzony w hodowli
- *        - name: kind of animal name
+ *        - name: kindOfAnimalName
  *          in: formData
  *          required: true
  *          type: date
  *          example: Królik
- *        - name: animal gender
+ *        - name: animalGender
  *          in: formData
  *          required: true
  *          type: string
  *          example: Samica
- *        - name: identity number of animal
+ *        - name: identityNumberOfAnimal
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
  *          example: 1234
- *        - name: breed of animal
+ *        - name: breedOfAnimal
  *          in: formData
  *          required: true
  *          type: string
  *          example: Kalifornijski
- *        - name: date of join to the herd
+ *        - name: dateOfJoinToTheHerd
  *          in: formData
  *          required: true
  *          type: string
  *          format: date
  *          example: 01-01-2021
- *        - name: birth date
+ *        - name: birthDate
  *          in: formData
  *          required: true
  *          type: string
  *          format: date
  *          example: 01-12-2020
- *        - name: animal weight
+ *        - name: animalWeight
  *          in: formData
  *          required: true
  *          type: number
@@ -383,7 +383,7 @@ router.post(
  *      - name: Animals
  *      summary: Take all animals in herd
  *      parameters:
- *        - name: herd name
+ *        - name: herdName
  *          in: formData
  *          required: true
  *          type: string
@@ -449,12 +449,12 @@ router.get("/findAllAnimalsInHerd/:herdName", verifyToken, (req, res) => {
  *      - name: Animals
  *      summary: Take one animal from herd
  *      parameters:
- *        - name: herd name
+ *        - name: herdName
  *          in: formData
  *          required: true
  *          type: string
  *          example: thebestherd
- *        - name: identity number
+ *        - name: identityNumber
  *          in: formData
  *          required: true
  *          type: integer
@@ -526,18 +526,18 @@ router.get(
  *      - name: Animals
  *      summary: Edit identity number of animal
  *      parameters:
- *        - name: herd name
+ *        - name: herdName
  *          in: formData
  *          required: true
  *          type: string
  *          example: thebestherd
- *        - name: old identity number of animal
+ *        - name: oldIdentityNumberOfAnimal
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
  *          example: 1234
- *        - name: new identity number of animal
+ *        - name: newIdentityNumberOfAnimal
  *          in: formData
  *          required: true
  *          type: integer
@@ -663,23 +663,23 @@ router.put(
  *      - name: Animals
  *      summary: Edit breed of animal
  *      parameters:
- *        - name: herd name
+ *        - name: herdName
  *          in: formData
  *          required: true
  *          type: string
  *          example: thebestherd
- *        - name: identity number of animal
+ *        - name: identityNumberOfAnimal
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
  *          example: 4321
- *        - name: old Breed Of Animal
+ *        - name: oldBreedOfAnimal
  *          in: formData
  *          required: true
  *          type: string
  *          example: Kalifornijski
- *        - name: new Breed Of Animal
+ *        - name: newBreedOfAnimal
  *          in: formData
  *          required: true
  *          type: string
@@ -798,24 +798,24 @@ router.put(
  *      - name: Animals
  *      summary: Edit animal birth date
  *      parameters:
- *        - name: herd name
+ *        - name: herdName
  *          in: formData
  *          required: true
  *          type: string
  *          example: thebestherd
- *        - name: identity number of animal
+ *        - name: identityNumberOfAnimal
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
  *          example: 4321
- *        - name: old birth date
+ *        - name: oldBirthDate
  *          in: formData
  *          required: true
  *          type: string
  *          format: date
  *          example: 01-12-2020
- *        - name: new birth date
+ *        - name: newBirthDate
  *          in: formData
  *          required: true
  *          type: string
@@ -940,24 +940,24 @@ router.put(
  *      - name: Animals
  *      summary: Edit animal weight
  *      parameters:
- *        - name: herd name
+ *        - name: herdName
  *          in: formData
  *          required: true
  *          type: string
  *          example: thebestherd
- *        - name: identity number of animal
+ *        - name: identityNumberOfAnimal
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
  *          example: 4321
- *        - name: old animal weight
+ *        - name: oldAnimalWeight
  *          in: formData
  *          required: true
  *          type: number
  *          format: float
  *          example: 4,8
- *        - name: new animal weight
+ *        - name: newAnimalWeight
  *          in: formData
  *          required: true
  *          type: number
@@ -1077,29 +1077,29 @@ router.put(
  *      - name: Animals
  *      summary: Add new born animal by user
  *      parameters:
- *        - name: kind of animal name
+ *        - name: kindOfAnimalName
  *          in: formData
  *          required: true
  *          type: string
  *          example: Królik
- *        - name: parent identity number
+ *        - name: parentIdentityNumber
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
  *          example: 4321
- *        - name: herd name
+ *        - name: herdName
  *          in: formData
  *          required: true
  *          type: string
  *          example: thebestherd
- *        - name: birth date
+ *        - name: birthDate
  *          in: formData
  *          required: true
  *          type: string
  *          format: date
  *          example: 01-01-2021
- *        - name: temporary identity number of animal
+ *        - name: temporaryIdentityNumberOfAnimal
  *          in: formData
  *          required: true
  *          type: integer
@@ -1230,24 +1230,24 @@ router.post(
  *      - name: Animals
  *      summary: Edit new born animal birth date
  *      parameters:
- *        - name: herd name
+ *        - name: herdName
  *          in: formData
  *          required: true
  *          type: string
  *          example: thebestherd
- *        - name: animal child identity number of animal
+ *        - name: animalChildIdentityNumberOfAnimal
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
  *          example: 0123
- *        - name: old birth date
+ *        - name: oldBirthDate
  *          in: formData
  *          required: true
  *          type: string
  *          format: date
  *          example: 01-01-2021
- *        - name: new birth date
+ *        - name: newBirthDate
  *          in: formData
  *          required: true
  *          type: string
@@ -1372,7 +1372,7 @@ router.put(
  *      - name: Animals
  *      summary: Take all new born animals in herd
  *      parameters:
- *        - name: herd name
+ *        - name: herdName
  *          in: formData
  *          required: true
  *          type: string
@@ -1485,24 +1485,24 @@ router.get("/takeAllReasonsDeaths", verifyToken, (req, res) => {
  *      - name: Animals
  *      summary: Add new dead animal
  *      parameters:
- *        - name: herd name
+ *        - name: herdName
  *          in: formData
  *          required: true
  *          type: string
  *          example: thebestherd
- *        - name: identity number Of animal
+ *        - name: identityNumberOfAnimal
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
  *          example: 4321
- *        - name: date of death
+ *        - name: dateOfDeath
  *          in: formData
  *          required: true
  *          type: string
  *          format: date
  *          example: 02-02-2021
- *        - name: reason death
+ *        - name: reasonDeath
  *          in: formData
  *          required: true
  *          type: string
@@ -1637,7 +1637,7 @@ router.post(
  *      - name: Animals
  *      summary: Take all deads animals in herd
  *      parameters:
- *        - name: herd name
+ *        - name: herdName
  *          in: formData
  *          required: true
  *          type: string
@@ -1703,18 +1703,18 @@ router.get("/takeAllDeadsAnimalsInHerd/:herdName", verifyToken, (req, res) => {
  *      - name: Animals
  *      summary: Edit new dead animal identity number
  *      parameters:
- *        - name: herd name
+ *        - name: herdName
  *          in: formData
  *          required: true
  *          type: string
  *          example: thebestherd
- *        - name: old identity number of animal
+ *        - name: oldIdentityNumberOfAnimal
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
  *          example: 4321
- *        - name: new identity number of animal
+ *        - name: newIdentityNumberOfAnimal
  *          in: formData
  *          required: true
  *          type: integer
@@ -1840,24 +1840,24 @@ router.put(
  *      - name: Animals
  *      summary: Edit new dead animal date of death
  *      parameters:
- *        - name: herd name
+ *        - name: herdName
  *          in: formData
  *          required: true
  *          type: string
  *          example: thebestherd
- *        - name: identity number Of animal
+ *        - name: identityNumberOfAnimal
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
  *          example: 4321
- *        - name: old date
+ *        - name: oldDate
  *          in: formData
  *          required: true
  *          type: string
  *          format: date
  *          example: 02-02-2021
- *        - name: new date
+ *        - name: newDate
  *          in: formData
  *          required: true
  *          type: string
@@ -1981,18 +1981,18 @@ router.put(
  *      - name: Animals
  *      summary: Delete new born animal
  *      parameters:
- *        - name: herd name
+ *        - name: herdName
  *          in: formData
  *          required: true
  *          type: string
  *          example: thebestherd
- *        - name: temporary identity Number Of Animal
+ *        - name: temporaryIdentityNumberOfAnimal
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
  *          example: 0123
- *        - name: confirm temporary identity number of animal
+ *        - name: confirmTemporaryIdentityNumberOfAnimal
  *          in: formData
  *          required: true
  *          type: integer
@@ -2112,18 +2112,18 @@ router.delete(
  *      - name: Animals
  *      summary: Delete dead animal
  *      parameters:
- *        - name: herd name
+ *        - name: herdName
  *          in: formData
  *          required: true
  *          type: string
  *          example: thebestherd
- *        - name: identity number of animal
+ *        - name: identityNumberOfAnimal
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
  *          example: 4321
- *        - name: confirm identity number of animal
+ *        - name: confirmIdentityNumberOfAnimal
  *          in: formData
  *          required: true
  *          type: integer
@@ -2243,18 +2243,18 @@ router.delete(
  *      - name: Animals
  *      summary: Delete animal from herd
  *      parameters:
- *        - name: herd name
+ *        - name: herdName
  *          in: formData
  *          required: true
  *          type: string
  *          example: thebestherd
- *        - name: identity number of animal
+ *        - name: identityNumberOfAnimal
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
  *          example: 4321
- *        - name: confirm identity number of animal
+ *        - name: confirmIdentityNumberOfAnimal
  *          in: formData
  *          required: true
  *          type: integer
