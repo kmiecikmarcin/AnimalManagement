@@ -29,29 +29,29 @@ const deleteUserAccount = require("../Functions/Users/deleteUserAccount");
  *      - name: Users
  *      summary: Register in system
  *      parameters:
- *        - name: user e-mail
+ *        - name: userEmail
  *          in: formData
  *          required: true
  *          type: string
  *          example: user@gmail.com
- *        - name: user password
+ *        - name: userPassword
  *          in: formData
  *          required: true
  *          type: string
  *          format: password
  *          example: userpassword#
- *        - name: confirm password
+ *        - name: confirmPassword
  *          in: formData
  *          required: true
  *          type: string
  *          format: password
  *          example: userpassword#
- *        - name: user gender
+ *        - name: userGender
  *          in: formData
  *          required: true
  *          type: string
  *          example: Kobieta or Mężczyzna
- *        - name: user verification
+ *        - name: userVerification
  *          in: boolean
  *          required: true
  *          type: boolean
