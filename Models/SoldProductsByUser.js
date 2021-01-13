@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize");
 
 const sequelize = require("../Functions/Database/connectionWithDatabase");
 const AllProductsFromAnimals = require("./AllProductsFromAnimals");
-const AddingTransactionForSoldOrderByUser = require("./AddingTransactionForSoldOrderByUser");
+const UserTransactions = require("./UserTransactions");
 
 const SoldProductsByUser = sequelize.define(
   "SoldProductsByUser",
@@ -21,11 +21,11 @@ const SoldProductsByUser = sequelize.define(
   { timestamps: true }
 );
 
-AllProductsFromAnimals.belongsToMany(AddingTransactionForSoldOrderByUser, {
+AllProductsFromAnimals.belongsToMany(UserTransactions, {
   through: SoldProductsByUser,
 });
 
-AddingTransactionForSoldOrderByUser.belongsToMany(AllProductsFromAnimals, {
+UserTransactions.belongsToMany(AllProductsFromAnimals, {
   through: SoldProductsByUser,
 });
 
