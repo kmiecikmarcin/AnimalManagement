@@ -82,24 +82,24 @@ router.get("/takeAllSpeciesOfFood", verifyToken, (req, res) => {
  *      - name: Food
  *      summary: Add new food
  *      parameters:
- *        - name: identity number of purchased food
+ *        - name: identityNumberOfPurchasedFood
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
  *          example: 1234
- *        - name: species of food name
+ *        - name: speciesOfFoodName
  *          in: formData
  *          required: true
  *          type: string
  *          example: Przenica
- *        - name: quantity of food
+ *        - name: quantityOfFood
  *          in: formData
  *          required: true
  *          type: number
  *          format: float
  *          example: 50 (kg)
- *        - name: date of purchased food
+ *        - name: dateOfPurchasedFood
  *          in: formData
  *          required: true
  *          type: string
@@ -266,7 +266,7 @@ router.get("/takeFoodStatus", verifyToken, (req, res) => {
  *      - name: Food
  *      summary: Take all food status
  *      parameters:
- *        - name: type name
+ *        - name: speciesName
  *          in: formData
  *          required: true
  *          type: string
@@ -339,13 +339,13 @@ router.get(
  *      - name: Food
  *      summary: Edit species of food
  *      parameters:
- *        - name: identity number of purchased food
+ *        - name: identityNumberOfPurchasedFood
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
  *          example: 1234
- *        - name: species of food name
+ *        - name: speciesOfFoodName
  *          in: formData
  *          required: true
  *          type: string
@@ -437,7 +437,7 @@ router.put(
  *      - name: Food
  *      summary: Edit quantity of food
  *      parameters:
- *        - name: identity number of purchased food
+ *        - name: identityNumberOfPurchasedFood
  *          in: formData
  *          required: true
  *          type: integer
@@ -540,7 +540,7 @@ router.put(
  *      - name: Food
  *      summary: Edit date of purchased food
  *      parameters:
- *        - name: identity number of purchased food
+ *        - name: identityNumberOfPurchasedFood
  *          in: formData
  *          required: true
  *          type: integer
@@ -658,23 +658,29 @@ router.put(
  *      - name: Food
  *      summary: Assign food to herd
  *      parameters:
- *        - name: herd name
+ *        - name: herdName
  *          in: formData
  *          required: true
  *          type: string
- *        - name: identity number of food used for herd
+ *        - name: identityNumberOfPurchasedFood
+ *          in: formData
+ *          required: true
+ *          type: integer
+ *          format: int64
+ *          exmaple: 1234
+ *        - name: identityNumberOfFoodUsedForHerd
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
  *          exmaple: 4321
- *        - name: quantity of food used for herd
+ *        - name: quantityOfFoodUsedForHerd
  *          in: formData
  *          required: true
  *          type: number
  *          format: float
  *          example: 30 (kg)
- *        - name: date when food was used
+ *        - name: dateWhenFoodWasUsed
  *          in: formData
  *          required: true
  *          type: string
@@ -882,7 +888,7 @@ router.get("/takeFoodStatusInHerd", verifyToken, (req, res) => {
  *      - name: Food
  *      summary: Take all food status in herd by its type
  *      parameters:
- *        - name: species name
+ *        - name: speciesName
  *          in: formData
  *          required: true
  *          type: string
@@ -952,18 +958,18 @@ router.get(
  *      - name: Food
  *      summary: Edit quantity of food used for animals
  *      parameters:
- *        - name: herd name
+ *        - name: herdName
  *          in: formData
  *          required: true
  *          type: string
  *          example: thebestherd
- *        - name: identity number of food used for herd
+ *        - name: identityNumberOfPurchasedFood
  *          in: formData
  *          required: true
  *          type: integer
  *          format: int64
- *          example: 4321
- *        - name: new quantity of food used for herd
+ *          example: 1234
+ *        - name: newQuantityOfFoodUsedForHerd
  *          in: formData
  *          required: true
  *          type: integer
@@ -1092,12 +1098,12 @@ router.put(
  *      - name: Food
  *      summary: Edit date when user used food for herd
  *      parameters:
- *        - name: herd name
+ *        - name: herdName
  *          in: formData
  *          required: true
  *          type: string
  *          example: thebestherd
- *        - name: identity number of food used for herd
+ *        - name: identityNumberOfFoodUsedForHerd
  *          in: formData
  *          required: true
  *          type: integer
@@ -1233,7 +1239,7 @@ router.put(
  *      - name: Food
  *      summary: Delete purchased food
  *      parameters:
- *        - name: identity number of purchased food
+ *        - name: identityNumberOfPurchasedFood
  *          in: formData
  *          required: true
  *          type: integer
@@ -1330,7 +1336,7 @@ router.delete(
  *      - name: Food
  *      summary: Delete food assigned to herd
  *      parameters:
- *        - name: identity number of food used for herd
+ *        - name: identityNumberOfFoodUsedForHerd
  *          in: formData
  *          required: true
  *          type: integer
