@@ -27,17 +27,17 @@ const checkEnteredName = require("../Functions/Others/checkEnteredName");
  *      - name: Herds
  *      summary: Add new herd by user
  *      parameters:
- *        - name: herd name
+ *        - name: herdName
  *          in: formData
  *          required: true
  *          type: string
  *          example: thebestherd
- *        - name: kind of herd
+ *        - name: kindOfAnimalsInHerd
  *          in: formData
  *          required: true
  *          type: string
  *          example: Kura
- *        - name: creation date
+ *        - name: creationDate
  *          in: formData
  *          required: true
  *          type: string
@@ -63,7 +63,7 @@ router.post(
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 40 })
       .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
-    check("herdType")
+    check("kindOfAnimalsInHerd")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
@@ -106,7 +106,7 @@ router.post(
                   req.body.herdName,
                   req.body.creationDate,
                   authData.id,
-                  req.body.herdType
+                  req.body.kindOfAnimalsInHerd
                 );
                 if (addNewHerd) {
                   res
@@ -288,12 +288,12 @@ router.get("/findHerdByAnimalType/:typeOfAnimal", verifyToken, (req, res) => {
  *      - name: Herds
  *      summary: Change name of herd
  *      parameters:
- *        - name: old herd name
+ *        - name: oldHerdName
  *          in: formData
  *          required: true
  *          type: string
  *          example: thebestherd
- *        - name: new herd name
+ *        - name: newHerdName
  *          in: formData
  *          required: true
  *          type: string
@@ -395,7 +395,7 @@ router.put(
  *      - name: Herds
  *      summary: Change type of herd
  *      parameters:
- *        - name: new kind of herd
+ *        - name: newKindsOfAnimalsInHerd
  *          in: formData
  *          required: true
  *          type: string
@@ -411,7 +411,7 @@ router.put(
 router.put(
   "/changeTypeofHerd",
   [
-    check("newTypeOfHerd")
+    check("newKindsOfAnimalsInHerd")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
@@ -436,7 +436,7 @@ router.put(
             if (checkUser !== null) {
               const checkEnteredHerdTypeFromUser = await findKindOfAnimalsByName(
                 KindsOfAnimals,
-                req.body.newTypeOfHerd
+                req.body.newKindsOfAnimalsInHerd
               );
               if (checkEnteredHerdTypeFromUser) {
                 const updateType = await changeTypeOfHerd(
@@ -476,18 +476,18 @@ router.put(
  *      - name: Herds
  *      summary: Delete the herd
  *      parameters:
- *        - name: herd name
+ *        - name: herdName
  *          in: formData
  *          required: true
  *          type: string
  *          example: thebestherd
- *        - name: user password
+ *        - name: userPassword
  *          in: formData
  *          required: true
  *          type: string
  *          format: password
  *          example: userpassword#
- *        - name: confirm password
+ *        - name: confirmPassword
  *          in: formData
  *          required: true
  *          type: string
