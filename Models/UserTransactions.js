@@ -14,6 +14,11 @@ const UserTransactions = sequelize.define(
       allowNull: false,
       field: "idUserTransaction",
     },
+    identityNumber: {
+      type: DataTypes.BIGINT,
+      allowNull: false,
+      field: "identityNumberOfTransaction",
+    },
     date: {
       type: DataTypes.DATEONLY,
       allowNull: false,
