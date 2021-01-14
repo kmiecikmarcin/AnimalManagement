@@ -2002,7 +2002,7 @@ router.put(
  *        200:
  *          description: The new born animal deleted successfully!
  *        400:
- *          description: The animal couldn not be removed!
+ *          description: The animal could not be removed!
  *        403:
  *          description: Authentication failed!
  *        404:
@@ -2133,7 +2133,7 @@ router.delete(
  *        200:
  *          description: The dead animal deleted successfully!
  *        400:
- *          description: The animal couldn not be removed!
+ *          description: The animal could not be removed!
  *        403:
  *          description: Authentication failed!
  *        404:
@@ -2264,7 +2264,7 @@ router.delete(
  *        200:
  *          description: Animal deleted successfully!
  *        400:
- *          description: The animal couldn not be removed!
+ *          description: The animal could not be removed!
  *        403:
  *          description: Authentication failed!
  *        404:
