@@ -15,6 +15,11 @@ const AllProductsFromAnimals = sequelize.define(
       allowNull: false,
       field: "idProduct",
     },
+    identityNumber: {
+      type: DataTypes.BIGINT,
+      allowNull: false,
+      field: "identityNumberOfProduct",
+    },
     quantity: {
       type: DataTypes.FLOAT,
       allowNull: false,
