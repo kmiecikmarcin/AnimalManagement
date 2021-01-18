@@ -13,6 +13,8 @@ const AllProductsFromAnimals = require("../Models/AllProductsFromAnimals");
 const findAllUserProducts = require("../Functions/Products/findAllUserProducts");
 const findAllUserProductsByTypeName = require("../Functions/Products/findAllUserProductsByTypeName");
 const findProductByName = require("../Functions/Products/findProductByName");
+const checkIdentityNumberForFoodAndProducts = require("../Functions/Others/checkIdentityNumberForFoodAndProducts");
+const createNewUserProductFromAnimal = require("../Functions/Products/createNewUserProductFromAnimal");
 
 /**
  * @swagger
@@ -259,6 +261,61 @@ router.post(
     const error = validationResult(req);
     if (!error.isEmpty()) {
       res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkEnteredIdentityNumber = await checkIdentityNumberForFoodAndProducts(
+                AllProductsFromAnimals,
+                req.body.identityNumberOfProduct,
+                authData.id
+              );
+              if (checkEnteredIdentityNumber === null) {
+                const findProductsByType = await findProductByName(
+                  TypesOfProducts,
+                  req.body.nameOfProductType
+                );
+                if (findProductsByType !== null) {
+                  const addNewProduct = await createNewUserProductFromAnimal(
+                    AllProductsFromAnimals,
+                    req.body.identityNumberOfProduct,
+                    req.body.quantityOfProduct,
+                    req.body.dateOfAddedProduct,
+                    findProductsByType.id,
+                    authData.id
+                  );
+                  if (addNewProduct !== null) {
+                    res
+                      .status(201)
+                      .json({ Message: "Pomyślnie utworzono nowy produkt!" });
+                  } else {
+                    res.status(400).json({
+                      Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
+                    });
+                  }
+                } else {
+                  res
+                    .status(404)
+                    .json({ Error: "Wprowadzony typ produktu nie istnieje!" });
+                }
+              } else {
+                res.status(400).json({
+                  Error:
+                    "Wprowadzony numer identyfikacyjny jest już przypisany!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
     }
   }
 );
