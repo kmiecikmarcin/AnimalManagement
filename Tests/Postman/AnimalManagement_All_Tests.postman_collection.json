@@ -2233,6 +2233,97 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get all user products",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/allProducts",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"allProducts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user products by its type name",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const random_number = _.random(0,3);\r",
+									"const type_of_product_name_array = [\"Mięso\", \"Jajka\", \"Futro\", \"Mleko\"];\r",
+									"const type_of_product_name = type_of_product_name_array[random_number];\r",
+									"\r",
+									"pm.collectionVariables.set(\"type_of_product_name\", type_of_product_name);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/byType/:typeName",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"byType",
+								":typeName"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "typeName",
+									"value": "{{type_of_product_name}}"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -4732,6 +4823,10 @@
 		},
 		{
 			"key": "new_email",
+			"value": ""
+		},
+		{
+			"key": "type_of_product_name",
 			"value": ""
 		}
 	]
