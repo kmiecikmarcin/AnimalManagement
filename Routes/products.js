@@ -8,6 +8,10 @@ const Users = require("../Models/Users");
 const findUserById = require("../Functions/Users/findUserById");
 const findAllTypesOfProducts = require("../Functions/Products/findAllTypesOfProducts");
 const TypesOfProducts = require("../Models/TypesOfProducts");
+const AllProductsFromAnimals = require("../Models/AllProductsFromAnimals");
+const findAllUserProducts = require("../Functions/Products/findAllUserProducts");
+const findAllUserProductsByTypeName = require("../Functions/Products/findAllUserProductsByTypeName");
+const findProductByName = require("../Functions/Products/findProductByName");
 
 /**
  * @swagger
@@ -54,7 +58,7 @@ router.get("/allTypes", verifyToken, (req, res) => {
 
 /**
  * @swagger
- * /products/takeAllProducts:
+ * /products/allProducts:
  *    get:
  *      tags:
  *      - name: Products
@@ -67,17 +71,44 @@ router.get("/allTypes", verifyToken, (req, res) => {
  *        404:
  *          description: User doesn't have assigned products! or User doesn't exist!
  */
-router.get("/takeAllProducts", verifyToken, () => {});
+router.get("/allProducts", verifyToken, (req, res) => {
+  jwt.verify(
+    req.token,
+    process.env.S3_SECRETKEY,
+    async (jwtError, authData) => {
+      if (jwtError) {
+        res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+      } else {
+        const checkUser = await findUserById(Users, authData);
+        if (checkUser !== null) {
+          const findProducts = await findAllUserProducts(
+            AllProductsFromAnimals,
+            authData.id
+          );
+          if (findProducts !== null) {
+            res.status(200).json(findProducts);
+          } else {
+            res.status(400).json({
+              Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
+            });
+          }
+        } else {
+          res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+        }
+      }
+    }
+  );
+});
 
 /**
  * @swagger
- * /products/takeProductsByType/{productType}:
+ * /products/byType/{typeName}:
  *    get:
  *      tags:
  *      - name: Products
  *      summary: Take products by its type
  *      parameters:
- *        - name: productType
+ *        - name: typeName
  *          in: formData
  *          required: true
  *          type: string
@@ -90,7 +121,49 @@ router.get("/takeAllProducts", verifyToken, () => {});
  *        404:
  *          description: User doesn't have assigned products with entered type! or User doesn't exist!
  */
-router.get("/takeProductsByType/:productType", verifyToken, () => {});
+router.get("/byType/:typeName", verifyToken, (req, res) => {
+  if (req.params.typeName) {
+    jwt.verify(
+      req.token,
+      process.env.S3_SECRETKEY,
+      async (jwtError, authData) => {
+        if (jwtError) {
+          res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+        } else {
+          const checkUser = await findUserById(Users, authData);
+          if (checkUser !== null) {
+            const findProduct = await findProductByName(
+              TypesOfProducts,
+              req.params.typeName
+            );
+            if (findProduct !== null) {
+              const findProducts = await findAllUserProductsByTypeName(
+                AllProductsFromAnimals,
+                authData.id,
+                findProduct.id
+              );
+              if (findProducts !== null) {
+                res.status(200).json(findProducts);
+              } else {
+                res.status(400).json({
+                  Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
+                });
+              }
+            } else {
+              res
+                .status(404)
+                .json({ Error: "Wybrany typ productu nie istnieje!" });
+            }
+          } else {
+            res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+          }
+        }
+      }
+    );
+  } else {
+    res.status(400).json({ Error: "Nie wprowadzono wymaganych danych!" });
+  }
+});
 
 /**
  * @swagger
