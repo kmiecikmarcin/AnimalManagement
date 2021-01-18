@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 
 const router = express.Router();
 require("dotenv").config();
+const { check, validationResult } = require("express-validator");
 const verifyToken = require("../Functions/Users/verifyJwtToken");
 const Users = require("../Models/Users");
 const findUserById = require("../Functions/Users/findUserById");
@@ -212,7 +213,55 @@ router.get("/byType/:typeName", verifyToken, (req, res) => {
  *        404:
  *          description: User doesn't exist!
  */
-router.post("/fromAnimal", verifyToken, () => {});
+router.post(
+  "/fromAnimal",
+  [
+    check("identityNumberOfProduct")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isInt()
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
+    check("quantityOfProduct")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isFloat()
+      .withMessage("Wprowadzona wartość nie jest liczbą!"),
+    check("currentQuantityOfProduct")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isFloat()
+      .withMessage("Wprowadzona wartość nie jest liczbą!"),
+    check("dateOfAddedProduct")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isDate()
+      .withMessage(
+        "Wprowadzona wartość nie jest datą! Spróbuj według schematu: YYYY-MM-DD."
+      ),
+    check("nameOfProductType")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ max: 64 })
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+  ],
+  verifyToken,
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    }
+  }
+);
 
 /**
  * @swagger
