@@ -2036,11 +2036,22 @@
 								"exec": [
 									"pm.test(\"Response is correct\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.Message).to.eql(\"Zwierzę zostało trwale usunięte ze stada!\");\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
 									"});\r",
 									"pm.test(\"Successful DELETE request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
 									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const bad_identity_number_of_animal = _.random(0,100000);\r",
+									"\r",
+									"pm.environment.set(\"bad_identity_number_of_animal\", bad_identity_number_of_animal);"
 								],
 								"type": "text/javascript"
 							}
@@ -2061,7 +2072,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"identityNumberOfAnimal\": \"{{new_identityNumberOfAnimal}}\",\r\n    \"confirmIdentityNumberOfAnimal\": \"{{new_identityNumberOfAnimal}}\"\r\n}",
+							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"identityNumberOfAnimal\": \"{{bad_identity_number_of_animal}}\",\r\n    \"confirmIdentityNumberOfAnimal\": \"{{bad_identity_number_of_animal}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2459,7 +2470,7 @@
 								"exec": [
 									"pm.test(\"Response is correct\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.Message).to.eql(\"Pomyslnie przypisano produkt do zwierzęcia!\");\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie przypisano produkt do zwierzęcia!\");\r",
 									"});\r",
 									"pm.test(\"Successful POST request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
