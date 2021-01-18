@@ -167,7 +167,7 @@ router.get("/byType/:typeName", verifyToken, (req, res) => {
 
 /**
  * @swagger
- * /products/addNewProductFromAnimal:
+ * /products/fromAnimal:
  *    post:
  *      tags:
  *      - name: Products
@@ -212,11 +212,11 @@ router.get("/byType/:typeName", verifyToken, (req, res) => {
  *        404:
  *          description: User doesn't exist!
  */
-router.post("/addNewProductFromAnimal", verifyToken, () => {});
+router.post("/fromAnimal", verifyToken, () => {});
 
 /**
  * @swagger
- * /products/editTypeOfProduct:
+ * /products/type:
  *    put:
  *      tags:
  *      - name: Products
@@ -248,11 +248,11 @@ router.post("/addNewProductFromAnimal", verifyToken, () => {});
  *        404:
  *          description: User doesn't exist!
  */
-router.put("/editTypeOfProduct", verifyToken, () => {});
+router.put("/type", verifyToken, () => {});
 
 /**
  * @swagger
- * /products/editQuantityOfProduct:
+ * /products/quantity:
  *    put:
  *      tags:
  *      - name: Products
@@ -280,11 +280,11 @@ router.put("/editTypeOfProduct", verifyToken, () => {});
  *        404:
  *          description: User doesn't exist!
  */
-router.put("/editQuantityOfProduct", verifyToken, () => {});
+router.put("/quantity", verifyToken, () => {});
 
 /**
  * @swagger
- * /products/editDateOfAddedProduct:
+ * /products/dateOfAdded:
  *    put:
  *      tags:
  *      - name: Products
@@ -312,11 +312,11 @@ router.put("/editQuantityOfProduct", verifyToken, () => {});
  *        404:
  *          description: User doesn't exist!
  */
-router.put("/editDateOfAddedProduct", verifyToken, () => {});
+router.put("/dateOfAdded", verifyToken, () => {});
 
 /**
  * @swagger
- * /products/assignProductToAnimal:
+ * /products/assignToAnimal:
  *    post:
  *      tags:
  *      - name: Products
@@ -350,11 +350,11 @@ router.put("/editDateOfAddedProduct", verifyToken, () => {});
  *        404:
  *          description: User doesn't exist!
  */
-router.post("/assignProductToAnimal", verifyToken, () => {});
+router.post("/assignToAnimal", verifyToken, () => {});
 
 /**
  * @swagger
- * /products/takeAllAssignedProductToAnimal/{identityNumberOfAnimal}:
+ * /products/allAssignedToAnimal/{identityNumberOfAnimal}:
  *    get:
  *      tags:
  *      - name: Products
@@ -375,14 +375,14 @@ router.post("/assignProductToAnimal", verifyToken, () => {});
  *          description: User doesn't exist!
  */
 router.get(
-  "/takeAllAssignedProductToAnimal/:identityNumberOfAnimal",
+  "/allAssignedToAnimal/:identityNumberOfAnimal",
   verifyToken,
   () => {}
 );
 
 /**
  * @swagger
- * /products/addNewTransaction:
+ * /products/transaction:
  *    post:
  *      tags:
  *      - name: Products
@@ -404,11 +404,11 @@ router.get(
  *        404:
  *          description: User doesn't exist!
  */
-router.post("/addNewTransaction", verifyToken, () => {});
+router.post("/transaction", verifyToken, () => {});
 
 /**
  * @swagger
- * /products/takeAllTransactions:
+ * /products/allTransactions:
  *    get:
  *      tags:
  *      - name: Products
@@ -421,11 +421,11 @@ router.post("/addNewTransaction", verifyToken, () => {});
  *        404:
  *          description: User doesn't exist!
  */
-router.get("/takeAllTransactions", verifyToken, () => {});
+router.get("/allTransactions", verifyToken, () => {});
 
 /**
  * @swagger
- * /products/assignProductToTransaction:
+ * /products/assignToTransaction:
  *    post:
  *      tags:
  *      - name: Products
@@ -465,11 +465,11 @@ router.get("/takeAllTransactions", verifyToken, () => {});
  *        404:
  *          description: User doesn't exist!
  */
-router.post("/assignProductToTransaction", verifyToken, () => {});
+router.post("/assignToTransaction", verifyToken, () => {});
 
 /**
  * @swagger
- * /products/takeProductFromTransaction/{identityNumberOfTransaction}:
+ * /products/FromTransaction/{identityNumberOfTransaction}:
  *    get:
  *      tags:
  *      - name: Products
@@ -490,14 +490,14 @@ router.post("/assignProductToTransaction", verifyToken, () => {});
  *          description: User doesn't exist!
  */
 router.get(
-  "/takeProductFromTransaction/:identityNumberOfTransaction",
+  "/FromTransaction/:identityNumberOfTransaction",
   verifyToken,
   () => {}
 );
 
 /**
  * @swagger
- * /products/editQuantityOfProductInTransaction:
+ * /products/quantityInTransaction:
  *    put:
  *      tags:
  *      - name: Products
@@ -531,11 +531,11 @@ router.get(
  *        404:
  *          description: User doesn't exist!
  */
-router.put("/editQuantityOfProductInTransaction", verifyToken, () => {});
+router.put("/quantityInTransaction", verifyToken, () => {});
 
 /**
  * @swagger
- * /products/editPriceForProductInTransaction:
+ * /products/priceInTransaction:
  *    put:
  *      tags:
  *      - name: Products
@@ -569,11 +569,11 @@ router.put("/editQuantityOfProductInTransaction", verifyToken, () => {});
  *        404:
  *          description: User doesn't exist!
  */
-router.put("/editPriceForProductInTransaction", verifyToken, () => {});
+router.put("/priceInTransaction", verifyToken, () => {});
 
 /**
  * @swagger
- * /products/deleteProductFromAnimal:
+ * /products/fromAnimal:
  *    delete:
  *      tags:
  *      - name: Products
@@ -595,11 +595,11 @@ router.put("/editPriceForProductInTransaction", verifyToken, () => {});
  *        404:
  *          description: Errors about empty data.
  */
-router.delete("/deleteProductFromAnimal", verifyToken, () => {});
+router.delete("/fromAnimal", verifyToken, () => {});
 
 /**
  * @swagger
- * /products/deleteAssignedProductToAnimal:
+ * /products/assignedToAnimal:
  *    delete:
  *      tags:
  *      - name: Products
@@ -627,11 +627,11 @@ router.delete("/deleteProductFromAnimal", verifyToken, () => {});
  *        404:
  *          description: Errors about empty data.
  */
-router.delete("/deleteAssignedProductToAnimal", verifyToken, () => {});
+router.delete("/assignedToAnimal", verifyToken, () => {});
 
 /**
  * @swagger
- * /products/deleteTransaction:
+ * /products/transaction:
  *    delete:
  *      tags:
  *      - name: Products
@@ -653,11 +653,11 @@ router.delete("/deleteAssignedProductToAnimal", verifyToken, () => {});
  *        404:
  *          description: Errors about empty data.
  */
-router.delete("/deleteTransaction", verifyToken, () => {});
+router.delete("/transaction", verifyToken, () => {});
 
 /**
  * @swagger
- * /products/deleteAssignedProductToTransaction:
+ * /products/assignedToTransaction:
  *    delete:
  *      tags:
  *      - name: Products
@@ -685,6 +685,6 @@ router.delete("/deleteTransaction", verifyToken, () => {});
  *        404:
  *          description: Errors about empty data.
  */
-router.delete("/deleteAssignedProductToTransaction", verifyToken, () => {});
+router.delete("/assignedToTransaction", verifyToken, () => {});
 
 module.exports = router;
