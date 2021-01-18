@@ -2205,6 +2205,23 @@
 			"item": [
 				{
 					"name": "Get all types ",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -2236,6 +2253,23 @@
 				},
 				{
 					"name": "Get all user products",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -2280,6 +2314,21 @@
 								],
 								"type": "text/javascript"
 							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
 						}
 					],
 					"request": {
@@ -2320,6 +2369,82 @@
 									"key": "typeName",
 									"value": "{{type_of_product_name}}"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add new product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie utworzono nowy produkt!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const random_number = _.random(0,10000);\r",
+									"const identity_number_of_product = random_number;\r",
+									"\r",
+									"const quantity_of_product = 20;\r",
+									"\r",
+									"const take_date = new Date();\r",
+									"const date_of_added_products = take_date.getFullYear() + \"-\" + (\"0\" + (take_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_date.getDate()).slice(-2);\r",
+									"\r",
+									"pm.collectionVariables.set(\"identity_number_of_product\", identity_number_of_product);\r",
+									"pm.collectionVariables.set(\"quantity_of_product\", quantity_of_product);\r",
+									"pm.collectionVariables.set(\"date_of_added_products\", date_of_added_products);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfProduct\": \"{{identity_number_of_product}}\",\r\n    \"quantityOfProduct\": \"{{quantity_of_product}}\",\r\n    \"currentQuantityOfProduct\": \"{{quantity_of_product}}\",\r\n    \"dateOfAddedProduct\": \"{{date_of_added_products}}\",\r\n    \"nameOfProductType\": \"{{type_of_product_name}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/fromAnimal",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"fromAnimal"
 							]
 						}
 					},
@@ -4827,6 +4952,18 @@
 		},
 		{
 			"key": "type_of_product_name",
+			"value": ""
+		},
+		{
+			"key": "identity_number_of_product",
+			"value": ""
+		},
+		{
+			"key": "quantity_of_product",
+			"value": ""
+		},
+		{
+			"key": "date_of_added_products",
 			"value": ""
 		}
 	]
