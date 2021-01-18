@@ -10,11 +10,17 @@ const findUserById = require("../Functions/Users/findUserById");
 const findAllTypesOfProducts = require("../Functions/Products/findAllTypesOfProducts");
 const TypesOfProducts = require("../Models/TypesOfProducts");
 const AllProductsFromAnimals = require("../Models/AllProductsFromAnimals");
+const Herds = require("../Models/Herds");
+const AnimalsInHerd = require("../Models/AnimalsInHerd");
+const ProductFromAnAnimal = require("../Models/ProductFromAnAnimal");
 const findAllUserProducts = require("../Functions/Products/findAllUserProducts");
 const findAllUserProductsByTypeName = require("../Functions/Products/findAllUserProductsByTypeName");
 const findProductByName = require("../Functions/Products/findProductByName");
 const checkIdentityNumberForFoodAndProducts = require("../Functions/Others/checkIdentityNumberForFoodAndProducts");
 const createNewUserProductFromAnimal = require("../Functions/Products/createNewUserProductFromAnimal");
+const findHerdByName = require("../Functions/Herds/findHerdByName");
+const checkEnteredIdentityNumberForAnimals = require("../Functions/Others/checkEnteredIdentityNumberForAnimals");
+const assignUserProductToAnimal = require("../Functions/Products/assignUserProductToAnimal");
 
 /**
  * @swagger
@@ -271,12 +277,12 @@ router.post(
           } else {
             const checkUser = await findUserById(Users, authData);
             if (checkUser !== null) {
-              const checkEnteredIdentityNumber = await checkIdentityNumberForFoodAndProducts(
+              const checkIdentityNumber = await checkIdentityNumberForFoodAndProducts(
                 AllProductsFromAnimals,
                 req.body.identityNumberOfProduct,
                 authData.id
               );
-              if (checkEnteredIdentityNumber === null) {
+              if (checkIdentityNumber === null) {
                 const findProductsByType = await findProductByName(
                   TypesOfProducts,
                   req.body.nameOfProductType
@@ -428,6 +434,11 @@ router.put("/dateOfAdded", verifyToken, () => {});
  *      - name: Products
  *      summary: Assign product to animal
  *      parameters:
+ *        - name: herdName
+ *          in: formData
+ *          required: true
+ *          type: string
+ *          example: thebestherd
  *        - name: identityNumberOfAnimal
  *          in: formData
  *          required: true
@@ -456,7 +467,116 @@ router.put("/dateOfAdded", verifyToken, () => {});
  *        404:
  *          description: User doesn't exist!
  */
-router.post("/assignToAnimal", verifyToken, () => {});
+router.post(
+  "/assignToAnimal",
+  [
+    check("herdName")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 3, max: 40 })
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+    check("identityNumberOfAnimal")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isInt()
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
+    check("identityNumberOfProduct")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isInt()
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
+    check("dateWhenProductWasAdded")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isDate()
+      .withMessage(
+        "Wprowadzona wartość nie jest datą! Spróbuj według schematu: YYYY-MM-DD."
+      ),
+  ],
+  verifyToken,
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkHerd = await findHerdByName(
+                Herds,
+                req.body.herdName,
+                authData.id
+              );
+              if (checkHerd !== null) {
+                const checkIdentityNumberOfAnimal = await checkEnteredIdentityNumberForAnimals(
+                  AnimalsInHerd,
+                  req.body.identityNumberOfAnimal,
+                  checkHerd.id
+                );
+                if (checkIdentityNumberOfAnimal !== null) {
+                  const checkIdentityNumberOfProduct = await checkIdentityNumberForFoodAndProducts(
+                    AllProductsFromAnimals,
+                    req.body.identityNumberOfProduct,
+                    authData.id
+                  );
+                  if (checkIdentityNumberOfProduct !== null) {
+                    const assignToAnimal = await assignUserProductToAnimal(
+                      ProductFromAnAnimal,
+                      checkIdentityNumberOfAnimal.id,
+                      checkIdentityNumberOfProduct.id,
+                      req.body.dateWhenProductWasAdded
+                    );
+                    if (assignToAnimal !== null) {
+                      res.status(201).json({
+                        Message: "Pomyślnie przypisano produkt do zwierzęcia!",
+                      });
+                    } else {
+                      res.status(400).json({
+                        Error:
+                          "Nie udało się przypisać produktu do zwierzęcia! Sprawdź dane!",
+                      });
+                    }
+                  } else {
+                    res.status(404).json({
+                      Error:
+                        "Wprowadzony numer identyfikacyjny produktu nie istnieje!",
+                    });
+                  }
+                } else {
+                  res.status(404).json({
+                    Error:
+                      "Wprowadzony numer identyfikacyjny zwierzęcia nie istnieje!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error:
+                    "Użytkownik nie posiada hodowli o wprowadzonej nazwie!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
+);
 
 /**
  * @swagger
