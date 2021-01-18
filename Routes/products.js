@@ -1,12 +1,17 @@
 const express = require("express");
+const jwt = require("jsonwebtoken");
 
 const router = express.Router();
 require("dotenv").config();
 const verifyToken = require("../Functions/Users/verifyJwtToken");
+const Users = require("../Models/Users");
+const findUserById = require("../Functions/Users/findUserById");
+const findAllTypesOfProducts = require("../Functions/Products/findAllTypesOfProducts");
+const TypesOfProducts = require("../Models/TypesOfProducts");
 
 /**
  * @swagger
- * /products/takeAllTypesOfProducts:
+ * /products/allTypes:
  *    get:
  *      tags:
  *      - name: Products
@@ -19,7 +24,33 @@ const verifyToken = require("../Functions/Users/verifyJwtToken");
  *        404:
  *          description: System has no types of products! or User doesn't exist!
  */
-router.get("/takeAllTypesOfProducts", verifyToken, () => {});
+router.get("/allTypes", verifyToken, (req, res) => {
+  jwt.verify(
+    req.token,
+    process.env.S3_SECRETKEY,
+    async (jwtError, authData) => {
+      if (jwtError) {
+        res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+      } else {
+        const checkUser = await findUserById(Users, authData);
+        if (checkUser !== null) {
+          const findTypesOfProducts = await findAllTypesOfProducts(
+            TypesOfProducts
+          );
+          if (findTypesOfProducts !== null) {
+            res.status(200).json(findTypesOfProducts);
+          } else {
+            res.status(404).json({
+              Error: "Dane dotyczące typów productu nie istnieją w systemie!",
+            });
+          }
+        } else {
+          res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+        }
+      }
+    }
+  );
+});
 
 /**
  * @swagger
