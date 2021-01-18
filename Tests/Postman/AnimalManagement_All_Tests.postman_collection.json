@@ -2201,6 +2201,42 @@
 			]
 		},
 		{
+			"name": "Products - scenario 1",
+			"item": [
+				{
+					"name": "Get all types ",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/allTypes",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"allTypes"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Food - scenario 1",
 			"item": [
 				{
