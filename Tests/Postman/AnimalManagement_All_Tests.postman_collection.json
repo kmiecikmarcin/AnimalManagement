@@ -2577,6 +2577,74 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "New user transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie utworzono nową transakcję!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const identity_number_of_transaction = _.random(0,10000);\r",
+									"\r",
+									"pm.collectionVariables.set(\"identity_number_of_transaction\",identity_number_of_transaction);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfTransaction\": \"{{identity_number_of_transaction}}\",\r\n    \"dateOfSoldProduct\": \"{{date}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/transaction",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"transaction"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -5092,6 +5160,10 @@
 		},
 		{
 			"key": "date_of_added_products",
+			"value": ""
+		},
+		{
+			"key": "identity_number_of_transaction",
 			"value": ""
 		}
 	]
