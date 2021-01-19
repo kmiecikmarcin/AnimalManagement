@@ -6,6 +6,7 @@ async function findAllUserFoodsStatusByItsSpecies(
   speciesId
 ) {
   const findFood = await PurchasedFoodForHerd.findAll({
+    raw: true,
     where: { SpeciesOfFoodId: speciesId, UserId: userId },
     attributes: ["identityNumber", "quantity", "currentQuantity", "date"],
     include: [{ model: SpeciesOfFoods, attributes: ["name"] }],

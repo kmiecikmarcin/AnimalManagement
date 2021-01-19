@@ -8,6 +8,7 @@ async function findAllUsedFoodByUserByFoodType(
   foodTypeId
 ) {
   const findFood = await PurchasedFoodForHerd.findAll({
+    raw: true,
     attributes: {
       exclude: [
         "id",
