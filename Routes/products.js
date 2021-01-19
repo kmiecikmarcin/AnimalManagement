@@ -13,6 +13,7 @@ const AllProductsFromAnimals = require("../Models/AllProductsFromAnimals");
 const Herds = require("../Models/Herds");
 const AnimalsInHerd = require("../Models/AnimalsInHerd");
 const ProductFromAnAnimal = require("../Models/ProductFromAnAnimal");
+const UserTransactions = require("../Models/UserTransactions");
 const findAllUserProducts = require("../Functions/Products/findAllUserProducts");
 const findAllUserProductsByTypeName = require("../Functions/Products/findAllUserProductsByTypeName");
 const findProductByName = require("../Functions/Products/findProductByName");
@@ -22,6 +23,7 @@ const findHerdByName = require("../Functions/Herds/findHerdByName");
 const checkEnteredIdentityNumberForAnimals = require("../Functions/Others/checkEnteredIdentityNumberForAnimals");
 const assignUserProductToAnimal = require("../Functions/Products/assignUserProductToAnimal");
 const findAllProductsAssignedToAnimal = require("../Functions/Products/findAllProductsAssignedToAnimal");
+const createNewUserTransaction = require("../Functions/Products/createNewUserTransaction");
 
 /**
  * @swagger
@@ -676,6 +678,12 @@ router.get(
  *      - name: Products
  *      summary: Add new transaction
  *      parameters:
+ *        - name: identityNumberOfTransaction
+ *          in: formData
+ *          required: true
+ *          type: integer
+ *          format: int64
+ *          example: 1234
  *        - name: dateOfSoldProduct
  *          in: formData
  *          required: true
@@ -692,7 +700,77 @@ router.get(
  *        404:
  *          description: User doesn't exist!
  */
-router.post("/transaction", verifyToken, () => {});
+router.post(
+  "/transaction",
+  [
+    check("identityNumberOfTransaction")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isInt()
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
+    check("dateOfSoldProduct")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isDate()
+      .withMessage(
+        "Wprowadzona wartość nie jest datą! Spróbuj według schematu: YYYY-MM-DD."
+      ),
+  ],
+  verifyToken,
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkIdentityNumberOfTransaction = await checkIdentityNumberForFoodAndProducts(
+                UserTransactions,
+                req.body.identityNumberOfTransaction,
+                authData.id
+              );
+              if (checkIdentityNumberOfTransaction === null) {
+                const addNewTransaction = await createNewUserTransaction(
+                  UserTransactions,
+                  req.body.identityNumberOfTransaction,
+                  req.body.dateOfSoldProduct,
+                  authData.id
+                );
+                if (addNewTransaction !== null) {
+                  res
+                    .status(201)
+                    .json({ Message: "Pomyślnie utworzono nową transakcję!" });
+                } else {
+                  res.status(400).json({
+                    Error: "Coś poszło nmie tak! Sprawdź wprowadzone dane!",
+                  });
+                }
+              } else {
+                res.status(400).json({
+                  Error:
+                    "Wprowadzony numer identyfikacyjny jest już przypisany do innej transakcji!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
+);
 
 /**
  * @swagger
