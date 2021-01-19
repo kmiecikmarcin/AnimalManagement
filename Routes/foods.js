@@ -35,7 +35,7 @@ const deleteFoodUsedForHerd = require("../Functions/Foods/deleteFoodUsedForHerd"
 
 /**
  * @swagger
- * /food/takeAllSpeciesOfFood:
+ * /foods/allSpecies:
  *    get:
  *      tags:
  *      - name: Food
@@ -48,7 +48,7 @@ const deleteFoodUsedForHerd = require("../Functions/Foods/deleteFoodUsedForHerd"
  *        404:
  *          description: System doesn't have assigned species of food! or User doesn't exist!
  */
-router.get("/takeAllSpeciesOfFood", verifyToken, (req, res) => {
+router.get("/allSpecies", verifyToken, (req, res) => {
   jwt.verify(
     req.token,
     process.env.S3_SECRETKEY,
@@ -76,7 +76,7 @@ router.get("/takeAllSpeciesOfFood", verifyToken, (req, res) => {
 
 /**
  * @swagger
- * /food/addNewFood:
+ * /foods/food:
  *    post:
  *      tags:
  *      - name: Food
@@ -116,7 +116,7 @@ router.get("/takeAllSpeciesOfFood", verifyToken, (req, res) => {
  *          description: User or species of food doesn't exist!
  */
 router.post(
-  "/addNewFood",
+  "/food",
   [
     check("identityNumberOfPurchasedFood")
       .exists()
@@ -216,7 +216,7 @@ router.post(
 
 /**
  * @swagger
- * /food/takeFoodStatus:
+ * /foods/foodStatus:
  *    get:
  *      tags:
  *      - name: Food
@@ -229,7 +229,7 @@ router.post(
  *        404:
  *          description: User doesn't have food assigned to his account! or User doesn't exist!
  */
-router.get("/takeFoodStatus", verifyToken, (req, res) => {
+router.get("/foodStatus", verifyToken, (req, res) => {
   jwt.verify(
     req.token,
     process.env.S3_SECRETKEY,
@@ -260,7 +260,7 @@ router.get("/takeFoodStatus", verifyToken, (req, res) => {
 
 /**
  * @swagger
- * /food/takeFoodStatusByItsSpecies/{speciesName}:
+ * /foods/foodStatus/{speciesName}:
  *    get:
  *      tags:
  *      - name: Food
@@ -279,59 +279,54 @@ router.get("/takeFoodStatus", verifyToken, (req, res) => {
  *        404:
  *          description: User doesn't have food assigned to his account! or User doesn't exist!
  */
-router.get(
-  "/takeFoodStatusByItsSpecies/:speciesName",
-  verifyToken,
-  (req, res) => {
-    console.log(req.params.speciesName);
-    if (req.params.speciesName) {
-      jwt.verify(
-        req.token,
-        process.env.S3_SECRETKEY,
-        async (jwtError, authData) => {
-          if (jwtError) {
-            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
-          } else {
-            const checkUser = await findUserById(Users, authData);
-            if (checkUser !== null) {
-              const findSpecies = await findSpeciesOfFoods(
-                SpeciesOfFoods,
-                req.params.speciesName
+router.get("/foodStatus/:speciesName", verifyToken, (req, res) => {
+  console.log(req.params.speciesName);
+  if (req.params.speciesName) {
+    jwt.verify(
+      req.token,
+      process.env.S3_SECRETKEY,
+      async (jwtError, authData) => {
+        if (jwtError) {
+          res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+        } else {
+          const checkUser = await findUserById(Users, authData);
+          if (checkUser !== null) {
+            const findSpecies = await findSpeciesOfFoods(
+              SpeciesOfFoods,
+              req.params.speciesName
+            );
+            if (findSpecies !== null) {
+              const findFoodsStatusBySpecies = await findAllUserFoodsStatusByItsSpecies(
+                PurchasedFoodForHerd,
+                authData.id,
+                findSpecies.id
               );
-              if (findSpecies !== null) {
-                const findFoodsStatusBySpecies = await findAllUserFoodsStatusByItsSpecies(
-                  PurchasedFoodForHerd,
-                  authData.id,
-                  findSpecies.id
-                );
-                if (findFoodsStatusBySpecies !== null) {
-                  res.status(200).json(findFoodsStatusBySpecies);
-                } else {
-                  res.status(404).json({
-                    Error:
-                      "Użytkownik nie posiada pożywienia wybranego gatunku!",
-                  });
-                }
+              if (findFoodsStatusBySpecies !== null) {
+                res.status(200).json(findFoodsStatusBySpecies);
               } else {
                 res.status(404).json({
-                  Error: "Wprowadzony gatunek pożywienia nie istnieje!",
+                  Error: "Użytkownik nie posiada pożywienia wybranego gatunku!",
                 });
               }
             } else {
-              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+              res.status(404).json({
+                Error: "Wprowadzony gatunek pożywienia nie istnieje!",
+              });
             }
+          } else {
+            res.status(404).json({ Error: "Użytkownik nie istnieje!" });
           }
         }
-      );
-    } else {
-      res.status(400).json({ Error: "Nie wprowadzono danych!" });
-    }
+      }
+    );
+  } else {
+    res.status(400).json({ Error: "Nie wprowadzono danych!" });
   }
-);
+});
 
 /**
  * @swagger
- * /food/editSpeciesOfFood:
+ * /foods/species:
  *    put:
  *      tags:
  *      - name: Food
@@ -359,7 +354,7 @@ router.get(
  *          description: Errors about empty data.
  */
 router.put(
-  "/editSpeciesOfFood",
+  "/species",
   [
     check("identityNumberOfPurchasedFood")
       .exists()
@@ -429,7 +424,7 @@ router.put(
 
 /**
  * @swagger
- * /food/editQuantityOfFood:
+ * /foods/quantity:
  *    put:
  *      tags:
  *      - name: Food
@@ -458,7 +453,7 @@ router.put(
  *          description: Errors about empty data.
  */
 router.put(
-  "/editQuantityOfFood",
+  "/quantity",
   [
     check("identityNumberOfPurchasedFood")
       .exists()
@@ -532,7 +527,7 @@ router.put(
 
 /**
  * @swagger
- * /food/editDateOfPurchasedFood:
+ * /foods/dateOfPurchased:
  *    put:
  *      tags:
  *      - name: Food
@@ -567,7 +562,7 @@ router.put(
  *          description: Errors about empty data.
  */
 router.put(
-  "/editDateOfPurchasedFood",
+  "/dateOfPurchased",
   [
     check("identityNumberOfPurchasedFood")
       .exists()
@@ -650,7 +645,7 @@ router.put(
 
 /**
  * @swagger
- * /food/assignFoodToHerd:
+ * /foods/assignToHerd:
  *    post:
  *      tags:
  *      - name: Food
@@ -695,7 +690,7 @@ router.put(
  *          description: User or herd doesn't exist!
  */
 router.post(
-  "/assignFoodToHerd",
+  "/assignToHerd",
   [
     check("herdName")
       .exists()
@@ -831,7 +826,7 @@ router.post(
 
 /**
  * @swagger
- * /food/takeFoodStatusInHerd:
+ * /foods/statusInHerd:
  *    get:
  *      tags:
  *      - name: Food
@@ -844,7 +839,7 @@ router.post(
  *        404:
  *          description: User doesn't have food assigned to his herd! or User doesn't exist!
  */
-router.get("/takeFoodStatusInHerd", verifyToken, (req, res) => {
+router.get("/statusInHerd", verifyToken, (req, res) => {
   jwt.verify(
     req.token,
     process.env.S3_SECRETKEY,
@@ -880,7 +875,7 @@ router.get("/takeFoodStatusInHerd", verifyToken, (req, res) => {
 
 /**
  * @swagger
- * /food/takeFoodStatusInHerdByItsSpecies/{speciesName}:
+ * /foods/statusInHerd/{speciesName}:
  *    get:
  *      tags:
  *      - name: Food
@@ -899,58 +894,53 @@ router.get("/takeFoodStatusInHerd", verifyToken, (req, res) => {
  *        404:
  *          description: User doesn't have food assigned to his herd! or User doesn't exist!
  */
-router.get(
-  "/takeFoodStatusInHerdByItsSpecies/:speciesName",
-  verifyToken,
-  (req, res) => {
-    if (req.params.speciesName) {
-      jwt.verify(
-        req.token,
-        process.env.S3_SECRETKEY,
-        async (jwtError, authData) => {
-          if (jwtError) {
-            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
-          } else {
-            const checkUser = await findUserById(Users, authData);
-            if (checkUser !== null) {
-              const checkFoodType = await findSpeciesOfFoods(
-                SpeciesOfFoods,
-                req.params.speciesName
+router.get("/statusInHerd/:speciesName", verifyToken, (req, res) => {
+  if (req.params.speciesName) {
+    jwt.verify(
+      req.token,
+      process.env.S3_SECRETKEY,
+      async (jwtError, authData) => {
+        if (jwtError) {
+          res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+        } else {
+          const checkUser = await findUserById(Users, authData);
+          if (checkUser !== null) {
+            const checkFoodType = await findSpeciesOfFoods(
+              SpeciesOfFoods,
+              req.params.speciesName
+            );
+            if (checkFoodType !== null) {
+              const findFoodByType = await findAllUsedFoodByUserByFoodType(
+                PurchasedFoodForHerd,
+                authData.id,
+                checkFoodType.id
               );
-              if (checkFoodType !== null) {
-                const findFoodByType = await findAllUsedFoodByUserByFoodType(
-                  PurchasedFoodForHerd,
-                  authData.id,
-                  checkFoodType.id
-                );
-                if (findFoodByType !== null) {
-                  res.status(200).json(findFoodByType);
-                } else {
-                  res.status(404).json({
-                    Error: "Użytkownik nie posiada żadnego pożywienia!",
-                  });
-                }
+              if (findFoodByType !== null) {
+                res.status(200).json(findFoodByType);
               } else {
                 res.status(404).json({
-                  Error:
-                    "Wprowadzony rodzaj pożywienia nie istnieje w systemie!",
+                  Error: "Użytkownik nie posiada żadnego pożywienia!",
                 });
               }
             } else {
-              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+              res.status(404).json({
+                Error: "Wprowadzony rodzaj pożywienia nie istnieje w systemie!",
+              });
             }
+          } else {
+            res.status(404).json({ Error: "Użytkownik nie istnieje!" });
           }
         }
-      );
-    } else {
-      res.status(400).json({ Error: "Nie wprowadzono danych!" });
-    }
+      }
+    );
+  } else {
+    res.status(400).json({ Error: "Nie wprowadzono danych!" });
   }
-);
+});
 
 /**
  * @swagger
- * /food/editQuantityOfFoodUsedForAnimals:
+ * /foods/quantityUsedForAnimals:
  *    put:
  *      tags:
  *      - name: Food
@@ -984,7 +974,7 @@ router.get(
  *          description: Errors about empty data.
  */
 router.put(
-  "/editQuantityOfFoodUsedForAnimals",
+  "/quantityUsedForAnimals",
   [
     check("herdName")
       .exists()
@@ -1090,7 +1080,7 @@ router.put(
 
 /**
  * @swagger
- * /food/editDateWhenUserUsedFoodForHerd:
+ * /foods/dateWhenUsedForAnimals:
  *    put:
  *      tags:
  *      - name: Food
@@ -1130,7 +1120,7 @@ router.put(
  *          description: Errors about empty data.
  */
 router.put(
-  "/editDateWhenUserUsedFoodForHerd",
+  "/dateWhenUsedForAnimals",
   [
     check("herdName")
       .exists()
@@ -1231,7 +1221,7 @@ router.put(
 
 /**
  * @swagger
- * /food/deletePurchasedFood:
+ * /foods/purchased:
  *    delete:
  *      tags:
  *      - name: Food
@@ -1254,7 +1244,7 @@ router.put(
  *          description: Errors about empty data.
  */
 router.delete(
-  "/deletePurchasedFood",
+  "/purchased",
   [
     check("identityNumberOfPurchasedFood")
       .exists()
@@ -1328,7 +1318,7 @@ router.delete(
 
 /**
  * @swagger
- * /food/deleteFoodUsedForHerd:
+ * /foods/usedForHerd:
  *    delete:
  *      tags:
  *      - name: Food
@@ -1351,7 +1341,7 @@ router.delete(
  *          description: Errors about empty data.
  */
 router.delete(
-  "/deleteFoodUsedForHerd",
+  "/usedForHerd",
   [
     check("identityNumberOfFoodUsedForHerd")
       .exists()
