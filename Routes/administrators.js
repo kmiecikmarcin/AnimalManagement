@@ -372,7 +372,7 @@ router.post(
  *          description: User doesn't exists!, System has no this kind of animal!
  */
 router.delete(
-  "/deleteKindOfAnimal",
+  "/animals/kind",
   [
     check("kindOfAnimal")
       .exists()
