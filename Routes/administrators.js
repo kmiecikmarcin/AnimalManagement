@@ -27,7 +27,7 @@ const changeUserPermissions = require("../Functions/Administrators/changeUserPer
 
 /**
  * @swagger
- * /administrators/takeAllTypesOfAnimals:
+ * /administrators/animals/allTypes:
  *    get:
  *      tags:
  *      - name: Administrators
@@ -42,7 +42,7 @@ const changeUserPermissions = require("../Functions/Administrators/changeUserPer
  *        404:
  *          description: System has no types of animals! or User doesn't exists!
  */
-router.get("/takeAllTypesOfAnimals", verifyToken, (req, res) => {
+router.get("/animals/allTypes", verifyToken, (req, res) => {
   jwt.verify(
     req.token,
     process.env.S3_SECRETKEY,
@@ -74,7 +74,7 @@ router.get("/takeAllTypesOfAnimals", verifyToken, (req, res) => {
 
 /**
  * @swagger
- * /administrators/addNewTypeOfAnimal:
+ * /administrators/animals/type:
  *    post:
  *      tags:
  *      - name: Administrators
@@ -96,7 +96,7 @@ router.get("/takeAllTypesOfAnimals", verifyToken, (req, res) => {
  *          description: User doesn't exists!
  */
 router.post(
-  "/addNewTypeOfAnimal",
+  "/animals/type",
   [
     check("newTypeOfAnimal")
       .exists()
@@ -158,7 +158,7 @@ router.post(
 
 /**
  * @swagger
- * /administrators/deleteTypeOfAnimal:
+ * /administrators/animals/type:
  *    delete:
  *      tags:
  *      - name: Administrators
@@ -180,7 +180,7 @@ router.post(
  *          description: System has no this type of animal! or User doesn't exists!
  */
 router.delete(
-  "/deleteTypeOfAnimal",
+  "/animals/type",
   [
     check("typeOfAnimal")
       .exists()
@@ -243,7 +243,7 @@ router.delete(
 
 /**
  * @swagger
- * /administrators/addNewKindOfAnimal:
+ * /administrators/animals/kind:
  *    post:
  *      tags:
  *      - name: Administrators
@@ -270,7 +270,7 @@ router.delete(
  *          description: User doesn't exists! System has no entered type of animal!
  */
 router.post(
-  "/addNewKindOfAnimal",
+  "/animals/kind",
   [
     check("typeOfAnimal")
       .exists()
@@ -350,7 +350,7 @@ router.post(
 
 /**
  * @swagger
- * /administrators/deleteKindOfAnimal:
+ * /administrators/animals/kind:
  *    delete:
  *      tags:
  *      - name: Administrators
@@ -435,7 +435,7 @@ router.delete(
 
 /**
  * @swagger
- * /administrators/takeAllTypesOfFoods:
+ * /administrators/food/allTypes:
  *    get:
  *      tags:
  *      - name: Administrators
@@ -450,7 +450,7 @@ router.delete(
  *        404:
  *          description: System has no types of foods! or User doesn't exists!
  */
-router.get("/takeAllTypesOfFoods", verifyToken, (req, res) => {
+router.get("/food/allTypes", verifyToken, (req, res) => {
   jwt.verify(
     req.token,
     process.env.S3_SECRETKEY,
@@ -482,7 +482,7 @@ router.get("/takeAllTypesOfFoods", verifyToken, (req, res) => {
 
 /**
  * @swagger
- * /administrators/addNewTypeOfFood:
+ * /administrators/food/type:
  *    post:
  *      tags:
  *      - name: Administrators
@@ -504,7 +504,7 @@ router.get("/takeAllTypesOfFoods", verifyToken, (req, res) => {
  *          description: User doesn't exists!
  */
 router.post(
-  "/addNewTypeOfFood",
+  "/food/type",
   [
     check("newTypeOfFood")
       .exists()
@@ -566,7 +566,7 @@ router.post(
 
 /**
  * @swagger
- * /administrators/deleteTypeOfFood:
+ * /administrators/food/type:
  *    delete:
  *      tags:
  *      - name: Administrators
@@ -588,7 +588,7 @@ router.post(
  *          description: System has no this type of food! or User doesn't exists!
  */
 router.delete(
-  "/deleteTypeOfFood",
+  "/food/type",
   [
     check("typeOfFood")
       .exists()
@@ -651,7 +651,7 @@ router.delete(
 
 /**
  * @swagger
- * /administrators/addNewSpeciesOfFood:
+ * /administrators/food/species:
  *    post:
  *      tags:
  *      - name: Administrators
@@ -678,7 +678,7 @@ router.delete(
  *          description: User doesn't exists! System has no entered type of food!
  */
 router.post(
-  "/addNewSpeciesOfFood",
+  "/food/species",
   [
     check("typeOfFood")
       .exists()
@@ -758,7 +758,7 @@ router.post(
 
 /**
  * @swagger
- * /administrators/deleteSpeciesOfFood:
+ * /administrators/food/species:
  *    delete:
  *      tags:
  *      - name: Administrators
@@ -780,7 +780,7 @@ router.post(
  *          description: System has no this species of food! or User doesn't exists!
  */
 router.delete(
-  "/deleteSpeciesOfFood",
+  "/food/species",
   [
     check("speciesOfFood")
       .exists()
@@ -843,7 +843,7 @@ router.delete(
 
 /**
  * @swagger
- * /administrators/takeTypesOfUsersRoles:
+ * /administrators/users/allRoles:
  *    get:
  *      tags:
  *      - name: Administrators
@@ -858,7 +858,7 @@ router.delete(
  *        404:
  *          description: System has no types of users roles! or User doesn't exists!
  */
-router.get("/takeTypesOfUsersRoles", verifyToken, (req, res) => {
+router.get("/users/allRoles", verifyToken, (req, res) => {
   jwt.verify(
     req.token,
     process.env.S3_SECRETKEY,
@@ -890,7 +890,7 @@ router.get("/takeTypesOfUsersRoles", verifyToken, (req, res) => {
 
 /**
  * @swagger
- * /administrators/addNewTypeOfUserRole:
+ * /administrators/users/allRoles:
  *    post:
  *      tags:
  *      - name: Administrators
@@ -912,7 +912,7 @@ router.get("/takeTypesOfUsersRoles", verifyToken, (req, res) => {
  *          description: User doesn't exists!
  */
 router.post(
-  "/addNewTypeOfUserRole",
+  "/users/allRoles",
   [
     check("newTypeOfUserRole")
       .exists()
@@ -974,7 +974,7 @@ router.post(
 
 /**
  * @swagger
- * /administrators/deleteTypeOfUserRole:
+ * /administrators/users/allRoles:
  *    delete:
  *      tags:
  *      - name: Administrators
@@ -996,7 +996,7 @@ router.post(
  *          description: System has no this type of user role! or User doesn't exists!
  */
 router.delete(
-  "/deleteTypeOfUserRole",
+  "/users/allRoles",
   [
     check("typeOfUserRole")
       .exists()
@@ -1059,7 +1059,7 @@ router.delete(
 
 /**
  * @swagger
- * /administrators/editUserPermissions:
+ * /administrators/users/permissions:
  *    put:
  *      tags:
  *      - name: Administrators
@@ -1086,7 +1086,7 @@ router.delete(
  *          description: System has no type of user role! or User doesn't exists!
  */
 router.put(
-  "/editUserPermissions",
+  "/users/permissions",
   [
     check("userEmail")
       .exists()
@@ -1168,7 +1168,7 @@ router.put(
 
 /**
  * @swagger
- * /administrators/addNewReasonOfAnimalDeath:
+ * /administrators/animals/reasonOfDeath:
  *    post:
  *      tags:
  *      - name: Administrators
@@ -1190,7 +1190,7 @@ router.put(
  *          description: User doesn't exists!
  */
 router.post(
-  "/addNewReasonOfAnimalDeath",
+  "/animals/reasonOfDeath",
   [
     check("newReasonOfAnimalDeath")
       .exists()
@@ -1254,7 +1254,7 @@ router.post(
 
 /**
  * @swagger
- * /administrators/deleteReasonOfAnimalDeath:
+ * /administrators/animals/reasonOfDeath:
  *    delete:
  *      tags:
  *      - name: Administrators
@@ -1276,7 +1276,7 @@ router.post(
  *          description: System has no this reason of animal death! or User doesn't exists!
  */
 router.delete(
-  "/deleteReasonOfAnimalDeath",
+  "/animals/reasonOfDeath",
   [
     check("reasonOfAnimalDeath")
       .exists()
@@ -1341,7 +1341,7 @@ router.delete(
 
 /**
  * @swagger
- * /administrators/addNewTypeOfJoinToHerd:
+ * /administrators/animals/typeOfJoinToHerd:
  *    post:
  *      tags:
  *      - name: Administrators
@@ -1363,7 +1363,7 @@ router.delete(
  *          description: System has this type of join to herd! or User doesn't exists!
  */
 router.post(
-  "/addNewTypeOfJoinToHerd",
+  "/animals/typeOfJoinToHerd",
   [
     check("newTypeOfJoinToHerd")
       .exists()
@@ -1425,7 +1425,7 @@ router.post(
 
 /**
  * @swagger
- * /administrators/deleteTypeOfJoinToHerd:
+ * /administrators/animals/typeOfJoinToHerd:
  *    delete:
  *      tags:
  *      - name: Administrators
@@ -1447,7 +1447,7 @@ router.post(
  *          description: System has no this type of join to herd! or User doesn't exists!
  */
 router.delete(
-  "/deleteTypeOfJoinToHerd",
+  "/animals/typeOfJoinToHerd",
   [
     check("typeOfJoinToHerd")
       .exists()
@@ -1510,7 +1510,7 @@ router.delete(
 
 /**
  * @swagger
- * /administrators/addNewTypeOfProduct:
+ * /administrators/products/type:
  *    post:
  *      tags:
  *      - name: Administrators
@@ -1532,7 +1532,7 @@ router.delete(
  *          description: User doesn't exists!
  */
 router.post(
-  "/addNewTypeOfProduct",
+  "/products/type",
   [
     check("newTypeOfProduct")
       .exists()
@@ -1594,7 +1594,7 @@ router.post(
 
 /**
  * @swagger
- * /administrators/deleteTypeOfProduct:
+ * /administrators/products/type:
  *    delete:
  *      tags:
  *      - name: Administrators
@@ -1616,7 +1616,7 @@ router.post(
  *          description: System has no this type of product! or User doesn't exists!
  */
 router.delete(
-  "/deleteTypeOfProduct",
+  "/products/type",
   [
     check("typeOfProduct")
       .exists()
@@ -1679,7 +1679,7 @@ router.delete(
 
 /**
  * @swagger
- * /administrators/takeListOfUsers:
+ * /administrators/users/list:
  *    get:
  *      tags:
  *      - name: Administrators
@@ -1694,7 +1694,7 @@ router.delete(
  *        404:
  *          description: System has no users! or User doesn't exists!
  */
-router.get("/takeListOfUsers", verifyToken, (req, res) => {
+router.get("/users/list", verifyToken, (req, res) => {
   jwt.verify(
     req.token,
     process.env.S3_SECRETKEY,
@@ -1726,7 +1726,7 @@ router.get("/takeListOfUsers", verifyToken, (req, res) => {
 
 /**
  * @swagger
- * /administrators/deleteUserAccount:
+ * /administrators/users/account:
  *    delete:
  *      tags:
  *      - name: Administrators
@@ -1748,7 +1748,7 @@ router.get("/takeListOfUsers", verifyToken, (req, res) => {
  *          description: System has no this user! or User doesn't exists!
  */
 router.delete(
-  "/deleteUserAccount",
+  "/users/account",
   [
     check("userEmail")
       .exists()
