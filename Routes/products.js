@@ -21,6 +21,7 @@ const createNewUserProductFromAnimal = require("../Functions/Products/createNewU
 const findHerdByName = require("../Functions/Herds/findHerdByName");
 const checkEnteredIdentityNumberForAnimals = require("../Functions/Others/checkEnteredIdentityNumberForAnimals");
 const assignUserProductToAnimal = require("../Functions/Products/assignUserProductToAnimal");
+const findAllProductsAssignedToAnimal = require("../Functions/Products/findAllProductsAssignedToAnimal");
 
 /**
  * @swagger
@@ -592,6 +593,11 @@ router.post(
  *          type: integer
  *          format: int64
  *          example: 1234
+ *        - name: herdName
+ *          in: formData
+ *          required: true
+ *          type: string
+ *          example: thebestherd
  *      responses:
  *        200:
  *          description: List of assigned products to animal.
@@ -601,9 +607,65 @@ router.post(
  *          description: User doesn't exist!
  */
 router.get(
-  "/allAssignedToAnimal/:identityNumberOfAnimal",
+  "/allAssignedToAnimal/:identityNumberOfAnimal/:herdName",
   verifyToken,
-  () => {}
+  (req, res) => {
+    if (req.params.identityNumberOfAnimal && req.params.herdName) {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkHerd = await findHerdByName(
+                Herds,
+                req.params.herdName,
+                authData.id
+              );
+              if (checkHerd !== null) {
+                const checkIdentityNumberOfAnimal = await checkEnteredIdentityNumberForAnimals(
+                  AnimalsInHerd,
+                  req.params.identityNumberOfAnimal,
+                  checkHerd.id
+                );
+                if (checkIdentityNumberOfAnimal !== null) {
+                  const findProducts = await findAllProductsAssignedToAnimal(
+                    AllProductsFromAnimals,
+                    checkIdentityNumberOfAnimal.id,
+                    checkHerd.id,
+                    authData.id
+                  );
+                  if (findProducts !== null) {
+                    res.status(200).json(findProducts);
+                  } else {
+                    res.status(400).json({
+                      Error: "Wystąpił błąd. Sprawdź wprowadzone dane!",
+                    });
+                  }
+                } else {
+                  res.status(404).json({
+                    Error:
+                      "Zwierzę o wprowadzonym numerze identyfikacyjnym nie istnieje!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error: "Użytkownik nie posiada stada o podanej nazwie!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    } else {
+      res.status(400).json({ Error: "Nie wprowadzono wymaganych danych!" });
+    }
+  }
 );
 
 /**
