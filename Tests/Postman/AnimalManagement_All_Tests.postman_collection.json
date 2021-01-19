@@ -2732,7 +2732,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/foods/takeAllSpeciesOfFood",
+							"raw": "localhost:3000/herdapi/{{api_version}}/foods/allSpecies",
 							"host": [
 								"localhost"
 							],
@@ -2741,7 +2741,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"foods",
-								"takeAllSpeciesOfFood"
+								"allSpecies"
 							]
 						}
 					},
@@ -2812,7 +2812,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/foods/addNewFood",
+							"raw": "localhost:3000/herdapi/{{api_version}}/foods/food",
 							"host": [
 								"localhost"
 							],
@@ -2821,7 +2821,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"foods",
-								"addNewFood"
+								"food"
 							]
 						}
 					},
@@ -2860,7 +2860,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/foods/takeFoodStatus",
+							"raw": "localhost:3000/herdapi/{{api_version}}/foods/foodStatus",
 							"host": [
 								"localhost"
 							],
@@ -2869,7 +2869,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"foods",
-								"takeFoodStatus"
+								"foodStatus"
 							]
 						}
 					},
@@ -2908,7 +2908,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/foods/takeFoodStatusByItsSpecies/:speciesName",
+							"raw": "localhost:3000/herdapi/{{api_version}}/foods/foodStatus/:speciesName",
 							"host": [
 								"localhost"
 							],
@@ -2917,7 +2917,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"foods",
-								"takeFoodStatusByItsSpecies",
+								"foodStatus",
 								":speciesName"
 							],
 							"variable": [
@@ -2986,7 +2986,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/foods/editSpeciesOfFood",
+							"raw": "localhost:3000/herdapi/{{api_version}}/foods/species",
 							"host": [
 								"localhost"
 							],
@@ -2995,7 +2995,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"foods",
-								"editSpeciesOfFood"
+								"species"
 							]
 						}
 					},
@@ -3054,7 +3054,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/foods/editQuantityOfFood",
+							"raw": "localhost:3000/herdapi/{{api_version}}/foods/quantity",
 							"host": [
 								"localhost"
 							],
@@ -3063,7 +3063,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"foods",
-								"editQuantityOfFood"
+								"quantity"
 							]
 						}
 					},
@@ -3123,7 +3123,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/foods/editDateOfPurchasedFood",
+							"raw": "localhost:3000/herdapi/{{api_version}}/foods/dateOfPurchased",
 							"host": [
 								"localhost"
 							],
@@ -3132,7 +3132,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"foods",
-								"editDateOfPurchasedFood"
+								"dateOfPurchased"
 							]
 						}
 					},
@@ -3193,7 +3193,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/foods/assignFoodToHerd",
+							"raw": "localhost:3000/herdapi/{{api_version}}/foods/assignToHerd",
 							"host": [
 								"localhost"
 							],
@@ -3202,7 +3202,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"foods",
-								"assignFoodToHerd"
+								"assignToHerd"
 							]
 						}
 					},
@@ -3241,7 +3241,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/foods/takeFoodStatusInHerd",
+							"raw": "localhost:3000/herdapi/{{api_version}}/foods/statusInHerd",
 							"host": [
 								"localhost"
 							],
@@ -3250,7 +3250,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"foods",
-								"takeFoodStatusInHerd"
+								"statusInHerd"
 							]
 						}
 					},
@@ -3289,7 +3289,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/foods/takeFoodStatusInHerdByItsSpecies/:speciesName",
+							"raw": "localhost:3000/herdapi/{{api_version}}/foods/statusInHerd/:speciesName",
 							"host": [
 								"localhost"
 							],
@@ -3298,7 +3298,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"foods",
-								"takeFoodStatusInHerdByItsSpecies",
+								"statusInHerd",
 								":speciesName"
 							],
 							"variable": [
@@ -3364,7 +3364,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/foods/editQuantityOfFoodUsedForAnimals",
+							"raw": "localhost:3000/herdapi/{{api_version}}/foods/quantityUsedForAnimals",
 							"host": [
 								"localhost"
 							],
@@ -3373,7 +3373,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"foods",
-								"editQuantityOfFoodUsedForAnimals"
+								"quantityUsedForAnimals"
 							]
 						}
 					},
@@ -3433,7 +3433,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/foods/editDateWhenUserUsedFoodForHerd",
+							"raw": "localhost:3000/herdapi/{{api_version}}/foods/dateWhenUsedForAnimals",
 							"host": [
 								"localhost"
 							],
@@ -3442,7 +3442,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"foods",
-								"editDateWhenUserUsedFoodForHerd"
+								"dateWhenUsedForAnimals"
 							]
 						}
 					},
@@ -3490,7 +3490,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/foods/deletePurchasedFood",
+							"raw": "localhost:3000/herdapi/{{api_version}}/foods/purchased",
 							"host": [
 								"localhost"
 							],
@@ -3499,7 +3499,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"foods",
-								"deletePurchasedFood"
+								"purchased"
 							]
 						}
 					},
@@ -3547,7 +3547,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/foods/deleteFoodUsedForHerd",
+							"raw": "localhost:3000/herdapi/{{api_version}}/foods/usedForHerd",
 							"host": [
 								"localhost"
 							],
@@ -3556,7 +3556,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"foods",
-								"deleteFoodUsedForHerd"
+								"usedForHerd"
 							]
 						}
 					},
