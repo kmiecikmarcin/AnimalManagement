@@ -3671,7 +3671,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/takeAllTypesOfAnimals",
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/animals/allTypes",
 							"host": [
 								"localhost"
 							],
@@ -3680,7 +3680,8 @@
 								"herdapi",
 								"{{api_version}}",
 								"administrators",
-								"takeAllTypesOfAnimals"
+								"animals",
+								"allTypes"
 							]
 						}
 					},
@@ -3740,7 +3741,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/addNewTypeOfAnimal",
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/animals/type",
 							"host": [
 								"localhost"
 							],
@@ -3749,7 +3750,8 @@
 								"herdapi",
 								"{{api_version}}",
 								"administrators",
-								"addNewTypeOfAnimal"
+								"animals",
+								"type"
 							]
 						}
 					},
@@ -3798,7 +3800,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/deleteTypeOfAnimal",
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/animals/type",
 							"host": [
 								"localhost"
 							],
@@ -3807,7 +3809,8 @@
 								"herdapi",
 								"{{api_version}}",
 								"administrators",
-								"deleteTypeOfAnimal"
+								"animals",
+								"type"
 							]
 						}
 					},
@@ -3869,7 +3872,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/addNewKindOfAnimal",
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/animals/kind",
 							"host": [
 								"localhost"
 							],
@@ -3878,7 +3881,8 @@
 								"herdapi",
 								"{{api_version}}",
 								"administrators",
-								"addNewKindOfAnimal"
+								"animals",
+								"kind"
 							]
 						}
 					},
@@ -3927,7 +3931,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/deleteKindOfAnimal",
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/animals/kind",
 							"host": [
 								"localhost"
 							],
@@ -3936,7 +3940,8 @@
 								"herdapi",
 								"{{api_version}}",
 								"administrators",
-								"deleteKindOfAnimal"
+								"animals",
+								"kind"
 							]
 						}
 					},
@@ -3975,7 +3980,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/takeAllTypesOfFoods",
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/food/allTypes",
 							"host": [
 								"localhost"
 							],
@@ -3984,7 +3989,8 @@
 								"herdapi",
 								"{{api_version}}",
 								"administrators",
-								"takeAllTypesOfFoods"
+								"food",
+								"allTypes"
 							]
 						}
 					},
@@ -4044,7 +4050,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/addNewTypeOfFood",
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/food/type",
 							"host": [
 								"localhost"
 							],
@@ -4053,7 +4059,8 @@
 								"herdapi",
 								"{{api_version}}",
 								"administrators",
-								"addNewTypeOfFood"
+								"food",
+								"type"
 							]
 						}
 					},
@@ -4102,7 +4109,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/deleteTypeOfFood",
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/food/type",
 							"host": [
 								"localhost"
 							],
@@ -4111,7 +4118,8 @@
 								"herdapi",
 								"{{api_version}}",
 								"administrators",
-								"deleteTypeOfFood"
+								"food",
+								"type"
 							]
 						}
 					},
@@ -4173,7 +4181,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/addNewSpeciesOfFood",
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/food/species",
 							"host": [
 								"localhost"
 							],
@@ -4182,7 +4190,8 @@
 								"herdapi",
 								"{{api_version}}",
 								"administrators",
-								"addNewSpeciesOfFood"
+								"food",
+								"species"
 							]
 						}
 					},
@@ -4231,7 +4240,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/deleteSpeciesOfFood",
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/food/species",
 							"host": [
 								"localhost"
 							],
@@ -4240,7 +4249,8 @@
 								"herdapi",
 								"{{api_version}}",
 								"administrators",
-								"deleteSpeciesOfFood"
+								"food",
+								"species"
 							]
 						}
 					},
@@ -4279,7 +4289,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/takeTypesOfUsersRoles",
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/users/allRoles",
 							"host": [
 								"localhost"
 							],
@@ -4288,7 +4298,8 @@
 								"herdapi",
 								"{{api_version}}",
 								"administrators",
-								"takeTypesOfUsersRoles"
+								"users",
+								"allRoles"
 							]
 						}
 					},
@@ -4348,7 +4359,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/addNewTypeOfUserRole",
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/users/allRoles",
 							"host": [
 								"localhost"
 							],
@@ -4357,7 +4368,8 @@
 								"herdapi",
 								"{{api_version}}",
 								"administrators",
-								"addNewTypeOfUserRole"
+								"users",
+								"allRoles"
 							]
 						}
 					},
@@ -4406,7 +4418,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/deleteTypeOfUserRole",
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/users/allRoles",
 							"host": [
 								"localhost"
 							],
@@ -4415,7 +4427,8 @@
 								"herdapi",
 								"{{api_version}}",
 								"administrators",
-								"deleteTypeOfUserRole"
+								"users",
+								"allRoles"
 							]
 						}
 					},
@@ -4474,7 +4487,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/editUserPermissions",
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/users/permissions",
 							"host": [
 								"localhost"
 							],
@@ -4483,7 +4496,8 @@
 								"herdapi",
 								"{{api_version}}",
 								"administrators",
-								"editUserPermissions"
+								"users",
+								"permissions"
 							]
 						}
 					},
@@ -4543,7 +4557,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/addNewReasonOfAnimalDeath",
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/animals/reasonOfDeath",
 							"host": [
 								"localhost"
 							],
@@ -4552,7 +4566,8 @@
 								"herdapi",
 								"{{api_version}}",
 								"administrators",
-								"addNewReasonOfAnimalDeath"
+								"animals",
+								"reasonOfDeath"
 							]
 						}
 					},
@@ -4601,7 +4616,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/deleteReasonOfAnimalDeath",
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/animals/reasonOfDeath",
 							"host": [
 								"localhost"
 							],
@@ -4610,7 +4625,8 @@
 								"herdapi",
 								"{{api_version}}",
 								"administrators",
-								"deleteReasonOfAnimalDeath"
+								"animals",
+								"reasonOfDeath"
 							]
 						}
 					},
@@ -4670,7 +4686,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/addNewTypeOfJoinToHerd",
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/animals/typeOfJoinToHerd",
 							"host": [
 								"localhost"
 							],
@@ -4679,7 +4695,8 @@
 								"herdapi",
 								"{{api_version}}",
 								"administrators",
-								"addNewTypeOfJoinToHerd"
+								"animals",
+								"typeOfJoinToHerd"
 							]
 						}
 					},
@@ -4728,7 +4745,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/deleteTypeOfJoinToHerd",
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/animals/typeOfJoinToHerd",
 							"host": [
 								"localhost"
 							],
@@ -4737,7 +4754,8 @@
 								"herdapi",
 								"{{api_version}}",
 								"administrators",
-								"deleteTypeOfJoinToHerd"
+								"animals",
+								"typeOfJoinToHerd"
 							]
 						}
 					},
@@ -4797,7 +4815,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/addNewTypeOfProduct",
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/products/type",
 							"host": [
 								"localhost"
 							],
@@ -4806,7 +4824,8 @@
 								"herdapi",
 								"{{api_version}}",
 								"administrators",
-								"addNewTypeOfProduct"
+								"products",
+								"type"
 							]
 						}
 					},
@@ -4855,7 +4874,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/deleteTypeOfProduct",
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/products/type",
 							"host": [
 								"localhost"
 							],
@@ -4864,7 +4883,8 @@
 								"herdapi",
 								"{{api_version}}",
 								"administrators",
-								"deleteTypeOfProduct"
+								"products",
+								"type"
 							]
 						}
 					},
@@ -4903,7 +4923,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/takeListOfUsers",
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/users/list",
 							"host": [
 								"localhost"
 							],
@@ -4912,7 +4932,8 @@
 								"herdapi",
 								"{{api_version}}",
 								"administrators",
-								"takeListOfUsers"
+								"users",
+								"list"
 							]
 						}
 					},
@@ -4961,7 +4982,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/deleteUserAccount",
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/users/account",
 							"host": [
 								"localhost"
 							],
@@ -4970,7 +4991,8 @@
 								"herdapi",
 								"{{api_version}}",
 								"administrators",
-								"deleteUserAccount"
+								"users",
+								"account"
 							]
 						}
 					},
