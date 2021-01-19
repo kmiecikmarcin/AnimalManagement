@@ -60,7 +60,7 @@ router.get("/takeAllSpeciesOfFood", verifyToken, (req, res) => {
         if (checkUser !== null) {
           const findSpecies = await findAllSpeciesOfFoods(SpeciesOfFoods);
           if (findSpecies) {
-            res.status(200).json({ SpeciesOfFoods: findSpecies });
+            res.status(200).json(findSpecies);
           } else {
             res.status(404).json({
               Error: "System nie posiada przypisanych gatunków pożywienia",
@@ -244,7 +244,7 @@ router.get("/takeFoodStatus", verifyToken, (req, res) => {
             authData.id
           );
           if (findUserFood !== null) {
-            res.status(200).json({ FoodStatus: findUserFood });
+            res.status(200).json(findUserFood);
           } else {
             res.status(404).json({
               Error: "Użytkownik nie posiada żadnego przypisanego pożywienia!",
@@ -305,9 +305,7 @@ router.get(
                   findSpecies.id
                 );
                 if (findFoodsStatusBySpecies !== null) {
-                  res
-                    .status(200)
-                    .json({ FoodsStatus: findFoodsStatusBySpecies });
+                  res.status(200).json(findFoodsStatusBySpecies);
                 } else {
                   res.status(404).json({
                     Error:
