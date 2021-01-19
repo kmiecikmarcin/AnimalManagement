@@ -4,6 +4,7 @@ const SpeciesOfFoods = require("../../Models/SpeciesOfFoods");
 
 async function findAllUsedFoodByUser(PurchasedFoodForHerd, userId) {
   const findFood = await PurchasedFoodForHerd.findAll({
+    raw: true,
     attributes: {
       exclude: [
         "id",
