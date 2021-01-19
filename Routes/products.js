@@ -24,6 +24,7 @@ const checkEnteredIdentityNumberForAnimals = require("../Functions/Others/checkE
 const assignUserProductToAnimal = require("../Functions/Products/assignUserProductToAnimal");
 const findAllProductsAssignedToAnimal = require("../Functions/Products/findAllProductsAssignedToAnimal");
 const createNewUserTransaction = require("../Functions/Products/createNewUserTransaction");
+const findAllUserTransactions = require("../Functions/Products/findAllUserTransactions");
 
 /**
  * @swagger
@@ -787,7 +788,34 @@ router.post(
  *        404:
  *          description: User doesn't exist!
  */
-router.get("/allTransactions", verifyToken, () => {});
+router.get("/allTransactions", verifyToken, (req, res) => {
+  jwt.verify(
+    req.token,
+    process.env.S3_SECRETKEY,
+    async (jwtError, authData) => {
+      if (jwtError) {
+        res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+      } else {
+        const checkUser = await findUserById(Users, authData);
+        if (checkUser !== null) {
+          const findAllTransactions = await findAllUserTransactions(
+            UserTransactions,
+            authData.id
+          );
+          if (findAllTransactions !== null) {
+            res.status(200).json(findAllTransactions);
+          } else {
+            res
+              .status(400)
+              .json({ Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!" });
+          }
+        } else {
+          res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+        }
+      }
+    }
+  );
+});
 
 /**
  * @swagger
