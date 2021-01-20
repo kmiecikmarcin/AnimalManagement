@@ -2316,9 +2316,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const random_number = _.random(0,3);\r",
-									"const type_of_product_name_array = [\"Mięso\", \"Jajka\", \"Futro\", \"Mleko\"];\r",
-									"const type_of_product_name = type_of_product_name_array[random_number];\r",
+									"const type_of_product_name = \"Mleko\";\r",
 									"\r",
 									"pm.collectionVariables.set(\"type_of_product_name\", type_of_product_name);"
 								],
@@ -2455,6 +2453,74 @@
 								"{{api_version}}",
 								"products",
 								"fromAnimal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit quantity of product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie zmieniono ilość produktu!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const new_quantity_of_product = 100;\r",
+									"\r",
+									"pm.collectionVariables.set(\"new_quantity_of_product\", new_quantity_of_product);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfProduct\": \"{{identity_number_of_product}}\",\r\n    \"quantityOfProduct\": \"{{new_quantity_of_product}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/quantity",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"quantity"
 							]
 						}
 					},
@@ -5233,6 +5299,14 @@
 		},
 		{
 			"key": "identity_number_of_transaction",
+			"value": ""
+		},
+		{
+			"key": "new_product_type",
+			"value": ""
+		},
+		{
+			"key": "new_quantity_of_product",
 			"value": ""
 		}
 	]
