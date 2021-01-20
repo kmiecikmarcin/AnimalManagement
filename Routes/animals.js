@@ -68,7 +68,7 @@ router.get("/takeAllAnimalsGenders", verifyToken, (req, res) => {
             authData.id
           );
           if (findAnimalsGenders !== null) {
-            res.status(200).json({ Genders: findAnimalsGenders });
+            res.status(200).json(findAnimalsGenders);
           } else {
             res.status(404).json({
               Error: "System nie posiada przypisanych płci zwierząt!",
@@ -111,7 +111,7 @@ router.get("/takeAllKindsOfAnimals", verifyToken, (req, res) => {
             KindsOfAnimals
           );
           if (findKindsOfAnimals !== null) {
-            res.status(200).json({ Genders: findKindsOfAnimals });
+            res.status(200).json(findKindsOfAnimals);
           } else {
             res.status(404).json({
               Error: "System nie posiada przypisanych rodzajów zwierząt!",
@@ -154,7 +154,7 @@ router.get("/takeAllJoinTypeToTheHerd", verifyToken, (req, res) => {
             TypesOfJoinToTheHerd
           );
           if (findTypesOfJoinToTheHerd !== null) {
-            res.status(200).json({ TypesOfJoin: findTypesOfJoinToTheHerd });
+            res.status(200).json(findTypesOfJoinToTheHerd);
           } else {
             res.status(404).json({
               Error:
@@ -418,7 +418,7 @@ router.get("/findAllAnimalsInHerd/:herdName", verifyToken, (req, res) => {
                 findHerd.id
               );
               if (findAnimalsInHerd !== null) {
-                res.status(200).json({ AnimalsInHerd: findAnimalsInHerd });
+                res.status(200).json(findAnimalsInHerd);
               } else {
                 res.status(404).json({
                   Error:
@@ -494,7 +494,7 @@ router.get(
                   req.params.identityNumber
                 );
                 if (responseAboutFoundAnimal !== null) {
-                  res.status(200).json({ Animal: responseAboutFoundAnimal });
+                  res.status(200).json(responseAboutFoundAnimal);
                 } else {
                   res.status(404).json({
                     Error:
@@ -1410,9 +1410,7 @@ router.get(
                   findHerd.id
                 );
                 if (findNewBornAnimalsInHerd !== null) {
-                  res
-                    .status(200)
-                    .json({ AnimalsBirths: findNewBornAnimalsInHerd });
+                  res.status(200).json(findNewBornAnimalsInHerd);
                 } else {
                   res.status(404).json({
                     Error:
@@ -1463,7 +1461,7 @@ router.get("/takeAllReasonsDeaths", verifyToken, (req, res) => {
         if (checkUser !== null) {
           const findReasonDeath = await findAllReasonDeath(ReasonOfDeath);
           if (findReasonDeath !== null) {
-            res.status(200).json({ ReasonOfDeath: findReasonDeath });
+            res.status(200).json(findReasonDeath);
           } else {
             res.status(404).json({
               Error: "System nie posiada przypisanych płci zwierząt!",
@@ -1672,7 +1670,7 @@ router.get("/takeAllDeadsAnimalsInHerd/:herdName", verifyToken, (req, res) => {
                 findHerd.id
               );
               if (findDeadAnimalsInHerd !== null) {
-                res.status(200).json({ AnimalsDeads: findDeadAnimalsInHerd });
+                res.status(200).json(findDeadAnimalsInHerd);
               } else {
                 res.status(404).json({
                   Error:
