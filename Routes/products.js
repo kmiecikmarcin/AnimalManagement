@@ -25,6 +25,7 @@ const assignUserProductToAnimal = require("../Functions/Products/assignUserProdu
 const findAllProductsAssignedToAnimal = require("../Functions/Products/findAllProductsAssignedToAnimal");
 const createNewUserTransaction = require("../Functions/Products/createNewUserTransaction");
 const findAllUserTransactions = require("../Functions/Products/findAllUserTransactions");
+const changeQuantityOfUserProduct = require("../Functions/Products/changeQuantityOfUserProduct");
 
 /**
  * @swagger
@@ -332,42 +333,6 @@ router.post(
 
 /**
  * @swagger
- * /products/type:
- *    put:
- *      tags:
- *      - name: Products
- *      summary: Edit type of product
- *      parameters:
- *        - name: identityNumberOfProduct
- *          in: formData
- *          required: true
- *          type: integer
- *          format: int64
- *          example: 01
- *        - name: oldProductType
- *          in: formData
- *          required: true
- *          type: string
- *          example: Jajko
- *        - name: newProductType
- *          in: formData
- *          required: true
- *          type: string
- *          example: Mięso
- *      responses:
- *        201:
- *          description: Data updated successfully!
- *        400:
- *          description: Data has not been updated!
- *        403:
- *          description: Authentication failed!
- *        404:
- *          description: User doesn't exist!
- */
-router.put("/type", verifyToken, () => {});
-
-/**
- * @swagger
  * /products/quantity:
  *    put:
  *      tags:
@@ -396,7 +361,76 @@ router.put("/type", verifyToken, () => {});
  *        404:
  *          description: User doesn't exist!
  */
-router.put("/quantity", verifyToken, () => {});
+router.put(
+  "/quantity",
+  [
+    check("identityNumberOfProduct")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isInt()
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
+    check("quantityOfProduct")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isFloat()
+      .withMessage("Wprowadzona wartość nie jest liczbą!"),
+  ],
+  verifyToken,
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkIdentityNumberOfProduct = await checkIdentityNumberForFoodAndProducts(
+                AllProductsFromAnimals,
+                req.body.identityNumberOfProduct,
+                authData.id
+              );
+              if (checkIdentityNumberOfProduct !== null) {
+                const updateQuantity = await changeQuantityOfUserProduct(
+                  AllProductsFromAnimals,
+                  authData.id,
+                  checkIdentityNumberOfProduct.id,
+                  req.body.quantityOfProduct
+                );
+                if (updateQuantity !== null) {
+                  res
+                    .status(200)
+                    .json({ Message: "Pomyślnie zmieniono ilość produktu!" });
+                } else {
+                  res.status(400).json({
+                    Error:
+                      "Nie udało się zaktualizować typu produktu! Sprawdź wprowadzone dane!",
+                  });
+                }
+              } else {
+                res.status(400).json({
+                  Error:
+                    "Produkt o wprowadzonym numerze identyfikacyjnym nie istnieje!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
+);
 
 /**
  * @swagger

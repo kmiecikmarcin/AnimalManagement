@@ -15,7 +15,7 @@ async function changeLifeStatusOfAnimal(
       { lifeStatusOfAnimal: false },
       { where: { HerdId: herdId, identityNumber: identityNumberOfAnimal } }
     );
-    if (updateLifeStatus) {
+    if (updateLifeStatus.includes(1)) {
       return updateLifeStatus;
     }
     return null;
