@@ -234,7 +234,7 @@ router.get("/:name", verifyToken, (req, res) => {
  *      - name: Herds
  *      summary: Take herd by type of animal
  *      parameters:
- *        - name: typeOfAnimal
+ *        - name: type
  *          in: path
  *          type: string
  *      responses:
@@ -246,7 +246,7 @@ router.get("/:name", verifyToken, (req, res) => {
  *          description: User doesn't exist!
  */
 router.get("/animals/:type", verifyToken, (req, res) => {
-  if (req.params.typeOfAnimal) {
+  if (req.params.type) {
     jwt.verify(
       req.token,
       process.env.S3_SECRETKEY,
@@ -259,7 +259,7 @@ router.get("/animals/:type", verifyToken, (req, res) => {
             const findHerd = await findHerdByAnimalType(
               KindsOfAnimals,
               Herds,
-              req.params.typeOfAnimal,
+              req.params.type,
               authData.id
             );
             if (findHerd) {
