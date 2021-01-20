@@ -5,6 +5,7 @@ const GenderOfAnimal = require("../../Models/GenderOfAnimal");
 
 async function findAllAnimalsInHerd(AnimalsInHerd, herdId) {
   const search = await AnimalsInHerd.findAll({
+    raw: true,
     where: { idHerd: herdId },
     include: [
       { model: Herds, attributes: ["name"] },

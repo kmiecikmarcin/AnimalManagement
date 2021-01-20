@@ -2,6 +2,7 @@ const Herds = require("../../Models/Herds");
 
 async function findAllNewDeadAnimalsInHerd(AnimalsDeads, herdId) {
   const search = await AnimalsDeads.findAll({
+    raw: true,
     where: { idHerd: herdId },
     include: [{ model: Herds, attributes: ["name"] }],
     attributes: ["date", "description"],
