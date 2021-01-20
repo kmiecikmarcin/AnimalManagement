@@ -936,7 +936,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/animals/takeAllAnimalsGenders",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/genders",
 							"host": [
 								"localhost"
 							],
@@ -945,7 +945,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"animals",
-								"takeAllAnimalsGenders"
+								"genders"
 							]
 						}
 					},
@@ -984,7 +984,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/animals/takeAllKindsOfAnimals",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/allkinds",
 							"host": [
 								"localhost"
 							],
@@ -993,7 +993,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"animals",
-								"takeAllKindsOfAnimals"
+								"allkinds"
 							]
 						}
 					},
@@ -1032,7 +1032,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/animals/takeAllJoinTypeToTheHerd",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/allJoinTypeToHerd",
 							"host": [
 								"localhost"
 							],
@@ -1041,7 +1041,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"animals",
-								"takeAllJoinTypeToTheHerd"
+								"allJoinTypeToHerd"
 							]
 						}
 					},
@@ -1122,7 +1122,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/animals/addNewAnimal",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/animal",
 							"host": [
 								"localhost"
 							],
@@ -1131,7 +1131,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"animals",
-								"addNewAnimal"
+								"animal"
 							]
 						}
 					},
@@ -1170,7 +1170,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/animals/findAllAnimalsInHerd/:herdName",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/allInHerd/:herdName",
 							"host": [
 								"localhost"
 							],
@@ -1179,13 +1179,73 @@
 								"herdapi",
 								"{{api_version}}",
 								"animals",
-								"findAllAnimalsInHerd",
+								"allInHerd",
 								":herdName"
 							],
 							"variable": [
 								{
 									"key": "herdName",
 									"value": "{{new_name_of_herd}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find animal by identity number",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/animalInHerd/:herdName/:identityNumber",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"animals",
+								"animalInHerd",
+								":herdName",
+								":identityNumber"
+							],
+							"variable": [
+								{
+									"key": "herdName",
+									"value": "{{new_name_of_herd}}"
+								},
+								{
+									"key": "identityNumber",
+									"value": "{{new_identityNumberOfAnimal}}"
 								}
 							]
 						}
@@ -1247,7 +1307,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/animals/editIdentityNumberOfAnimal",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/identityNumber",
 							"host": [
 								"localhost"
 							],
@@ -1256,67 +1316,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"animals",
-								"editIdentityNumberOfAnimal"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Find animal by identity number",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Response is correct\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.Message).not.eql(null);\r",
-									"});\r",
-									"pm.test(\"Successful GET request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/animals/findOneAnimalInHerd/:herdName/:identityNumber",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"herdapi",
-								"{{api_version}}",
-								"animals",
-								"findOneAnimalInHerd",
-								":herdName",
-								":identityNumber"
-							],
-							"variable": [
-								{
-									"key": "herdName",
-									"value": "{{new_name_of_herd}}"
-								},
-								{
-									"key": "identityNumber",
-									"value": "{{new_identityNumberOfAnimal}}"
-								}
+								"identityNumber"
 							]
 						}
 					},
@@ -1375,7 +1375,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/animals/editBreedOfAnimal",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/breed",
 							"host": [
 								"localhost"
 							],
@@ -1384,7 +1384,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"animals",
-								"editBreedOfAnimal"
+								"breed"
 							]
 						}
 					},
@@ -1444,7 +1444,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/animals/editBirthDate",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/birthDate",
 							"host": [
 								"localhost"
 							],
@@ -1453,7 +1453,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"animals",
-								"editBirthDate"
+								"birthDate"
 							]
 						}
 					},
@@ -1512,7 +1512,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/animals/editAnimalWeight",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/weight",
 							"host": [
 								"localhost"
 							],
@@ -1521,7 +1521,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"animals",
-								"editAnimalWeight"
+								"weight"
 							]
 						}
 					},
@@ -1584,7 +1584,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/animals/addNewBornAnimal",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/born",
 							"host": [
 								"localhost"
 							],
@@ -1593,7 +1593,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"animals",
-								"addNewBornAnimal"
+								"born"
 							]
 						}
 					},
@@ -1653,7 +1653,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/animals/editNewBornAnimalBirthDate",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/bornBirthDate",
 							"host": [
 								"localhost"
 							],
@@ -1662,7 +1662,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"animals",
-								"editNewBornAnimalBirthDate"
+								"bornBirthDate"
 							]
 						}
 					},
@@ -1701,7 +1701,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/animals/takeAllNewBornAnimalsInHerd/:herdName",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/bornInHerd/:herdName",
 							"host": [
 								"localhost"
 							],
@@ -1710,7 +1710,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"animals",
-								"takeAllNewBornAnimalsInHerd",
+								"bornInHerd",
 								":herdName"
 							],
 							"variable": [
@@ -1756,7 +1756,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/animals/takeAllReasonsDeaths",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/allReasonsOfDeath",
 							"host": [
 								"localhost"
 							],
@@ -1765,7 +1765,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"animals",
-								"takeAllReasonsDeaths"
+								"allReasonsOfDeath"
 							]
 						}
 					},
@@ -1830,7 +1830,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/animals/addNewDeadAnimal",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/dead",
 							"host": [
 								"localhost"
 							],
@@ -1839,7 +1839,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"animals",
-								"addNewDeadAnimal"
+								"dead"
 							]
 						}
 					},
@@ -1878,7 +1878,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/animals/takeAllDeadsAnimalsInHerd/:herdName",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/allDeadsInHerd/:herdName",
 							"host": [
 								"localhost"
 							],
@@ -1887,7 +1887,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"animals",
-								"takeAllDeadsAnimalsInHerd",
+								"allDeadsInHerd",
 								":herdName"
 							],
 							"variable": [
@@ -1955,7 +1955,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/animals/editNewDeadAnimalIdentityNumber",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/deadIdentityNumber",
 							"host": [
 								"localhost"
 							],
@@ -1964,7 +1964,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"animals",
-								"editNewDeadAnimalIdentityNumber"
+								"deadIdentityNumber"
 							]
 						}
 					},
@@ -2012,7 +2012,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/animals/editNewDeadAnimalDateOfDeath",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/deadDate",
 							"host": [
 								"localhost"
 							],
@@ -2021,7 +2021,121 @@
 								"herdapi",
 								"{{api_version}}",
 								"animals",
-								"editNewDeadAnimalDateOfDeath"
+								"deadDate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete new born animal",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Młode zwierzę zostało trwale usunięte!\");\r",
+									"});\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"temporaryIdentityNumberOfAnimal\": \"{{temporary_identity_number}}\",\r\n    \"confirmTemporaryIdentityNumberOfAnimal\": \"{{temporary_identity_number}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/born",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"animals",
+								"born"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete dead animal",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Zmarłe zwierzę zostało trwale usunięte!\");\r",
+									"});\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"identityNumberOfAnimal\": \"{{new_dead_animal_identityNumberOfAnimal}}\",\r\n    \"confirmIdentityNumberOfAnimal\": \"{{new_dead_animal_identityNumberOfAnimal}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/dead",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"animals",
+								"dead"
 							]
 						}
 					},
@@ -2080,7 +2194,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/animals/deleteAnimal",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/animal",
 							"host": [
 								"localhost"
 							],
@@ -2089,121 +2203,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"animals",
-								"deleteAnimal"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete new born animal",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Response is correct\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.Message).to.eql(\"Młode zwierzę zostało trwale usunięte!\");\r",
-									"});\r",
-									"pm.test(\"Successful DELETE request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"temporaryIdentityNumberOfAnimal\": \"{{temporary_identity_number}}\",\r\n    \"confirmTemporaryIdentityNumberOfAnimal\": \"{{temporary_identity_number}}\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/animals/deleteNewBornAnimal",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"herdapi",
-								"{{api_version}}",
-								"animals",
-								"deleteNewBornAnimal"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete dead animal",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Response is correct\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.Message).to.eql(\"Zmarłe zwierzę zostało trwale usunięte!\");\r",
-									"});\r",
-									"pm.test(\"Successful DELETE request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"identityNumberOfAnimal\": \"{{new_dead_animal_identityNumberOfAnimal}}\",\r\n    \"confirmIdentityNumberOfAnimal\": \"{{new_dead_animal_identityNumberOfAnimal}}\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/animals/deleteDeadAnimal",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"herdapi",
-								"{{api_version}}",
-								"animals",
-								"deleteDeadAnimal"
+								"animal"
 							]
 						}
 					},
