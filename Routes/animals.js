@@ -40,7 +40,7 @@ const checkEnteredIdentityNumberForAnimals = require("../Functions/Others/checkE
 
 /**
  * @swagger
- * /animals/takeAllAnimalsGenders:
+ * /animals/genders:
  *    get:
  *      tags:
  *      - name: Animals
@@ -53,7 +53,7 @@ const checkEnteredIdentityNumberForAnimals = require("../Functions/Others/checkE
  *        404:
  *          description: System has no gender assigned to the animals! or User doesn't exist!
  */
-router.get("/takeAllAnimalsGenders", verifyToken, (req, res) => {
+router.get("/genders", verifyToken, (req, res) => {
   jwt.verify(
     req.token,
     process.env.S3_SECRETKEY,
@@ -84,7 +84,7 @@ router.get("/takeAllAnimalsGenders", verifyToken, (req, res) => {
 
 /**
  * @swagger
- * /animals/takeAllKindsOfAnimals:
+ * /animals/allkinds:
  *    get:
  *      tags:
  *      - name: Animals
@@ -97,7 +97,7 @@ router.get("/takeAllAnimalsGenders", verifyToken, (req, res) => {
  *        404:
  *          description: System has no kinds assigned to the animals! or User doesn't exist!
  */
-router.get("/takeAllKindsOfAnimals", verifyToken, (req, res) => {
+router.get("/allkinds", verifyToken, (req, res) => {
   jwt.verify(
     req.token,
     process.env.S3_SECRETKEY,
@@ -127,7 +127,7 @@ router.get("/takeAllKindsOfAnimals", verifyToken, (req, res) => {
 
 /**
  * @swagger
- * /animals/takeAllJoinTypeToTheHerd:
+ * /animals/allJoinTypeToHerd:
  *    get:
  *      tags:
  *      - name: Animals
@@ -140,7 +140,7 @@ router.get("/takeAllKindsOfAnimals", verifyToken, (req, res) => {
  *        404:
  *          description: System has no join types assigned to the animals! or User doesn't exist!
  */
-router.get("/takeAllJoinTypeToTheHerd", verifyToken, (req, res) => {
+router.get("/allJoinTypeToHerd", verifyToken, (req, res) => {
   jwt.verify(
     req.token,
     process.env.S3_SECRETKEY,
@@ -171,7 +171,7 @@ router.get("/takeAllJoinTypeToTheHerd", verifyToken, (req, res) => {
 
 /**
  * @swagger
- * /animals/addNewAnimal:
+ * /animals/animal:
  *    post:
  *      tags:
  *      - name: Animals
@@ -237,7 +237,7 @@ router.get("/takeAllJoinTypeToTheHerd", verifyToken, (req, res) => {
  *          description: User, herd, kind of animal, join type or animal gender doesn't exist!
  */
 router.post(
-  "/addNewAnimal",
+  "/animal",
   [
     check("herdName")
       .exists()
@@ -377,7 +377,7 @@ router.post(
 
 /**
  * @swagger
- * /animals/findAllAnimalsInHerd/{herdName}:
+ * /animals/allInHerd/{herdName}:
  *    get:
  *      tags:
  *      - name: Animals
@@ -396,7 +396,7 @@ router.post(
  *        404:
  *          description: User doesn't have animals in this herd! or User doesn't exist!
  */
-router.get("/findAllAnimalsInHerd/:herdName", verifyToken, (req, res) => {
+router.get("/allInHerd/:herdName", verifyToken, (req, res) => {
   if (req.params.herdName) {
     jwt.verify(
       req.token,
@@ -443,7 +443,7 @@ router.get("/findAllAnimalsInHerd/:herdName", verifyToken, (req, res) => {
 
 /**
  * @swagger
- * /animals/findOneAnimalInHerd/{herdName}/{identityNumber}:
+ * /animals/animalInHerd/{herdName}/{identityNumber}:
  *    get:
  *      tags:
  *      - name: Animals
@@ -469,7 +469,7 @@ router.get("/findAllAnimalsInHerd/:herdName", verifyToken, (req, res) => {
  *          description: User doesn't have this animal in this herd!, User doesn't exist! or User doesn't have herd with this name!
  */
 router.get(
-  "/findOneAnimalInHerd/:herdName/:identityNumber",
+  "/animalInHerd/:herdName/:identityNumber",
   verifyToken,
   (req, res) => {
     if (req.params.herdName && req.params.identityNumber) {
@@ -520,7 +520,7 @@ router.get(
 
 /**
  * @swagger
- * /animals/editIdentityNumberOfAnimal:
+ * /animals/identityNumber:
  *    put:
  *      tags:
  *      - name: Animals
@@ -554,7 +554,7 @@ router.get(
  *          description: Errors about empty data.
  */
 router.put(
-  "/editIdentityNumberOfAnimal",
+  "/identityNumber",
   [
     check("herdName")
       .exists()
@@ -657,7 +657,7 @@ router.put(
 
 /**
  * @swagger
- * /animals/editBreedOfAnimal:
+ * /animals/breed:
  *    put:
  *      tags:
  *      - name: Animals
@@ -695,7 +695,7 @@ router.put(
  *          description: Errors about empty data.
  */
 router.put(
-  "/editBreedOfAnimal",
+  "/breed",
   [
     check("herdName")
       .exists()
@@ -792,7 +792,7 @@ router.put(
 
 /**
  * @swagger
- * /animals/editBirthDate:
+ * /animals/birthDate:
  *    put:
  *      tags:
  *      - name: Animals
@@ -832,7 +832,7 @@ router.put(
  *          description: Errors about empty data.
  */
 router.put(
-  "/editBirthDate",
+  "/birthDate",
   [
     check("herdName")
       .exists()
@@ -934,7 +934,7 @@ router.put(
 
 /**
  * @swagger
- * /animals/editAnimalWeight:
+ * /animals/weight:
  *    put:
  *      tags:
  *      - name: Animals
@@ -974,7 +974,7 @@ router.put(
  *          description: Errors about empty data.
  */
 router.put(
-  "/editAnimalWeight",
+  "/weight",
   [
     check("herdName")
       .exists()
@@ -1071,7 +1071,7 @@ router.put(
 
 /**
  * @swagger
- * /animals/addNewBornAnimal:
+ * /animals/born:
  *    post:
  *      tags:
  *      - name: Animals
@@ -1116,7 +1116,7 @@ router.put(
  *          description: Errors about empty data.
  */
 router.post(
-  "/addNewBornAnimal",
+  "/born",
   [
     check("kindOfAnimalName")
       .exists()
@@ -1224,7 +1224,7 @@ router.post(
 
 /**
  * @swagger
- * /animals/editNewBornAnimalBirthDate:
+ * /animals/bornBirthDate:
  *    put:
  *      tags:
  *      - name: Animals
@@ -1264,7 +1264,7 @@ router.post(
  *          description: Errors about empty data.
  */
 router.put(
-  "/editNewBornAnimalBirthDate",
+  "/bornBirthDate",
   [
     check("herdName")
       .exists()
@@ -1366,7 +1366,7 @@ router.put(
 
 /**
  * @swagger
- * /animals/takeAllNewBornAnimalsInHerd/{herdName}:
+ * /animals/bornInHerd/{herdName}:
  *    get:
  *      tags:
  *      - name: Animals
@@ -1385,58 +1385,54 @@ router.put(
  *        404:
  *          description: Errors about empty data.
  */
-router.get(
-  "/takeAllNewBornAnimalsInHerd/:herdName",
-  verifyToken,
-  (req, res) => {
-    if (req.params.herdName) {
-      jwt.verify(
-        req.token,
-        process.env.S3_SECRETKEY,
-        async (jwtError, authData) => {
-          if (jwtError) {
-            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
-          } else {
-            const checkUser = await findUserById(Users, authData);
-            if (checkUser !== null) {
-              const findHerd = await findHerdByName(
-                Herds,
-                req.params.herdName,
-                authData.id
+router.get("/bornInHerd/:herdName", verifyToken, (req, res) => {
+  if (req.params.herdName) {
+    jwt.verify(
+      req.token,
+      process.env.S3_SECRETKEY,
+      async (jwtError, authData) => {
+        if (jwtError) {
+          res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+        } else {
+          const checkUser = await findUserById(Users, authData);
+          if (checkUser !== null) {
+            const findHerd = await findHerdByName(
+              Herds,
+              req.params.herdName,
+              authData.id
+            );
+            if (findHerd) {
+              const findNewBornAnimalsInHerd = await findAllNewBornAnimalsInHerd(
+                AnimalsBirths,
+                findHerd.id
               );
-              if (findHerd) {
-                const findNewBornAnimalsInHerd = await findAllNewBornAnimalsInHerd(
-                  AnimalsBirths,
-                  findHerd.id
-                );
-                if (findNewBornAnimalsInHerd !== null) {
-                  res.status(200).json(findNewBornAnimalsInHerd);
-                } else {
-                  res.status(404).json({
-                    Error:
-                      "Użytkownik nie posiada zwierząt przypisanych do jakiejkolwiek hodowli!",
-                  });
-                }
+              if (findNewBornAnimalsInHerd !== null) {
+                res.status(200).json(findNewBornAnimalsInHerd);
               } else {
-                res
-                  .status(404)
-                  .json({ Error: "Użytkownik nie posiada hodowli!" });
+                res.status(404).json({
+                  Error:
+                    "Użytkownik nie posiada zwierząt przypisanych do jakiejkolwiek hodowli!",
+                });
               }
             } else {
-              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+              res
+                .status(404)
+                .json({ Error: "Użytkownik nie posiada hodowli!" });
             }
+          } else {
+            res.status(404).json({ Error: "Użytkownik nie istnieje!" });
           }
         }
-      );
-    } else {
-      res.status(400).json({ Error: "Nie wprowadzono danych!" });
-    }
+      }
+    );
+  } else {
+    res.status(400).json({ Error: "Nie wprowadzono danych!" });
   }
-);
+});
 
 /**
  * @swagger
- * /animals/takeAllReasonsDeaths:
+ * /animals/allReasonsOfDeath:
  *    get:
  *      tags:
  *      - name: Animals
@@ -1449,7 +1445,7 @@ router.get(
  *        404:
  *          description: Errors about empty data.
  */
-router.get("/takeAllReasonsDeaths", verifyToken, (req, res) => {
+router.get("/allReasonsOfDeath", verifyToken, (req, res) => {
   jwt.verify(
     req.token,
     process.env.S3_SECRETKEY,
@@ -1477,7 +1473,7 @@ router.get("/takeAllReasonsDeaths", verifyToken, (req, res) => {
 
 /**
  * @swagger
- * /animals/addNewDeadAnimal:
+ * /animals/dead:
  *    post:
  *      tags:
  *      - name: Animals
@@ -1521,7 +1517,7 @@ router.get("/takeAllReasonsDeaths", verifyToken, (req, res) => {
  *          description: Errors about empty data.
  */
 router.post(
-  "/addNewDeadAnimal",
+  "/dead",
   [
     check("herdName")
       .exists()
@@ -1629,7 +1625,7 @@ router.post(
 
 /**
  * @swagger
- * /animals/takeAllDeadsAnimalsInHerd/{herdName}:
+ * /animals/allDeadsInHerd/{herdName}:
  *    get:
  *      tags:
  *      - name: Animals
@@ -1648,7 +1644,7 @@ router.post(
  *        404:
  *          description: Errors about empty data.
  */
-router.get("/takeAllDeadsAnimalsInHerd/:herdName", verifyToken, (req, res) => {
+router.get("/allDeadsInHerd/:herdName", verifyToken, (req, res) => {
   if (req.params.herdName) {
     jwt.verify(
       req.token,
@@ -1695,7 +1691,7 @@ router.get("/takeAllDeadsAnimalsInHerd/:herdName", verifyToken, (req, res) => {
 
 /**
  * @swagger
- * /animals/editNewDeadAnimalIdentityNumber:
+ * /animals/deadIdentityNumber:
  *    put:
  *      tags:
  *      - name: Animals
@@ -1729,7 +1725,7 @@ router.get("/takeAllDeadsAnimalsInHerd/:herdName", verifyToken, (req, res) => {
  *          description: Errors about empty data.
  */
 router.put(
-  "/editNewDeadAnimalIdentityNumber",
+  "/deadIdentityNumber",
   [
     check("herdName")
       .exists()
@@ -1832,7 +1828,7 @@ router.put(
 
 /**
  * @swagger
- * /animals/editNewDeadAnimalDateOfDeath:
+ * /animals/deadDate:
  *    put:
  *      tags:
  *      - name: Animals
@@ -1872,7 +1868,7 @@ router.put(
  *          description: Errors about empty data.
  */
 router.put(
-  "/editNewDeadAnimalDateOfDeath",
+  "/deadDate",
   [
     check("herdName")
       .exists()
@@ -1973,7 +1969,7 @@ router.put(
 
 /**
  * @swagger
- * /animals/deleteNewBornAnimal:
+ * /animals/born:
  *    delete:
  *      tags:
  *      - name: Animals
@@ -2007,7 +2003,7 @@ router.put(
  *          description: Errors about empty data.
  */
 router.delete(
-  "/deleteNewBornAnimal",
+  "/born",
   [
     check("herdName")
       .exists()
@@ -2104,7 +2100,7 @@ router.delete(
 
 /**
  * @swagger
- * /animals/deleteDeadAnimal:
+ * /animals/dead:
  *    delete:
  *      tags:
  *      - name: Animals
@@ -2138,7 +2134,7 @@ router.delete(
  *          description: Errors about empty data.
  */
 router.delete(
-  "/deleteDeadAnimal",
+  "/dead",
   [
     check("herdName")
       .exists()
@@ -2235,7 +2231,7 @@ router.delete(
 
 /**
  * @swagger
- * /animals/deleteAnimal:
+ * /animals/animal:
  *    delete:
  *      tags:
  *      - name: Animals
@@ -2269,7 +2265,7 @@ router.delete(
  *          description: Errors about empty data.
  */
 router.delete(
-  "/deleteAnimal",
+  "/animal",
   [
     check("herdName")
       .exists()
