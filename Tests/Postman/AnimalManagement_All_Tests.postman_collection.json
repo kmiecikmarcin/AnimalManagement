@@ -1245,7 +1245,7 @@
 								},
 								{
 									"key": "identityNumber",
-									"value": "{{new_identityNumberOfAnimal}}"
+									"value": "{{identityNumberOfAnimal}}"
 								}
 							]
 						}
