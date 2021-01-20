@@ -10,7 +10,6 @@ async function changeQuantityOfUserProduct(
       where: { idProduct: productId, UserId: userId },
     }
   );
-  console.log(updateQuantity);
   if (updateQuantity.includes(1)) {
     return updateQuantity;
   }
