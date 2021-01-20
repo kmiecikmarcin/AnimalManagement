@@ -21,7 +21,7 @@ const checkEnteredName = require("../Functions/Others/checkEnteredName");
 
 /**
  * @swagger
- * /herds/addNewHerd:
+ * /herds/herd:
  *    post:
  *      tags:
  *      - name: Herds
@@ -54,7 +54,7 @@ const checkEnteredName = require("../Functions/Others/checkEnteredName");
  *          description: User doesn't exist!
  */
 router.post(
-  "/addNewHerd",
+  "/herd",
   [
     check("herdName")
       .exists()
@@ -134,7 +134,7 @@ router.post(
 
 /**
  * @swagger
- * /herds/findAllHerds:
+ * /herds/all:
  *    get:
  *      tags:
  *      - name: Herds
@@ -147,7 +147,7 @@ router.post(
  *        404:
  *          description: User doesn't exist!
  */
-router.get("/findAllHerds", verifyToken, (req, res) => {
+router.get("/all", verifyToken, (req, res) => {
   jwt.verify(
     req.token,
     process.env.S3_SECRETKEY,
@@ -175,7 +175,7 @@ router.get("/findAllHerds", verifyToken, (req, res) => {
 
 /**
  * @swagger
- * /herds/findHerdByName/{name}:
+ * /herds/{name}:
  *    get:
  *      tags:
  *      - name: Herds
@@ -192,7 +192,7 @@ router.get("/findAllHerds", verifyToken, (req, res) => {
  *        404:
  *          description: User doesn't exist!
  */
-router.get("/findHerdByName/:name", verifyToken, (req, res) => {
+router.get("/:name", verifyToken, (req, res) => {
   if (req.params.name) {
     jwt.verify(
       req.token,
@@ -228,13 +228,13 @@ router.get("/findHerdByName/:name", verifyToken, (req, res) => {
 
 /**
  * @swagger
- * /herds/findHerdByAnimalType/{typeOfAnimal}:
+ * /herds/animals/{type}:
  *    get:
  *      tags:
  *      - name: Herds
  *      summary: Take herd by type of animal
  *      parameters:
- *        - name: typeOfAnimal
+ *        - name: type
  *          in: path
  *          type: string
  *      responses:
@@ -245,8 +245,8 @@ router.get("/findHerdByName/:name", verifyToken, (req, res) => {
  *        404:
  *          description: User doesn't exist!
  */
-router.get("/findHerdByAnimalType/:typeOfAnimal", verifyToken, (req, res) => {
-  if (req.params.typeOfAnimal) {
+router.get("/animals/:type", verifyToken, (req, res) => {
+  if (req.params.type) {
     jwt.verify(
       req.token,
       process.env.S3_SECRETKEY,
@@ -259,7 +259,7 @@ router.get("/findHerdByAnimalType/:typeOfAnimal", verifyToken, (req, res) => {
             const findHerd = await findHerdByAnimalType(
               KindsOfAnimals,
               Herds,
-              req.params.typeOfAnimal,
+              req.params.type,
               authData.id
             );
             if (findHerd) {
@@ -282,7 +282,7 @@ router.get("/findHerdByAnimalType/:typeOfAnimal", verifyToken, (req, res) => {
 
 /**
  * @swagger
- * /herds/changeHerdName:
+ * /herds/name:
  *    put:
  *      tags:
  *      - name: Herds
@@ -307,7 +307,7 @@ router.get("/findHerdByAnimalType/:typeOfAnimal", verifyToken, (req, res) => {
  *          description: User doesn't exist or herd with entered name doesn't exist!
  */
 router.put(
-  "/changeHerdName",
+  "/name",
   [
     check("oldHerdName")
       .exists()
@@ -389,7 +389,7 @@ router.put(
 
 /**
  * @swagger
- * /herds/changeTypeofHerd:
+ * /herds/type:
  *    put:
  *      tags:
  *      - name: Herds
@@ -409,7 +409,7 @@ router.put(
  *          description: User doesn't exist or entered type doesn't exist!
  */
 router.put(
-  "/changeTypeofHerd",
+  "/type",
   [
     check("newKindsOfAnimalsInHerd")
       .exists()
@@ -470,7 +470,7 @@ router.put(
 
 /**
  * @swagger
- * /herds/deleteHerd:
+ * /herds/herd:
  *    delete:
  *      tags:
  *      - name: Herds
@@ -502,7 +502,7 @@ router.put(
  *          description: User doesn't exist or herd with entered name doesn't exist!
  */
 router.delete(
-  "/deleteHerd",
+  "/herd",
   [
     check("herdName")
       .exists()

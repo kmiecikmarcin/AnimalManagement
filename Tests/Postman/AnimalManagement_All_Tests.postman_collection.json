@@ -456,7 +456,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/herds/addNewHerd",
+							"raw": "localhost:3000/herdapi/{{api_version}}/herds/herd",
 							"host": [
 								"localhost"
 							],
@@ -465,7 +465,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"herds",
-								"addNewHerd"
+								"herd"
 							]
 						}
 					},
@@ -510,7 +510,7 @@
 							}
 						],
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/herds/findAllHerds",
+							"raw": "localhost:3000/herdapi/{{api_version}}/herds/all",
 							"host": [
 								"localhost"
 							],
@@ -519,7 +519,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"herds",
-								"findAllHerds"
+								"all"
 							]
 						}
 					},
@@ -565,7 +565,7 @@
 							}
 						],
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/herds/findHerdByName/:name",
+							"raw": "localhost:3000/herdapi/{{api_version}}/herds/:name",
 							"host": [
 								"localhost"
 							],
@@ -574,7 +574,6 @@
 								"herdapi",
 								"{{api_version}}",
 								"herds",
-								"findHerdByName",
 								":name"
 							],
 							"variable": [
@@ -627,7 +626,7 @@
 							}
 						],
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/herds/findHerdByAnimalType/:typeOfAnimal",
+							"raw": "localhost:3000/herdapi/{{api_version}}/herds/animals/:type",
 							"host": [
 								"localhost"
 							],
@@ -636,12 +635,12 @@
 								"herdapi",
 								"{{api_version}}",
 								"herds",
-								"findHerdByAnimalType",
-								":typeOfAnimal"
+								"animals",
+								":type"
 							],
 							"variable": [
 								{
-									"key": "typeOfAnimal",
+									"key": "type",
 									"value": "{{type_of_herd}}"
 								}
 							]
@@ -710,7 +709,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/herds/changeHerdName",
+							"raw": "localhost:3000/herdapi/{{api_version}}/herds/name",
 							"host": [
 								"localhost"
 							],
@@ -719,7 +718,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"herds",
-								"changeHerdName"
+								"name"
 							]
 						}
 					},
@@ -787,7 +786,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/herds/changeTypeofHerd",
+							"raw": "localhost:3000/herdapi/{{api_version}}/herds/type",
 							"host": [
 								"localhost"
 							],
@@ -796,7 +795,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"herds",
-								"changeTypeofHerd"
+								"type"
 							]
 						}
 					},
@@ -863,7 +862,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/herds/deleteHerd",
+							"raw": "localhost:3000/herdapi/{{api_version}}/herds/herd",
 							"host": [
 								"localhost"
 							],
@@ -872,7 +871,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"herds",
-								"deleteHerd"
+								"herd"
 							]
 						}
 					},
