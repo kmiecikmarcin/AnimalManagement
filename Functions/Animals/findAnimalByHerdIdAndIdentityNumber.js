@@ -9,6 +9,7 @@ async function findAnimalByHerdIdAndIdentityNumber(
   identityNumberOfAnimal
 ) {
   const findAnimal = await AnimalsInHerd.findOne({
+    raw: true,
     where: { identityNumber: identityNumberOfAnimal, idHerd: herdId },
     attributes: ["identityNumber", "breed", "joinDate", "birthDate", "weight"],
     include: [
