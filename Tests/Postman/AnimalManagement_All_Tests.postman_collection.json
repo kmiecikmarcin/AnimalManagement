@@ -199,7 +199,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/users/changeAdressEmail",
+							"raw": "localhost:3000/herdapi/{{api_version}}/users/adressEmail",
 							"host": [
 								"localhost"
 							],
@@ -208,76 +208,7 @@
 								"herdapi",
 								"{{api_version}}",
 								"users",
-								"changeAdressEmail"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Deleted user account",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Successful Delete request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [
-							{
-								"key": "",
-								"value": "",
-								"type": "text",
-								"disabled": true
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"userPassword\":\"mmmmmm@\",\r\n    \"confirmPassword\":\"mmmmmm@\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/users/deleteAccount",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"herdapi",
-								"{{api_version}}",
-								"users",
-								"deleteAccount"
+								"adressEmail"
 							]
 						}
 					},
@@ -346,7 +277,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/{{api_version}}/users/changePassword",
+							"raw": "localhost:3000/herdapi/{{api_version}}/users/password",
 							"host": [
 								"localhost"
 							],
@@ -355,7 +286,76 @@
 								"herdapi",
 								"{{api_version}}",
 								"users",
-								"changePassword"
+								"password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deleted user account",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful Delete request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userPassword\":\"mmmmmm@\",\r\n    \"confirmPassword\":\"mmmmmm@\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/users/account",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"users",
+								"account"
 							]
 						}
 					},
