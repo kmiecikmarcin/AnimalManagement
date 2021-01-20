@@ -641,7 +641,7 @@
 							"variable": [
 								{
 									"key": "type",
-									"value": ""
+									"value": "{{type_of_animal}}"
 								}
 							]
 						}
