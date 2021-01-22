@@ -5082,7 +5082,7 @@
 								"exec": [
 									"pm.test(\"Response is correct\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.Message).to.eql(\"Nie udało się usunąć wybranych danych!\");\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
 									"});\r",
 									"pm.test(\"Successful DELETE request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
@@ -5097,7 +5097,7 @@
 							"script": {
 								"exec": [
 									"const random_number = _.random(0,1000);\r",
-									"const random_user_email = \"user\" +  random_number + \"@example\";\r",
+									"const random_user_email = \"user\" +  random_number + \"@example.com\";\r",
 									"\r",
 									"pm.environment.set(\"random_user_email\", random_user_email);"
 								],
