@@ -26,6 +26,7 @@ const findAllProductsAssignedToAnimal = require("../Functions/Products/findAllPr
 const createNewUserTransaction = require("../Functions/Products/createNewUserTransaction");
 const findAllUserTransactions = require("../Functions/Products/findAllUserTransactions");
 const changeQuantityOfUserProduct = require("../Functions/Products/changeQuantityOfUserProduct");
+const changeDateOfAddedProductByUser = require("../Functions/Products/changeDateOfAddedProductByUser");
 
 /**
  * @swagger
@@ -462,7 +463,79 @@ router.put(
  *        404:
  *          description: User doesn't exist!
  */
-router.put("/dateOfAdded", verifyToken, () => {});
+router.put(
+  "/dateOfAdded",
+  [
+    check("identityNumberOfProduct")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isInt()
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
+    check("newDateOfAddedProduct")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isDate()
+      .withMessage(
+        "Wprowadzona wartość nie jest datą! Spróbuj według schematu: YYYY-MM-DD."
+      ),
+  ],
+  verifyToken,
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkIdentityNumberOfProduct = await checkIdentityNumberForFoodAndProducts(
+                AllProductsFromAnimals,
+                req.body.identityNumberOfProduct,
+                authData.id
+              );
+              if (checkIdentityNumberOfProduct !== null) {
+                const updateDate = await changeDateOfAddedProductByUser(
+                  AllProductsFromAnimals,
+                  checkIdentityNumberOfProduct.id,
+                  req.body.newDateOfAddedProduct,
+                  authData.id
+                );
+                if (updateDate !== null) {
+                  res.status(200).json({
+                    Message:
+                      "Pomyślnie zaktualizowano datę wprowadzenia produktu!",
+                  });
+                } else {
+                  res.status(400).json({
+                    Erro:
+                      "Nie udało się zaktualizować daty wprowadzenia produktu! Sprawdź wprowadzone dane!",
+                  });
+                }
+              } else {
+                res.status(400).json({
+                  Error:
+                    "Produkt o wprowadzonym numerze identyfikacyjnym nie istnieje!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
+);
 
 /**
  * @swagger
