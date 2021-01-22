@@ -2527,6 +2527,75 @@
 					"response": []
 				},
 				{
+					"name": "Edit date of added product ",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie zaktualizowano datę wprowadzenia produktu!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const take_date = new Date();\r",
+									"const new_date_of_added_product = take_date.getFullYear() + \"-\" + (\"0\" + (take_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_date.getDate() + 2).slice(-2);\r",
+									"\r",
+									"pm.environment.set(\"new_date_of_added_product\", new_date_of_added_product);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfProduct\": \"{{identity_number_of_product}}\",\r\n    \"newDateOfAddedProduct\": \"{{new_date_of_added_product}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/dateOfAdded",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"dateOfAdded"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Assign product to animal",
 					"event": [
 						{
