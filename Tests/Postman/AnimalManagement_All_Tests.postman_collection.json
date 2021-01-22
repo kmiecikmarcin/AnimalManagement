@@ -5082,7 +5082,7 @@
 								"exec": [
 									"pm.test(\"Response is correct\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.Message).to.eql(\"Wybrane konto użytkownika nie istnieje!\");\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Nie udało się usunąć wybranych danych!\");\r",
 									"});\r",
 									"pm.test(\"Successful DELETE request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
