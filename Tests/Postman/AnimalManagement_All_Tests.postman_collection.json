@@ -1091,7 +1091,7 @@
 									"pm.collectionVariables.set(\"kinds_of_animal_array\", kinds_of_animal_array);\r",
 									"pm.collectionVariables.set(\"animal_gender\", animal_gender);\r",
 									"pm.collectionVariables.set(\"identityNumberOfAnimal\", identityNumberOfAnimal);\r",
-									"pm.collectionVariables.set(\"breeds_of_animal_array\", breeds_of_animal_array);\r",
+									"pm.environment.set(\"breeds_of_animal_array\", breeds_of_animal_array);\r",
 									"pm.collectionVariables.set(\"animal_weight\", animal_weight);"
 								],
 								"type": "text/javascript"
@@ -2549,7 +2549,7 @@
 							"script": {
 								"exec": [
 									"const take_date = new Date();\r",
-									"const new_date_of_added_product = take_date.getFullYear() + \"-\" + (\"0\" + (take_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_date.getDate() + 2).slice(-2);\r",
+									"const new_date_of_added_product = take_date.getFullYear() + \"-\" + (\"0\" + (take_date.getMonth() + 2)).slice(-2) + \"-\" + (\"0\" + take_date.getDate()).slice(-2);\r",
 									"\r",
 									"pm.environment.set(\"new_date_of_added_product\", new_date_of_added_product);"
 								],
@@ -5082,12 +5082,24 @@
 								"exec": [
 									"pm.test(\"Response is correct\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie usunięto konto wybranego użytkownika!\");\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Wybrane konto użytkownika nie istnieje!\");\r",
 									"});\r",
 									"pm.test(\"Successful DELETE request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
 									"});\r",
 									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const random_number = _.random(0,1000);\r",
+									"const random_user_email = \"user\" +  random_number + \"@example\";\r",
+									"\r",
+									"pm.environment.set(\"random_user_email\", random_user_email);"
 								],
 								"type": "text/javascript"
 							}
@@ -5108,7 +5120,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userEmail\": \"{{new_email}}\"\r\n}",
+							"raw": "{\r\n    \"userEmail\": \"{{random_user_email}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -5188,10 +5200,6 @@
 		},
 		{
 			"key": "animal_weight",
-			"value": ""
-		},
-		{
-			"key": "breed_of_animal",
 			"value": ""
 		},
 		{
@@ -5303,14 +5311,6 @@
 			"value": ""
 		},
 		{
-			"key": "Drób",
-			"value": ""
-		},
-		{
-			"key": "Kaczka",
-			"value": ""
-		},
-		{
 			"key": "new_kind_of_animal",
 			"value": ""
 		},
@@ -5368,10 +5368,6 @@
 		},
 		{
 			"key": "identity_number_of_transaction",
-			"value": ""
-		},
-		{
-			"key": "new_product_type",
 			"value": ""
 		},
 		{
