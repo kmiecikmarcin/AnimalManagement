@@ -25,7 +25,7 @@ const AllProductsFromAnimals = sequelize.define(
       allowNull: false,
       field: "quantityOfProduct",
     },
-    currentQuentity: {
+    currentQuantity: {
       type: DataTypes.FLOAT,
       allowNull: false,
       field: "currentQuantityOfProduct",
