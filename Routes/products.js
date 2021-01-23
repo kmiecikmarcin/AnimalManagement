@@ -14,6 +14,7 @@ const Herds = require("../Models/Herds");
 const AnimalsInHerd = require("../Models/AnimalsInHerd");
 const ProductFromAnAnimal = require("../Models/ProductFromAnAnimal");
 const UserTransactions = require("../Models/UserTransactions");
+const SoldProductsByUser = require("../Models/SoldProductsByUser");
 const findAllUserProducts = require("../Functions/Products/findAllUserProducts");
 const findAllUserProductsByTypeName = require("../Functions/Products/findAllUserProductsByTypeName");
 const findProductByName = require("../Functions/Products/findProductByName");
@@ -27,6 +28,8 @@ const createNewUserTransaction = require("../Functions/Products/createNewUserTra
 const findAllUserTransactions = require("../Functions/Products/findAllUserTransactions");
 const changeQuantityOfUserProduct = require("../Functions/Products/changeQuantityOfUserProduct");
 const changeDateOfAddedProductByUser = require("../Functions/Products/changeDateOfAddedProductByUser");
+const changeCurrentQuantityOfProduct = require("../Functions/Products/changeCurrentQuantityOfProduct");
+const assignSoldProductToUserTransaction = require("../Functions/Products/assignSoldProductToUserTransaction");
 
 /**
  * @swagger
@@ -966,7 +969,115 @@ router.get("/allTransactions", verifyToken, (req, res) => {
  *        404:
  *          description: User doesn't exist!
  */
-router.post("/assignToTransaction", verifyToken, () => {});
+router.post(
+  "/assignToTransaction",
+  [
+    check("identityNumberOfTransaction")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isInt()
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
+    check("identityNumberOfProduct")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isInt()
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
+    check("soldQuantityOfProduct")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isFloat()
+      .withMessage("Wprowadzona wartość nie jest liczbą!"),
+    check("price")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isFloat()
+      .withMessage("Wprowadzona wartość nie jest liczbą!"),
+  ],
+  verifyToken,
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkTransactionIdentityNumber = await checkIdentityNumberForFoodAndProducts(
+                UserTransactions,
+                req.body.identityNumberOfTransaction,
+                authData.id
+              );
+              if (checkTransactionIdentityNumber !== null) {
+                const checkProductIdentityNumber = await checkIdentityNumberForFoodAndProducts(
+                  AllProductsFromAnimals,
+                  req.body.identityNumberOfProduct,
+                  authData.id
+                );
+                if (checkProductIdentityNumber !== null) {
+                  const updateCurrentQuantityOfProduct = await changeCurrentQuantityOfProduct(
+                    AllProductsFromAnimals,
+                    checkProductIdentityNumber.currentQuantity,
+                    req.body.soldQuantityOfProduct,
+                    checkProductIdentityNumber.id,
+                    authData.id
+                  );
+                  if (updateCurrentQuantityOfProduct !== null) {
+                    const assignProductToTransaction = await assignSoldProductToUserTransaction(
+                      SoldProductsByUser,
+                      checkProductIdentityNumber.id,
+                      checkTransactionIdentityNumber.id,
+                      req.body.soldQuantityOfProduct,
+                      req.body.price,
+                      updateCurrentQuantityOfProduct.currentQuantity
+                    );
+                    if (assignProductToTransaction !== null) {
+                      res.status(201).json({
+                        Message: "Pomyślnie przypisano produkt do transakcji!",
+                      });
+                    } else {
+                      res.status(400).json({
+                        Error:
+                          "Nie udało się przypisać produktu do transakcji!",
+                      });
+                    }
+                  } else {
+                    res.status(400).json({});
+                  }
+                } else {
+                  res.status(404).json({
+                    Error:
+                      "Wprowadzony identyfikacyjny numer produktu nie istnieje!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error:
+                    "Wprowadzony identyfikacyjny numer transakcji nie istnieje!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
+);
 
 /**
  * @swagger
