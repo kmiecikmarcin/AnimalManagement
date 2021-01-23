@@ -9,7 +9,7 @@ async function createNewUserProductFromAnimal(
   const addNewProduct = await AllProductsFromAnimals.create({
     identityNumber: identityNumberOfProduct,
     quantity: quantityOfProduct,
-    currentQuentity: quantityOfProduct,
+    currentQuantity: quantityOfProduct,
     date: dateOfAddedProduct,
     TypesOfProductId: productTypeId,
     UserId: userId,
