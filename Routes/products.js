@@ -1042,7 +1042,7 @@ router.post(
                       checkTransactionIdentityNumber.id,
                       req.body.soldQuantityOfProduct,
                       req.body.price,
-                      updateCurrentQuantityOfProduct.currentQuantity
+                      checkProductIdentityNumber.currentQuantity
                     );
                     if (assignProductToTransaction !== null) {
                       res.status(201).json({
@@ -1055,7 +1055,9 @@ router.post(
                       });
                     }
                   } else {
-                    res.status(400).json({});
+                    res
+                      .status(400)
+                      .json({ Error: "Brak wymaganej ilości produktu!" });
                   }
                 } else {
                   res.status(404).json({
