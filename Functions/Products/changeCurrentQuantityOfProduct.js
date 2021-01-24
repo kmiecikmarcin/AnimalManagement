@@ -8,7 +8,7 @@ async function changeCurrentQuantityOfProduct(
   const currentSoldQuantity =
     parseFloat(currentQuantityOfProduct, 10) -
     parseFloat(soldQuantityOfProduct, 10);
-  if (parseFloat(currentSoldQuantity, 10) > 0) {
+  if (parseFloat(currentSoldQuantity, 10) >= 0) {
     const updateCurrentQuantity = await AllProductsFromAnimals.update(
       { currentQuantity: currentSoldQuantity },
       { where: { idProduct: productId, UserId: userId } }
