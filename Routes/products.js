@@ -30,6 +30,7 @@ const changeQuantityOfUserProduct = require("../Functions/Products/changeQuantit
 const changeDateOfAddedProductByUser = require("../Functions/Products/changeDateOfAddedProductByUser");
 const changeCurrentQuantityOfProduct = require("../Functions/Products/changeCurrentQuantityOfProduct");
 const assignSoldProductToUserTransaction = require("../Functions/Products/assignSoldProductToUserTransaction");
+const findAllProductsAssignedToUserTransactions = require("../Functions/Products/findAllProductsAssignedToUserTransactions");
 
 /**
  * @swagger
@@ -1106,7 +1107,39 @@ router.post(
 router.get(
   "/FromTransaction/:identityNumberOfTransaction",
   verifyToken,
-  () => {}
+  (req, res) => {
+    if (req.params.identityNumberOfTransaction) {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const findProductsInTransaction = await findAllProductsAssignedToUserTransactions(
+                UserTransactions,
+                req.params.identityNumberOfTransaction,
+                authData.id
+              );
+              if (findProductsInTransaction !== null) {
+                res.status(200).json(findProductsInTransaction);
+              } else {
+                res.status(400).json({
+                  Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    } else {
+      res.status(400).json({ Error: "Nie wprowadzono wymaganych danych!" });
+    }
+  }
 );
 
 /**

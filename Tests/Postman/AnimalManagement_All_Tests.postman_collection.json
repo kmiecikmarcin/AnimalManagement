@@ -2897,6 +2897,61 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Find all products assigned to transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/FromTransaction/:identityNumberOfTransaction",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"FromTransaction",
+								":identityNumberOfTransaction"
+							],
+							"variable": [
+								{
+									"key": "identityNumberOfTransaction",
+									"value": "{{identity_number_of_transaction}}"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
