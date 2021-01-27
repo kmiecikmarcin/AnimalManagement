@@ -2829,7 +2829,7 @@
 					"response": []
 				},
 				{
-					"name": "Assign product to animal",
+					"name": "Assign product to transactions",
 					"event": [
 						{
 							"listen": "test",
@@ -2948,6 +2948,131 @@
 									"key": "identityNumberOfTransaction",
 									"value": "{{identity_number_of_transaction}}"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit quantity of sold product in transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie zaktualizowano ilość sprzedanych produktów w transakcji!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfTransaction\": \"{{identity_number_of_transaction}}\",\r\n    \"identityNumberOfProduct\": \"{{identity_number_of_product}}\",\r\n    \"quantityOfProduct\": \"{{quantity_of_product}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/quantityInTransaction",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"quantityInTransaction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit price of produkt in transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie zaktualizowano cenę za jaką sprzedano produkt!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const random_price = _.random(0,100);\r",
+									"\r",
+									"pm.environment.set(\"random_price\", random_price);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfTransaction\": \"{{identity_number_of_transaction}}\",\r\n    \"identityNumberOfProduct\": \"{{identity_number_of_product}}\",\r\n    \"price\": \"{{random_price}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/priceInTransaction",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"priceInTransaction"
 							]
 						}
 					},
