@@ -31,6 +31,8 @@ const changeDateOfAddedProductByUser = require("../Functions/Products/changeDate
 const changeCurrentQuantityOfProduct = require("../Functions/Products/changeCurrentQuantityOfProduct");
 const assignSoldProductToUserTransaction = require("../Functions/Products/assignSoldProductToUserTransaction");
 const findAllProductsAssignedToUserTransactions = require("../Functions/Products/findAllProductsAssignedToUserTransactions");
+const changeQuantityOfSoldProductInTransaction = require("../Functions/Products/changeQuantityOfSoldProductInTransaction");
+const changePriceOfSoldProductInTransaction = require("../Functions/Products/changePriceOfSoldProductInTransaction");
 
 /**
  * @swagger
@@ -1178,7 +1180,109 @@ router.get(
  *        404:
  *          description: User doesn't exist!
  */
-router.put("/quantityInTransaction", verifyToken, () => {});
+router.put(
+  "/quantityInTransaction",
+  [
+    check("identityNumberOfTransaction")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isInt()
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
+    check("identityNumberOfProduct")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isInt()
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
+    check("quantityOfProduct")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isFloat()
+      .withMessage("Wprowadzona wartość nie jest liczbą!"),
+  ],
+  verifyToken,
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkTransactionIdentityNumber = await checkIdentityNumberForFoodAndProducts(
+                UserTransactions,
+                req.body.identityNumberOfTransaction,
+                authData.id
+              );
+              if (checkTransactionIdentityNumber !== null) {
+                const checkProductIdentityNumber = await checkIdentityNumberForFoodAndProducts(
+                  AllProductsFromAnimals,
+                  req.body.identityNumberOfProduct,
+                  authData.id
+                );
+                if (checkProductIdentityNumber !== null) {
+                  const updateCurrentQuantityOfProduct = await changeCurrentQuantityOfProduct(
+                    AllProductsFromAnimals,
+                    checkProductIdentityNumber.currentQuantity,
+                    req.body.quantityOfProduct,
+                    checkProductIdentityNumber.id,
+                    authData.id
+                  );
+                  if (updateCurrentQuantityOfProduct !== null) {
+                    const updateQuantityOfSoldProduct = await changeQuantityOfSoldProductInTransaction(
+                      SoldProductsByUser,
+                      req.body.quantityOfProduct,
+                      checkTransactionIdentityNumber.id,
+                      checkProductIdentityNumber.id
+                    );
+                    if (updateQuantityOfSoldProduct !== null) {
+                      res.status(200).json({
+                        Message:
+                          "Pomyślnie zaktualizowano ilość sprzedanych produktów w transakcji!",
+                      });
+                    } else {
+                      res.status(400).json({
+                        Error:
+                          "Nie udało się zaktualizować ilości sprzedanego produktu! Sprawdź wprowadzone dane!",
+                      });
+                    }
+                  } else {
+                    res
+                      .status(400)
+                      .json({ Error: "Brak produktu, by zmienić jego ilość!" });
+                  }
+                } else {
+                  res.status(404).json({
+                    Error:
+                      "Wprowadzony identyfikacyjny numer produktu nie istnieje!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error:
+                    "Wprowadzony identyfikacyjny numer transakcji nie istnieje!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
+);
 
 /**
  * @swagger
@@ -1216,7 +1320,96 @@ router.put("/quantityInTransaction", verifyToken, () => {});
  *        404:
  *          description: User doesn't exist!
  */
-router.put("/priceInTransaction", verifyToken, () => {});
+router.put(
+  "/priceInTransaction",
+  [
+    check("identityNumberOfTransaction")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isInt()
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
+    check("identityNumberOfProduct")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isInt()
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
+    check("price")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isFloat()
+      .withMessage("Wprowadzona wartość nie jest liczbą!"),
+  ],
+  verifyToken,
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkTransactionIdentityNumber = await checkIdentityNumberForFoodAndProducts(
+                UserTransactions,
+                req.body.identityNumberOfTransaction,
+                authData.id
+              );
+              if (checkTransactionIdentityNumber !== null) {
+                const checkProductIdentityNumber = await checkIdentityNumberForFoodAndProducts(
+                  AllProductsFromAnimals,
+                  req.body.identityNumberOfProduct,
+                  authData.id
+                );
+                if (checkProductIdentityNumber !== null) {
+                  const updatePriceOfSoldProductInTransaction = await changePriceOfSoldProductInTransaction(
+                    SoldProductsByUser,
+                    checkTransactionIdentityNumber.id,
+                    checkProductIdentityNumber.id,
+                    req.body.price
+                  );
+                  if (updatePriceOfSoldProductInTransaction !== null) {
+                    res.status(200).json({
+                      Message:
+                        "Pomyślnie zaktualizowano cenę za jaką sprzedano produkt!",
+                    });
+                  } else {
+                    res.status(400).json({
+                      Error:
+                        "Nie udało się zaktualizowac ceny! Sprawdź wprowadzone dane!",
+                    });
+                  }
+                } else {
+                  res.status(404).json({
+                    Error:
+                      "Wprowadzony identyfikacyjny numer produktu nie istnieje!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error:
+                    "Wprowadzony identyfikacyjny numer transakcji nie istnieje!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
+);
 
 /**
  * @swagger
