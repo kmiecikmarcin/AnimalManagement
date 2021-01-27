@@ -2853,7 +2853,7 @@
 									"const sold_quantity_of_product = 10;\r",
 									"const price = 5;\r",
 									"\r",
-									"pm.environment.set(\"sold_quantity_of_product\", sold_quantity_of_product);\r",
+									"pm.collectionVariables.set(\"sold_quantity_of_product\", sold_quantity_of_product);\r",
 									"pm.environment.set(\"price\", price);"
 								],
 								"type": "text/javascript"
@@ -2987,7 +2987,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"identityNumberOfTransaction\": \"{{identity_number_of_transaction}}\",\r\n    \"identityNumberOfProduct\": \"{{identity_number_of_product}}\",\r\n    \"quantityOfProduct\": \"{{quantity_of_product}}\"\r\n}",
+							"raw": "{\r\n    \"identityNumberOfTransaction\": \"{{identity_number_of_transaction}}\",\r\n    \"identityNumberOfProduct\": \"{{identity_number_of_product}}\",\r\n    \"quantityOfProduct\": \"{{sold_quantity_of_product}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

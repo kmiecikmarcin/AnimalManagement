@@ -1239,6 +1239,10 @@ router.put(
                     checkProductIdentityNumber.id,
                     authData.id
                   );
+                  console.log(
+                    checkProductIdentityNumber.currentQuantity,
+                    req.body.quantityOfProduct
+                  );
                   if (updateCurrentQuantityOfProduct !== null) {
                     const updateQuantityOfSoldProduct = await changeQuantityOfSoldProductInTransaction(
                       SoldProductsByUser,
