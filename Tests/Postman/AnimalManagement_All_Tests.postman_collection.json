@@ -3079,7 +3079,7 @@
 					"response": []
 				},
 				{
-					"name": "Product from animal",
+					"name": "Product assigned to animal",
 					"event": [
 						{
 							"listen": "test",
@@ -3091,6 +3091,63 @@
 									"});\r",
 									"pm.test(\"Successful DELETE request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"identityNumberOfAnimal\": \"{{new_identityNumberOfAnimal}}\",\r\n    \"identityNumberOfProduct\": \"{{identity_number_of_product}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/assignedToAnimal",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"assignedToAnimal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Product from animal",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
 									"});"
 								],
 								"type": "text/javascript"
