@@ -33,6 +33,8 @@ const assignSoldProductToUserTransaction = require("../Functions/Products/assign
 const findAllProductsAssignedToUserTransactions = require("../Functions/Products/findAllProductsAssignedToUserTransactions");
 const changeQuantityOfSoldProductInTransaction = require("../Functions/Products/changeQuantityOfSoldProductInTransaction");
 const changePriceOfSoldProductInTransaction = require("../Functions/Products/changePriceOfSoldProductInTransaction");
+const checkIfProductIsAssignedToAnimal = require("../Functions/Products/checkIfProductIsAssignedToAnimal");
+const deleteProductWhichUserAdded = require("../Functions/Products/deleteProductWhichUserAdded");
 
 /**
  * @swagger
@@ -1439,7 +1441,78 @@ router.put(
  *        404:
  *          description: Errors about empty data.
  */
-router.delete("/fromAnimal", verifyToken, () => {});
+router.delete(
+  "/fromAnimal",
+  [
+    check("identityNumberOfProduct")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isInt()
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
+  ],
+  verifyToken,
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkIdentityNumberOfProduct = await checkIdentityNumberForFoodAndProducts(
+                AllProductsFromAnimals,
+                req.body.identityNumberOfProduct,
+                authData.id
+              );
+              if (checkIdentityNumberOfProduct !== null) {
+                const checkProduct = await checkIfProductIsAssignedToAnimal(
+                  ProductFromAnAnimal,
+                  checkIdentityNumberOfProduct.id
+                );
+                if (checkProduct !== null) {
+                  const deleteProduct = await deleteProductWhichUserAdded(
+                    AllProductsFromAnimals,
+                    checkIdentityNumberOfProduct.id,
+                    authData.id
+                  );
+                  if (deleteProduct !== null) {
+                    res
+                      .status(200)
+                      .json({ Message: "Produkt został usunięty pomyślnie!" });
+                  } else {
+                    res.status(400).json({
+                      Error: "Nie udało się usunąć wybranego produktu!",
+                    });
+                  }
+                } else {
+                  res.status(400).json({
+                    Error:
+                      "Produkt jest przypisany do zwierzęcia! Nie można go usunąć!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error:
+                    "Product o wprowadzonym numerze identyfikacyjnym nie istnieje!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
+);
 
 /**
  * @swagger
