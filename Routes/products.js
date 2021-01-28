@@ -35,6 +35,7 @@ const changeQuantityOfSoldProductInTransaction = require("../Functions/Products/
 const changePriceOfSoldProductInTransaction = require("../Functions/Products/changePriceOfSoldProductInTransaction");
 const checkIfProductIsAssignedToAnimal = require("../Functions/Products/checkIfProductIsAssignedToAnimal");
 const deleteProductWhichUserAdded = require("../Functions/Products/deleteProductWhichUserAdded");
+const deleteProductAssignedToAnimal = require("../Functions/Products/deleteProductAssignedToAnimal");
 
 /**
  * @swagger
@@ -1241,10 +1242,6 @@ router.put(
                     checkProductIdentityNumber.id,
                     authData.id
                   );
-                  console.log(
-                    checkProductIdentityNumber.currentQuantity,
-                    req.body.quantityOfProduct
-                  );
                   if (updateCurrentQuantityOfProduct !== null) {
                     const updateQuantityOfSoldProduct = await changeQuantityOfSoldProductInTransaction(
                       SoldProductsByUser,
@@ -1522,6 +1519,11 @@ router.delete(
  *      - name: Products
  *      summary: Delete assigned product to animal
  *      parameters:
+ *        - name: herdName
+ *          in: formData
+ *          required: true
+ *          type: string
+ *          example: thebestherd
  *        - name: identityNumberOfAnimal
  *          in: formData
  *          required: true
@@ -1544,7 +1546,106 @@ router.delete(
  *        404:
  *          description: Errors about empty data.
  */
-router.delete("/assignedToAnimal", verifyToken, () => {});
+router.delete(
+  "/assignedToAnimal",
+  [
+    check("herdName")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isLength({ min: 3, max: 40 })
+      .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
+    check("identityNumberOfAnimal")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isInt()
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
+    check("identityNumberOfProduct")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isInt()
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
+  ],
+  verifyToken,
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkHerd = await findHerdByName(
+                Herds,
+                req.body.herdName,
+                authData.id
+              );
+              if (checkHerd !== null) {
+                const checkIdentityNumberOfAnimal = await checkEnteredIdentityNumberForAnimals(
+                  AnimalsInHerd,
+                  req.body.identityNumberOfAnimal,
+                  checkHerd.id
+                );
+                if (checkIdentityNumberOfAnimal !== null) {
+                  const checkIdentityNumberOfProduct = await checkIdentityNumberForFoodAndProducts(
+                    AllProductsFromAnimals,
+                    req.body.identityNumberOfProduct,
+                    authData.id
+                  );
+                  if (checkIdentityNumberOfProduct !== null) {
+                    const deleteProduct = await deleteProductAssignedToAnimal(
+                      ProductFromAnAnimal,
+                      checkIdentityNumberOfAnimal.id,
+                      checkIdentityNumberOfProduct.id
+                    );
+                    if (deleteProduct !== null) {
+                      res.status(200).json({
+                        Message:
+                          "Pomyślnie usunięto produkt przypisany do zwierzęcia!",
+                      });
+                    } else {
+                      res.status(400).json({
+                        Error:
+                          "Nie udało się usunąć produktu przypisanego do zwierzęcia!",
+                      });
+                    }
+                  } else {
+                    res.status(404).json({
+                      Error:
+                        "Produkt o wprowadzonym numerze identyfikacyjnym nie istnieje!",
+                    });
+                  }
+                } else {
+                  res.status(404).json({
+                    Error:
+                      "Zwierzę o wprowadzonym numerze identyfikacyjnym nie istnieje!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error: "Hodowla o wprowadzonej nazwie nie istnieje!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
+);
 
 /**
  * @swagger

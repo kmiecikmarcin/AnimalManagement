@@ -156,7 +156,6 @@ router.post(
           .status(400)
           .json({ Error: "Użytkownik o podanym adresie e-mail już istnieje!" });
       } else {
-        console.log(userEmail);
         const assignUserRole = await findTypeOfUserRoleByName(
           TypesOfUsersRoles,
           "Hodowca"
@@ -587,7 +586,6 @@ router.put(
                 checkUserById.accountDeletedStatus
               );
               if (deleteAccount) {
-                console.log(deleteAccount);
                 res.status(200).json({
                   Message: "Twoje konto zostało usunięte!",
                 });
