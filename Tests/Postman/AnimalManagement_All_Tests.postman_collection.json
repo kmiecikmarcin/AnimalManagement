@@ -148,7 +148,7 @@
 									"const random_number = _.random(1000, 9000);\r",
 									"const new_email = \"user\" + random_number + \"@example.com\";\r",
 									"\r",
-									"pm.collectionVariables.set(\"new_email\", new_email);"
+									"pm.environment.set(\"new_email\", new_email);"
 								],
 								"type": "text/javascript"
 							}
@@ -224,7 +224,7 @@
 									"const random_password = _.random(100000,9000000);\r",
 									"const new_password = random_password + \"@\";\r",
 									"\r",
-									"pm.collectionVariables.set(\"new_password\", new_password);\r",
+									"pm.environment.set(\"new_password\", new_password);\r",
 									"\r",
 									""
 								],
@@ -418,9 +418,9 @@
 									"const take_date = new Date();\r",
 									"const date = take_date.getFullYear() + \"-\" + (\"0\" + (take_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_date.getDate()).slice(-2);\r",
 									"\r",
-									"pm.collectionVariables.set(\"name_of_herd\", name_of_herd);\r",
-									"pm.collectionVariables.set(\"type_of_herd\", type_of_herd);\r",
-									"pm.collectionVariables.set(\"date\", date);"
+									"pm.environment.set(\"name_of_herd\", name_of_herd);\r",
+									"pm.environment.set(\"type_of_herd\", type_of_herd);\r",
+									"pm.environment.set(\"date\", date);"
 								],
 								"type": "text/javascript"
 							}
@@ -658,7 +658,7 @@
 									"const random_number = _.random(1, 9000);\r",
 									"const new_name_of_herd = \"herd\" + random_number + \"example\";\r",
 									"\r",
-									"pm.collectionVariables.set(\"new_name_of_herd\", new_name_of_herd);"
+									"pm.environment.set(\"new_name_of_herd\", new_name_of_herd);"
 								],
 								"type": "text/javascript"
 							}
@@ -734,7 +734,7 @@
 									"const herds_type = [\"Kura\",\"Królik\",\"Świnia\"]\r",
 									"const random_number_for_type_of_herd = _.random(0, 2);\r",
 									"const new_type_of_herd = herds_type[random_number_for_type_of_herd];\r",
-									"console.log(new_type_of_herd)\r",
+									"\r",
 									"pm.environment.set(\"new_type_of_herd\",new_type_of_herd)"
 								],
 								"type": "text/javascript"
@@ -1087,12 +1087,12 @@
 									"const join_type = join_type_name_array[random_number_for_join_type_name];\r",
 									"const animal_gender = animal_genders_array[random_gender];\r",
 									"\r",
-									"pm.collectionVariables.set(\"join_type\", join_type);\r",
-									"pm.collectionVariables.set(\"kinds_of_animal_array\", kinds_of_animal_array);\r",
-									"pm.collectionVariables.set(\"animal_gender\", animal_gender);\r",
-									"pm.collectionVariables.set(\"identityNumberOfAnimal\", identityNumberOfAnimal);\r",
+									"pm.environment.set(\"join_type\", join_type);\r",
+									"pm.environment.set(\"kinds_of_animal_array\", kinds_of_animal_array);\r",
+									"pm.environment.set(\"animal_gender\", animal_gender);\r",
+									"pm.environment.set(\"identityNumberOfAnimal\", identityNumberOfAnimal);\r",
 									"pm.environment.set(\"breeds_of_animal_array\", breeds_of_animal_array);\r",
-									"pm.collectionVariables.set(\"animal_weight\", animal_weight);"
+									"pm.environment.set(\"animal_weight\", animal_weight);"
 								],
 								"type": "text/javascript"
 							}
@@ -1277,7 +1277,7 @@
 									"\r",
 									"const new_identityNumberOfAnimal = random_number;\r",
 									"\r",
-									"pm.collectionVariables.set(\"new_identityNumberOfAnimal\", new_identityNumberOfAnimal);"
+									"pm.environment.set(\"new_identityNumberOfAnimal\", new_identityNumberOfAnimal);"
 								],
 								"type": "text/javascript"
 							}
@@ -1345,7 +1345,7 @@
 								"exec": [
 									"const new_breeds_of_animal_array = [\"Brojler\"];\r",
 									"\r",
-									"pm.collectionVariables.set(\"new_breeds_of_animal_array\", new_breeds_of_animal_array);"
+									"pm.environment.set(\"new_breeds_of_animal_array\", new_breeds_of_animal_array);"
 								],
 								"type": "text/javascript"
 							}
@@ -1414,7 +1414,7 @@
 									"const take_date = new Date();\r",
 									"const new_date = take_date.getFullYear() + \"-\" + (\"0\" + (take_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_date.getDate()).slice(-2);\r",
 									"\r",
-									"pm.collectionVariables.set(\"new_date\", new_date);"
+									"pm.environment.set(\"new_date\", new_date);"
 								],
 								"type": "text/javascript"
 							}
@@ -1482,7 +1482,7 @@
 								"exec": [
 									"const new_animal_weight = _.random(1, 20);\r",
 									"\r",
-									"pm.collectionVariables.set(\"new_animal_weight\", new_animal_weight);"
+									"pm.environment.set(\"new_animal_weight\", new_animal_weight);"
 								],
 								"type": "text/javascript"
 							}
@@ -1553,8 +1553,8 @@
 									"const take_date = new Date();\r",
 									"const newborn_animal_birth_date = take_date.getFullYear() + \"-\" + (\"0\" + (take_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_date.getDate()).slice(-2);\r",
 									"\r",
-									"pm.collectionVariables.set(\"newborn_animal_birth_date\", newborn_animal_birth_date);\r",
-									"pm.collectionVariables.set(\"temporary_identity_number\", temporary_identity_number);"
+									"pm.environment.set(\"newborn_animal_birth_date\", newborn_animal_birth_date);\r",
+									"pm.environment.set(\"temporary_identity_number\", temporary_identity_number);"
 								],
 								"type": "text/javascript"
 							}
@@ -1623,7 +1623,7 @@
 									"const take_date = new Date();\r",
 									"const new_newborn_animal_birth_date = take_date.getFullYear() + \"-\" + (\"0\" + (take_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_date.getDate()).slice(-2);\r",
 									"\r",
-									"pm.collectionVariables.set(\"new_newborn_animal_birth_date\", new_newborn_animal_birth_date);"
+									"pm.environment.set(\"new_newborn_animal_birth_date\", new_newborn_animal_birth_date);"
 								],
 								"type": "text/javascript"
 							}
@@ -1799,8 +1799,8 @@
 									"\r",
 									"const reason_of_death = reasons_of_deaths_array[random_number];\r",
 									"\r",
-									"pm.collectionVariables.set(\"reason_of_death\", reason_of_death);\r",
-									"pm.collectionVariables.set(\"description_of_death\", description_of_death);"
+									"pm.environment.set(\"reason_of_death\", reason_of_death);\r",
+									"pm.environment.set(\"description_of_death\", description_of_death);"
 								],
 								"type": "text/javascript"
 							}
@@ -1925,7 +1925,7 @@
 									"\r",
 									"const new_dead_animal_identityNumberOfAnimal = random_number;\r",
 									"\r",
-									"pm.collectionVariables.set(\"new_dead_animal_identityNumberOfAnimal\", new_dead_animal_identityNumberOfAnimal);"
+									"pm.environment.set(\"new_dead_animal_identityNumberOfAnimal\", new_dead_animal_identityNumberOfAnimal);"
 								],
 								"type": "text/javascript"
 							}
@@ -2412,9 +2412,9 @@
 									"const take_date = new Date();\r",
 									"const date_of_added_products = take_date.getFullYear() + \"-\" + (\"0\" + (take_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_date.getDate()).slice(-2);\r",
 									"\r",
-									"pm.collectionVariables.set(\"identity_number_of_product\", identity_number_of_product);\r",
-									"pm.collectionVariables.set(\"quantity_of_product\", quantity_of_product);\r",
-									"pm.collectionVariables.set(\"date_of_added_products\", date_of_added_products);"
+									"pm.environment.set(\"identity_number_of_product\", identity_number_of_product);\r",
+									"pm.environment.set(\"quantity_of_product\", quantity_of_product);\r",
+									"pm.environment.set(\"date_of_added_products\", date_of_added_products);"
 								],
 								"type": "text/javascript"
 							}
@@ -2482,7 +2482,7 @@
 								"exec": [
 									"const new_quantity_of_product = 100;\r",
 									"\r",
-									"pm.collectionVariables.set(\"new_quantity_of_product\", new_quantity_of_product);"
+									"pm.environment.set(\"new_quantity_of_product\", new_quantity_of_product);"
 								],
 								"type": "text/javascript"
 							}
@@ -2736,7 +2736,7 @@
 								"exec": [
 									"const identity_number_of_transaction = _.random(0,10000);\r",
 									"\r",
-									"pm.collectionVariables.set(\"identity_number_of_transaction\",identity_number_of_transaction);"
+									"pm.environment.set(\"identity_number_of_transaction\",identity_number_of_transaction);"
 								],
 								"type": "text/javascript"
 							}
@@ -2853,7 +2853,7 @@
 									"const sold_quantity_of_product = 10;\r",
 									"const price = 5;\r",
 									"\r",
-									"pm.collectionVariables.set(\"sold_quantity_of_product\", sold_quantity_of_product);\r",
+									"pm.environment.set(\"sold_quantity_of_product\", sold_quantity_of_product);\r",
 									"pm.environment.set(\"price\", price);"
 								],
 								"type": "text/javascript"
@@ -3077,6 +3077,63 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Product from animal",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfProduct\": \"{{identity_number_of_product}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/fromAnimal",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"fromAnimal"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -3164,10 +3221,10 @@
 									"const take_date = new Date();\r",
 									"const date_of_purchased_food = take_date.getFullYear() + \"-\" + (\"0\" + (take_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_date.getDate()).slice(-2);\r",
 									"\r",
-									"pm.collectionVariables.set(\"identity_number_of_purchased_food\", identity_number_of_purchased_food);\r",
-									"pm.collectionVariables.set(\"species_name\", species_name);\r",
-									"pm.collectionVariables.set(\"quantity_of_food\", quantity_of_food);\r",
-									"pm.collectionVariables.set(\"date_of_purchased_food\", date_of_purchased_food);"
+									"pm.environment.set(\"identity_number_of_purchased_food\", identity_number_of_purchased_food);\r",
+									"pm.environment.set(\"species_name\", species_name);\r",
+									"pm.environment.set(\"quantity_of_food\", quantity_of_food);\r",
+									"pm.environment.set(\"date_of_purchased_food\", date_of_purchased_food);"
 								],
 								"type": "text/javascript"
 							}
@@ -3341,7 +3398,7 @@
 									"\r",
 									"const new_species_of_feed = new_species_of_feed_array[random_number];\r",
 									"\r",
-									"pm.collectionVariables.set(\"new_species_of_feed\",new_species_of_feed);"
+									"pm.environment.set(\"new_species_of_feed\",new_species_of_feed);"
 								],
 								"type": "text/javascript"
 							}
@@ -3409,7 +3466,7 @@
 								"exec": [
 									"const new_quantity_of_food = 100;\r",
 									"\r",
-									"pm.collectionVariables.set(\"new_quantity_of_food\", new_quantity_of_food);"
+									"pm.environment.set(\"new_quantity_of_food\", new_quantity_of_food);"
 								],
 								"type": "text/javascript"
 							}
@@ -3547,8 +3604,8 @@
 									"const identity_number_of_food_used_for_herd = _.random(0,10000);\r",
 									"const quantity_of_food_used_for_herd = 50;\r",
 									"\r",
-									"pm.collectionVariables.set(\"identity_number_of_food_used_for_herd\", identity_number_of_food_used_for_herd);\r",
-									"pm.collectionVariables.set(\"quantity_of_food_used_for_herd\", quantity_of_food_used_for_herd);"
+									"pm.environment.set(\"identity_number_of_food_used_for_herd\", identity_number_of_food_used_for_herd);\r",
+									"pm.environment.set(\"quantity_of_food_used_for_herd\", quantity_of_food_used_for_herd);"
 								],
 								"type": "text/javascript"
 							}
@@ -4096,7 +4153,7 @@
 								"exec": [
 									"const new_type_of_animal = \"Dzikie\";\r",
 									"\r",
-									"pm.collectionVariables.set(\"new_type_of_animal\", new_type_of_animal);"
+									"pm.environment.set(\"new_type_of_animal\", new_type_of_animal);"
 								],
 								"type": "text/javascript"
 							}
@@ -4210,8 +4267,8 @@
 									"const type_of_animal = \"Drób\";\r",
 									"const new_kind_of_animal = \"Kaczka\";\r",
 									"\r",
-									"pm.collectionVariables.set(\"type_of_animal\", type_of_animal);\r",
-									"pm.collectionVariables.set(\"new_kind_of_animal\", new_kind_of_animal);"
+									"pm.environment.set(\"type_of_animal\", type_of_animal);\r",
+									"pm.environment.set(\"new_kind_of_animal\", new_kind_of_animal);"
 								],
 								"type": "text/javascript"
 							}
@@ -4405,7 +4462,7 @@
 								"exec": [
 									"const new_type_of_food = \"Sianokos\";\r",
 									"\r",
-									"pm.collectionVariables.set(\"new_type_of_food\", new_type_of_food);"
+									"pm.environment.set(\"new_type_of_food\", new_type_of_food);"
 								],
 								"type": "text/javascript"
 							}
@@ -4535,8 +4592,8 @@
 									"const type_of_food = \"Zboże\";\r",
 									"const new_species_of_food = \"Owies\";\r",
 									"\r",
-									"pm.collectionVariables.set(\"type_of_food\", type_of_food);\r",
-									"pm.collectionVariables.set(\"new_species_of_food\", new_species_of_food);"
+									"pm.environment.set(\"type_of_food\", type_of_food);\r",
+									"pm.environment.set(\"new_species_of_food\", new_species_of_food);"
 								],
 								"type": "text/javascript"
 							}
@@ -4714,7 +4771,7 @@
 								"exec": [
 									"const new_type_of_user_role = \"Rolnik\";\r",
 									"\r",
-									"pm.collectionVariables.set(\"new_type_of_user_role\", new_type_of_user_role);"
+									"pm.environment.set(\"new_type_of_user_role\", new_type_of_user_role);"
 								],
 								"type": "text/javascript"
 							}
@@ -4912,7 +4969,7 @@
 								"exec": [
 									"const new_reason_of_animal_death = \"Zabite przez dzieki zwierzę\";\r",
 									"\r",
-									"pm.collectionVariables.set(\"new_reason_of_animal_death\", new_reason_of_animal_death);"
+									"pm.environment.set(\"new_reason_of_animal_death\", new_reason_of_animal_death);"
 								],
 								"type": "text/javascript"
 							}
@@ -5041,7 +5098,7 @@
 								"exec": [
 									"const new_type_of_join_to_the_herd = \"Otrzymane od osoby trzeciej\";\r",
 									"\r",
-									"pm.collectionVariables.set(\"new_type_of_join_to_the_herd\", new_type_of_join_to_the_herd);"
+									"pm.environment.set(\"new_type_of_join_to_the_herd\", new_type_of_join_to_the_herd);"
 								],
 								"type": "text/javascript"
 							}
@@ -5170,7 +5227,7 @@
 								"exec": [
 									"const new_type_of_product = \"Masło\";\r",
 									"\r",
-									"pm.collectionVariables.set(\"new_type_of_product\", new_type_of_product);"
+									"pm.environment.set(\"new_type_of_product\", new_type_of_product);"
 								],
 								"type": "text/javascript"
 							}
@@ -5421,7 +5478,7 @@
 	],
 	"variable": [
 		{
-			"key": "token",
+			"key": "api_version",
 			"value": ""
 		},
 		{
@@ -5433,171 +5490,7 @@
 			"value": ""
 		},
 		{
-			"key": "date",
-			"value": ""
-		},
-		{
-			"key": "name_of_herd",
-			"value": ""
-		},
-		{
-			"key": "type_of_herd",
-			"value": ""
-		},
-		{
-			"key": "animal_gender",
-			"value": ""
-		},
-		{
-			"key": "animal_weight",
-			"value": ""
-		},
-		{
-			"key": "identityNumberOfAnimal",
-			"value": ""
-		},
-		{
-			"key": "join_type",
-			"value": ""
-		},
-		{
-			"key": "kinds_of_animal_array",
-			"value": ""
-		},
-		{
-			"key": "breeds_of_animal_array",
-			"value": ""
-		},
-		{
-			"key": "new_name_of_herd",
-			"value": ""
-		},
-		{
-			"key": "new_identityNumberOfAnimal",
-			"value": ""
-		},
-		{
-			"key": "new_breeds_of_animal_array",
-			"value": ""
-		},
-		{
-			"key": "new_date",
-			"value": ""
-		},
-		{
-			"key": "new_animal_weight",
-			"value": ""
-		},
-		{
-			"key": "newborn_animal_birth_date",
-			"value": ""
-		},
-		{
-			"key": "temporary_identity_number",
-			"value": ""
-		},
-		{
-			"key": "new_newborn_animal_birth_date",
-			"value": ""
-		},
-		{
-			"key": "description_of_death",
-			"value": ""
-		},
-		{
-			"key": "reason_of_death",
-			"value": ""
-		},
-		{
-			"key": "new_dead_animal_identityNumberOfAnimal",
-			"value": ""
-		},
-		{
-			"key": "new_password",
-			"value": ""
-		},
-		{
-			"key": "species_name",
-			"value": ""
-		},
-		{
-			"key": "date_of_purchased_food",
-			"value": ""
-		},
-		{
-			"key": "identity_number_of_purchased_food",
-			"value": ""
-		},
-		{
-			"key": "quantity_of_food",
-			"value": ""
-		},
-		{
-			"key": "new_quantity_of_food",
-			"value": ""
-		},
-		{
-			"key": "new_species_of_feed",
-			"value": ""
-		},
-		{
-			"key": "identity_number_of_food_used_for_herd",
-			"value": ""
-		},
-		{
-			"key": "quantity_of_food_used_for_herd",
-			"value": ""
-		},
-		{
-			"key": "administrator_token",
-			"value": ""
-		},
-		{
-			"key": "api_version",
-			"value": ""
-		},
-		{
-			"key": "new_type_of_animal",
-			"value": ""
-		},
-		{
-			"key": "new_kind_of_animal",
-			"value": ""
-		},
-		{
-			"key": "type_of_animal",
-			"value": ""
-		},
-		{
-			"key": "new_type_of_food",
-			"value": ""
-		},
-		{
-			"key": "new_species_of_food",
-			"value": ""
-		},
-		{
-			"key": "type_of_food",
-			"value": ""
-		},
-		{
-			"key": "new_type_of_user_role",
-			"value": ""
-		},
-		{
-			"key": "new_reason_of_animal_death",
-			"value": ""
-		},
-		{
-			"key": "new_type_of_join_to_the_herd",
-			"value": ""
-		},
-		{
-			"key": "new_type_of_product",
-			"value": ""
-		},
-		{
-			"key": "new_email",
+			"key": "token",
 			"value": ""
 		},
 		{
@@ -5605,23 +5498,7 @@
 			"value": ""
 		},
 		{
-			"key": "identity_number_of_product",
-			"value": ""
-		},
-		{
-			"key": "quantity_of_product",
-			"value": ""
-		},
-		{
-			"key": "date_of_added_products",
-			"value": ""
-		},
-		{
-			"key": "identity_number_of_transaction",
-			"value": ""
-		},
-		{
-			"key": "new_quantity_of_product",
+			"key": "administrator_token",
 			"value": ""
 		}
 	]
