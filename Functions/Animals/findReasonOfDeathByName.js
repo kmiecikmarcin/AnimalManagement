@@ -1,6 +1,6 @@
 async function findReasonOfDeathByName(ReasonOfDeath, reasonOfDeathName) {
   const search = await ReasonOfDeath.findOne({
-    where: { description: reasonOfDeathName },
+    where: { name: reasonOfDeathName },
   });
   if (search !== null) {
     return search;

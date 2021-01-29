@@ -62,14 +62,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/users/register",
+							"raw": "localhost:3000/herdapi/{{api_version}}/users/register",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"users",
 								"register"
 							]
@@ -123,14 +123,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/users/login",
+							"raw": "localhost:3000/herdapi/{{api_version}}/users/login",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"users",
 								"login"
 							]
@@ -162,7 +162,7 @@
 									"    pm.expect(jsonData.Message).to.eql(\"Twój adress e-mail został zaktualizowany!\");\r",
 									"});\r",
 									"pm.test(\"Successful PUT request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -199,16 +199,94 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/users/changeAdressEmail",
+							"raw": "localhost:3000/herdapi/{{api_version}}/users/adressEmail",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"users",
-								"changeAdressEmail"
+								"adressEmail"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change user password",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const random_password = _.random(100000,9000000);\r",
+									"const new_password = random_password + \"@\";\r",
+									"\r",
+									"pm.environment.set(\"new_password\", new_password);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"oldUserPassword\":\"{{password}}\",\r\n    \"newUserPassword\":\"{{new_password}}\",\r\n    \"confirmNewPassword\":\"{{new_password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/users/password",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"users",
+								"password"
 							]
 						}
 					},
@@ -230,7 +308,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful Delete request\", function () {\r",
+									"pm.test(\"Unsuccessful Delete request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
 									"});"
 								],
@@ -268,94 +346,16 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/users/deleteAccount",
+							"raw": "localhost:3000/herdapi/{{api_version}}/users/account",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"users",
-								"deleteAccount"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Change user password",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"const random_password = _.random(100000,9000000);\r",
-									"const new_password = random_password + \"@\";\r",
-									"\r",
-									"pm.collectionVariables.set(\"new_password\", new_password);\r",
-									"\r",
-									""
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Response is correct\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.Message).not.eql(null);\r",
-									"});\r",
-									"pm.test(\"Successful PUT request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [
-							{
-								"key": "",
-								"value": "",
-								"type": "text",
-								"disabled": true
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"oldUserPassword\":\"{{password}}\",\r\n    \"newUserPassword\":\"{{new_password}}\",\r\n    \"confirmNewPassword\":\"{{new_password}}\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:3000/herdapi/v1/users/changePassword",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"herdapi",
-								"v1",
-								"users",
-								"changePassword"
+								"account"
 							]
 						}
 					},
@@ -417,11 +417,10 @@
 									"\r",
 									"const take_date = new Date();\r",
 									"const date = take_date.getFullYear() + \"-\" + (\"0\" + (take_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_date.getDate()).slice(-2);\r",
-									"console.log(date)\r",
 									"\r",
-									"pm.collectionVariables.set(\"name_of_herd\", name_of_herd);\r",
-									"pm.collectionVariables.set(\"type_of_herd\", type_of_herd);\r",
-									"pm.collectionVariables.set(\"date\", date);"
+									"pm.environment.set(\"name_of_herd\", name_of_herd);\r",
+									"pm.environment.set(\"type_of_herd\", type_of_herd);\r",
+									"pm.environment.set(\"date\", date);"
 								],
 								"type": "text/javascript"
 							}
@@ -449,7 +448,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"herdName\": \"{{name_of_herd}}\", \r\n    \"herdType\": \"{{type_of_herd}}\",\r\n    \"creationDate\": \"{{date}}\"\r\n}",
+							"raw": "{\r\n    \"herdName\": \"{{name_of_herd}}\", \r\n    \"kindOfAnimalsInHerd\": \"{{type_of_herd}}\",\r\n    \"creationDate\": \"{{date}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -457,16 +456,16 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/herds/addNewHerd",
+							"raw": "localhost:3000/herdapi/{{api_version}}/herds/herd",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"herds",
-								"addNewHerd"
+								"herd"
 							]
 						}
 					},
@@ -511,16 +510,16 @@
 							}
 						],
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/herds/findAllHerds",
+							"raw": "localhost:3000/herdapi/{{api_version}}/herds/all",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"herds",
-								"findAllHerds"
+								"all"
 							]
 						}
 					},
@@ -566,22 +565,22 @@
 							}
 						],
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/herds/findHerdByName/:name",
+							"raw": "localhost:3000/herdapi/{{api_version}}/herds/:name",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"herds",
-								"findHerdByName",
 								":name"
 							],
 							"variable": [
 								{
 									"key": "name",
-									"value": "{{name_of_herd}}"
+									"value": "{{name_of_herd}}",
+									"type": "string"
 								}
 							]
 						}
@@ -628,22 +627,23 @@
 							}
 						],
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/herds/findHerdByAnimalType/:typeOfAnimal",
+							"raw": "localhost:3000/herdapi/{{api_version}}/herds/animals/:type",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"herds",
-								"findHerdByAnimalType",
-								":typeOfAnimal"
+								"animals",
+								":type"
 							],
 							"variable": [
 								{
-									"key": "typeOfAnimal",
-									"value": "{{type_of_herd}}"
+									"key": "type",
+									"value": "{{type_of_herd}}",
+									"type": "string"
 								}
 							]
 						}
@@ -660,7 +660,7 @@
 									"const random_number = _.random(1, 9000);\r",
 									"const new_name_of_herd = \"herd\" + random_number + \"example\";\r",
 									"\r",
-									"pm.collectionVariables.set(\"new_name_of_herd\", new_name_of_herd);"
+									"pm.environment.set(\"new_name_of_herd\", new_name_of_herd);"
 								],
 								"type": "text/javascript"
 							}
@@ -674,7 +674,7 @@
 									"    pm.expect(jsonData.Message).to.eql(\"Nazwa hodowli została zaktualizowana!\");\r",
 									"});\r",
 									"pm.test(\"Successful PUT request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -711,16 +711,16 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/herds/changeHerdName",
+							"raw": "localhost:3000/herdapi/{{api_version}}/herds/name",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"herds",
-								"changeHerdName"
+								"name"
 							]
 						}
 					},
@@ -736,7 +736,7 @@
 									"const herds_type = [\"Kura\",\"Królik\",\"Świnia\"]\r",
 									"const random_number_for_type_of_herd = _.random(0, 2);\r",
 									"const new_type_of_herd = herds_type[random_number_for_type_of_herd];\r",
-									"console.log(new_type_of_herd)\r",
+									"\r",
 									"pm.environment.set(\"new_type_of_herd\",new_type_of_herd)"
 								],
 								"type": "text/javascript"
@@ -751,7 +751,7 @@
 									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie zaktualizowano typ zwierząt w hodowli!\");\r",
 									"});\r",
 									"pm.test(\"Successful PUT request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -780,7 +780,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"newTypeOfHerd\": \"{{new_type_of_herd}}\"\r\n}",
+							"raw": "{\r\n    \"newKindsOfAnimalsInHerd\": \"{{new_type_of_herd}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -788,16 +788,16 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/herds/changeTypeofHerd",
+							"raw": "localhost:3000/herdapi/{{api_version}}/herds/type",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"herds",
-								"changeTypeofHerd"
+								"type"
 							]
 						}
 					},
@@ -814,7 +814,7 @@
 									"    var jsonData = pm.response.json();\r",
 									"    pm.expect(jsonData.Message).not.eql(null);\r",
 									"});\r",
-									"pm.test(\"Successful DELETE request\", function () {\r",
+									"pm.test(\"Unsuccessful DELETE request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
 									"});"
 								],
@@ -864,16 +864,16 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/herds/deleteHerd",
+							"raw": "localhost:3000/herdapi/{{api_version}}/herds/herd",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"herds",
-								"deleteHerd"
+								"herd"
 							]
 						}
 					},
@@ -937,16 +937,16 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/animals/takeAllAnimalsGenders",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/genders",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"animals",
-								"takeAllAnimalsGenders"
+								"genders"
 							]
 						}
 					},
@@ -985,16 +985,16 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/animals/takeAllKindsOfAnimals",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/allkinds",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"animals",
-								"takeAllKindsOfAnimals"
+								"allkinds"
 							]
 						}
 					},
@@ -1033,16 +1033,16 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/animals/takeAllJoinTypeToTheHerd",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/allJoinTypeToHerd",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"animals",
-								"takeAllJoinTypeToTheHerd"
+								"allJoinTypeToHerd"
 							]
 						}
 					},
@@ -1089,12 +1089,12 @@
 									"const join_type = join_type_name_array[random_number_for_join_type_name];\r",
 									"const animal_gender = animal_genders_array[random_gender];\r",
 									"\r",
-									"pm.collectionVariables.set(\"join_type\", join_type);\r",
-									"pm.collectionVariables.set(\"kinds_of_animal_array\", kinds_of_animal_array);\r",
-									"pm.collectionVariables.set(\"animal_gender\", animal_gender);\r",
-									"pm.collectionVariables.set(\"identityNumberOfAnimal\", identityNumberOfAnimal);\r",
-									"pm.collectionVariables.set(\"breeds_of_animal_array\", breeds_of_animal_array);\r",
-									"pm.collectionVariables.set(\"animal_weight\", animal_weight);"
+									"pm.environment.set(\"join_type\", join_type);\r",
+									"pm.environment.set(\"kinds_of_animal_array\", kinds_of_animal_array);\r",
+									"pm.environment.set(\"animal_gender\", animal_gender);\r",
+									"pm.environment.set(\"identityNumberOfAnimal\", identityNumberOfAnimal);\r",
+									"pm.environment.set(\"breeds_of_animal_array\", breeds_of_animal_array);\r",
+									"pm.environment.set(\"animal_weight\", animal_weight);"
 								],
 								"type": "text/javascript"
 							}
@@ -1123,16 +1123,16 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/animals/addNewAnimal",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/animal",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"animals",
-								"addNewAnimal"
+								"animal"
 							]
 						}
 					},
@@ -1171,93 +1171,24 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/animals/findAllAnimalsInHerd/:herdName",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/allInHerd/:herdName",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"animals",
-								"findAllAnimalsInHerd",
+								"allInHerd",
 								":herdName"
 							],
 							"variable": [
 								{
 									"key": "herdName",
-									"value": "{{new_name_of_herd}}"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Edit identity number of animal",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Response is correct\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.Message).not.eql(null);\r",
-									"});\r",
-									"pm.test(\"Successful PUT request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"const random_number = _.random(0,10000);\r",
-									"\r",
-									"const new_identityNumberOfAnimal = random_number;\r",
-									"\r",
-									"pm.collectionVariables.set(\"new_identityNumberOfAnimal\", new_identityNumberOfAnimal);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
+									"value": "{{new_name_of_herd}}",
 									"type": "string"
 								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"oldIdentityNumberOfAnimal\": \"{{identityNumberOfAnimal}}\",\r\n    \"newIdentityNumberOfAnimal\": \"{{new_identityNumberOfAnimal}}\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:3000/herdapi/v1/animals/editIdentityNumberOfAnimal",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"herdapi",
-								"v1",
-								"animals",
-								"editIdentityNumberOfAnimal"
 							]
 						}
 					},
@@ -1296,28 +1227,100 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/animals/findOneAnimalInHerd/:herdName/:identityNumber",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/animalInHerd/:herdName/:identityNumber",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"animals",
-								"findOneAnimalInHerd",
+								"animalInHerd",
 								":herdName",
 								":identityNumber"
 							],
 							"variable": [
 								{
 									"key": "herdName",
-									"value": "{{new_name_of_herd}}"
+									"value": "{{new_name_of_herd}}",
+									"type": "string"
 								},
 								{
 									"key": "identityNumber",
-									"value": "{{new_identityNumberOfAnimal}}"
+									"value": "{{identityNumberOfAnimal}}",
+									"type": "string"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit identity number of animal",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const random_number = _.random(0,10000);\r",
+									"\r",
+									"const new_identityNumberOfAnimal = random_number;\r",
+									"\r",
+									"pm.environment.set(\"new_identityNumberOfAnimal\", new_identityNumberOfAnimal);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"oldIdentityNumberOfAnimal\": \"{{identityNumberOfAnimal}}\",\r\n    \"newIdentityNumberOfAnimal\": \"{{new_identityNumberOfAnimal}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/identityNumber",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"animals",
+								"identityNumber"
 							]
 						}
 					},
@@ -1335,7 +1338,7 @@
 									"    pm.expect(jsonData.Message).not.eql(null);\r",
 									"});\r",
 									"pm.test(\"Successful PUT request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1347,7 +1350,7 @@
 								"exec": [
 									"const new_breeds_of_animal_array = [\"Brojler\"];\r",
 									"\r",
-									"pm.collectionVariables.set(\"new_breeds_of_animal_array\", new_breeds_of_animal_array);"
+									"pm.environment.set(\"new_breeds_of_animal_array\", new_breeds_of_animal_array);"
 								],
 								"type": "text/javascript"
 							}
@@ -1376,16 +1379,16 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/animals/editBreedOfAnimal",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/breed",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"animals",
-								"editBreedOfAnimal"
+								"breed"
 							]
 						}
 					},
@@ -1403,7 +1406,7 @@
 									"    pm.expect(jsonData.Message).not.eql(null);\r",
 									"});\r",
 									"pm.test(\"Successful PUT request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1416,7 +1419,7 @@
 									"const take_date = new Date();\r",
 									"const new_date = take_date.getFullYear() + \"-\" + (\"0\" + (take_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_date.getDate()).slice(-2);\r",
 									"\r",
-									"pm.collectionVariables.set(\"new_date\", new_date);"
+									"pm.environment.set(\"new_date\", new_date);"
 								],
 								"type": "text/javascript"
 							}
@@ -1445,16 +1448,16 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/animals/editBirthDate",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/birthDate",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"animals",
-								"editBirthDate"
+								"birthDate"
 							]
 						}
 					},
@@ -1472,7 +1475,7 @@
 									"    pm.expect(jsonData.Message).not.eql(null);\r",
 									"});\r",
 									"pm.test(\"Successful PUT request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1484,7 +1487,7 @@
 								"exec": [
 									"const new_animal_weight = _.random(1, 20);\r",
 									"\r",
-									"pm.collectionVariables.set(\"new_animal_weight\", new_animal_weight);"
+									"pm.environment.set(\"new_animal_weight\", new_animal_weight);"
 								],
 								"type": "text/javascript"
 							}
@@ -1513,16 +1516,16 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/animals/editAnimalWeight",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/weight",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"animals",
-								"editAnimalWeight"
+								"weight"
 							]
 						}
 					},
@@ -1555,8 +1558,8 @@
 									"const take_date = new Date();\r",
 									"const newborn_animal_birth_date = take_date.getFullYear() + \"-\" + (\"0\" + (take_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_date.getDate()).slice(-2);\r",
 									"\r",
-									"pm.collectionVariables.set(\"newborn_animal_birth_date\", newborn_animal_birth_date);\r",
-									"pm.collectionVariables.set(\"temporary_identity_number\", temporary_identity_number);"
+									"pm.environment.set(\"newborn_animal_birth_date\", newborn_animal_birth_date);\r",
+									"pm.environment.set(\"temporary_identity_number\", temporary_identity_number);"
 								],
 								"type": "text/javascript"
 							}
@@ -1585,16 +1588,16 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/animals/addNewBornAnimal",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/born",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"animals",
-								"addNewBornAnimal"
+								"born"
 							]
 						}
 					},
@@ -1612,7 +1615,7 @@
 									"    pm.expect(jsonData.Message).not.eql(null);\r",
 									"});\r",
 									"pm.test(\"Successful PUT request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1625,7 +1628,7 @@
 									"const take_date = new Date();\r",
 									"const new_newborn_animal_birth_date = take_date.getFullYear() + \"-\" + (\"0\" + (take_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_date.getDate()).slice(-2);\r",
 									"\r",
-									"pm.collectionVariables.set(\"new_newborn_animal_birth_date\", new_newborn_animal_birth_date);"
+									"pm.environment.set(\"new_newborn_animal_birth_date\", new_newborn_animal_birth_date);"
 								],
 								"type": "text/javascript"
 							}
@@ -1654,16 +1657,16 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/animals/editNewBornAnimalBirthDate",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/bornBirthDate",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"animals",
-								"editNewBornAnimalBirthDate"
+								"bornBirthDate"
 							]
 						}
 					},
@@ -1702,22 +1705,23 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/animals/takeAllNewBornAnimalsInHerd/:herdName",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/bornInHerd/:herdName",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"animals",
-								"takeAllNewBornAnimalsInHerd",
+								"bornInHerd",
 								":herdName"
 							],
 							"variable": [
 								{
 									"key": "herdName",
-									"value": "{{new_name_of_herd}}"
+									"value": "{{new_name_of_herd}}",
+									"type": "string"
 								}
 							]
 						}
@@ -1757,16 +1761,16 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/animals/takeAllReasonsDeaths",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/allReasonsOfDeath",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"animals",
-								"takeAllReasonsDeaths"
+								"allReasonsOfDeath"
 							]
 						}
 					},
@@ -1801,8 +1805,8 @@
 									"\r",
 									"const reason_of_death = reasons_of_deaths_array[random_number];\r",
 									"\r",
-									"pm.collectionVariables.set(\"reason_of_death\", reason_of_death);\r",
-									"pm.collectionVariables.set(\"description_of_death\", description_of_death);"
+									"pm.environment.set(\"reason_of_death\", reason_of_death);\r",
+									"pm.environment.set(\"description_of_death\", description_of_death);"
 								],
 								"type": "text/javascript"
 							}
@@ -1831,16 +1835,16 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/animals/addNewDeadAnimal",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/dead",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"animals",
-								"addNewDeadAnimal"
+								"dead"
 							]
 						}
 					},
@@ -1879,22 +1883,23 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/animals/takeAllDeadsAnimalsInHerd/:herdName",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/allDeadsInHerd/:herdName",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"animals",
-								"takeAllDeadsAnimalsInHerd",
+								"allDeadsInHerd",
 								":herdName"
 							],
 							"variable": [
 								{
 									"key": "herdName",
-									"value": "{{new_name_of_herd}}"
+									"value": "{{new_name_of_herd}}",
+									"type": "string"
 								}
 							]
 						}
@@ -1913,7 +1918,7 @@
 									"    pm.expect(jsonData.Message).not.eql(null);\r",
 									"});\r",
 									"pm.test(\"Successful PUT request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1927,7 +1932,7 @@
 									"\r",
 									"const new_dead_animal_identityNumberOfAnimal = random_number;\r",
 									"\r",
-									"pm.collectionVariables.set(\"new_dead_animal_identityNumberOfAnimal\", new_dead_animal_identityNumberOfAnimal);"
+									"pm.environment.set(\"new_dead_animal_identityNumberOfAnimal\", new_dead_animal_identityNumberOfAnimal);"
 								],
 								"type": "text/javascript"
 							}
@@ -1956,16 +1961,16 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/animals/editNewDeadAnimalIdentityNumber",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/deadIdentityNumber",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"animals",
-								"editNewDeadAnimalIdentityNumber"
+								"deadIdentityNumber"
 							]
 						}
 					},
@@ -1983,7 +1988,7 @@
 									"    pm.expect(jsonData.Message).not.eql(null);\r",
 									"});\r",
 									"pm.test(\"Successful PUT request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -2013,73 +2018,16 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/animals/editNewDeadAnimalDateOfDeath",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/deadDate",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"animals",
-								"editNewDeadAnimalDateOfDeath"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete animal",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Response is correct\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.Message).to.eql(\"Zwierzę zostało trwale usunięte ze stada!\");\r",
-									"});\r",
-									"pm.test(\"Successful DELETE request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"identityNumberOfAnimal\": \"{{new_identityNumberOfAnimal}}\",\r\n    \"confirmIdentityNumberOfAnimal\": \"{{new_identityNumberOfAnimal}}\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:3000/herdapi/v1/animals/deleteAnimal",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"herdapi",
-								"v1",
-								"animals",
-								"deleteAnimal"
+								"deadDate"
 							]
 						}
 					},
@@ -2127,16 +2075,16 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/animals/deleteNewBornAnimal",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/born",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"animals",
-								"deleteNewBornAnimal"
+								"born"
 							]
 						}
 					},
@@ -2184,16 +2132,3504 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/herdapi/v1/animals/deleteDeadAnimal",
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/dead",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"herdapi",
-								"v1",
+								"{{api_version}}",
 								"animals",
-								"deleteDeadAnimal"
+								"dead"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete animal",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Unsuccessful DELETE request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const bad_identity_number_of_animal = _.random(0,100000);\r",
+									"\r",
+									"pm.environment.set(\"bad_identity_number_of_animal\", bad_identity_number_of_animal);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"identityNumberOfAnimal\": \"{{bad_identity_number_of_animal}}\",\r\n    \"confirmIdentityNumberOfAnimal\": \"{{bad_identity_number_of_animal}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/animals/animal",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"animals",
+								"animal"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Products - scenario 1",
+			"item": [
+				{
+					"name": "Get all types ",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/allTypes",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"allTypes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all user products",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/allProducts",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"allProducts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user products by its type name",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const type_of_product_name = \"Mleko\";\r",
+									"\r",
+									"pm.collectionVariables.set(\"type_of_product_name\", type_of_product_name);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/byType/:typeName",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"byType",
+								":typeName"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "typeName",
+									"value": "{{type_of_product_name}}",
+									"type": "string"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add new product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie utworzono nowy produkt!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const random_number = _.random(0,10000);\r",
+									"const identity_number_of_product = random_number;\r",
+									"\r",
+									"const quantity_of_product = 20;\r",
+									"\r",
+									"const take_date = new Date();\r",
+									"const date_of_added_products = take_date.getFullYear() + \"-\" + (\"0\" + (take_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_date.getDate()).slice(-2);\r",
+									"\r",
+									"pm.environment.set(\"identity_number_of_product\", identity_number_of_product);\r",
+									"pm.environment.set(\"quantity_of_product\", quantity_of_product);\r",
+									"pm.environment.set(\"date_of_added_products\", date_of_added_products);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfProduct\": \"{{identity_number_of_product}}\",\r\n    \"quantityOfProduct\": \"{{quantity_of_product}}\",\r\n    \"currentQuantityOfProduct\": \"{{quantity_of_product}}\",\r\n    \"dateOfAddedProduct\": \"{{date_of_added_products}}\",\r\n    \"nameOfProductType\": \"{{type_of_product_name}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/fromAnimal",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"fromAnimal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit quantity of product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie zmieniono ilość produktu!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const new_quantity_of_product = 100;\r",
+									"\r",
+									"pm.environment.set(\"new_quantity_of_product\", new_quantity_of_product);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfProduct\": \"{{identity_number_of_product}}\",\r\n    \"quantityOfProduct\": \"{{new_quantity_of_product}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/quantity",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"quantity"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit date of added product ",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie zaktualizowano datę wprowadzenia produktu!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const take_date = new Date();\r",
+									"const new_date_of_added_product = take_date.getFullYear() + \"-\" + (\"0\" + (take_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_date.getDate()).slice(-2);\r",
+									"\r",
+									"pm.environment.set(\"new_date_of_added_product\", new_date_of_added_product);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfProduct\": \"{{identity_number_of_product}}\",\r\n    \"newDateOfAddedProduct\": \"{{new_date_of_added_product}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/dateOfAdded",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"dateOfAdded"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Assign product to animal",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie przypisano produkt do zwierzęcia!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"identityNumberOfAnimal\": \"{{new_identityNumberOfAnimal}}\",\r\n    \"identityNumberOfProduct\": \"{{identity_number_of_product}}\",\r\n    \"dateWhenProductWasAdded\": \"{{date}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/assignToAnimal",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"assignToAnimal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all assigned products to animal",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/allAssignedToAnimal/:identityNumberOfAnimal/:herdName",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"allAssignedToAnimal",
+								":identityNumberOfAnimal",
+								":herdName"
+							],
+							"variable": [
+								{
+									"key": "identityNumberOfAnimal",
+									"value": "{{new_identityNumberOfAnimal}}",
+									"type": "string"
+								},
+								{
+									"key": "herdName",
+									"value": "{{new_name_of_herd}}",
+									"type": "string"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New user transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie utworzono nową transakcję!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const identity_number_of_transaction = _.random(0,10000);\r",
+									"\r",
+									"pm.environment.set(\"identity_number_of_transaction\",identity_number_of_transaction);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfTransaction\": \"{{identity_number_of_transaction}}\",\r\n    \"dateOfSoldProduct\": \"{{date}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/transaction",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"transaction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all user transactions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/allTransactions",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"allTransactions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Assign product to transactions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie przypisano produkt do transakcji!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const sold_quantity_of_product = 10;\r",
+									"const price = 5;\r",
+									"\r",
+									"pm.environment.set(\"sold_quantity_of_product\", sold_quantity_of_product);\r",
+									"pm.environment.set(\"price\", price);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfTransaction\": \"{{identity_number_of_transaction}}\",\r\n    \"identityNumberOfProduct\": \"{{identity_number_of_product}}\",\r\n    \"soldQuantityOfProduct\": \"{{sold_quantity_of_product}}\",\r\n    \"price\": \"{{price}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/assignToTransaction",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"assignToTransaction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find all products assigned to transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/FromTransaction/:identityNumberOfTransaction",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"FromTransaction",
+								":identityNumberOfTransaction"
+							],
+							"variable": [
+								{
+									"key": "identityNumberOfTransaction",
+									"value": "{{identity_number_of_transaction}}",
+									"type": "string"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit quantity of sold product in transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie zaktualizowano ilość sprzedanych produktów w transakcji!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfTransaction\": \"{{identity_number_of_transaction}}\",\r\n    \"identityNumberOfProduct\": \"{{identity_number_of_product}}\",\r\n    \"quantityOfProduct\": \"{{sold_quantity_of_product}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/quantityInTransaction",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"quantityInTransaction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit price of produkt in transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie zaktualizowano cenę za jaką sprzedano produkt!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const random_price = _.random(0,100);\r",
+									"\r",
+									"pm.environment.set(\"random_price\", random_price);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfTransaction\": \"{{identity_number_of_transaction}}\",\r\n    \"identityNumberOfProduct\": \"{{identity_number_of_product}}\",\r\n    \"price\": \"{{random_price}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/priceInTransaction",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"priceInTransaction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Product assigned to animal",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"identityNumberOfAnimal\": \"{{new_identityNumberOfAnimal}}\",\r\n    \"identityNumberOfProduct\": \"{{identity_number_of_product}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/assignedToAnimal",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"assignedToAnimal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Product assigned to transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfTransaction\": \"{{identity_number_of_transaction}}\",\r\n    \"identityNumberOfProduct\": \"{{identity_number_of_product}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/assignedToTransaction",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"assignedToTransaction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Product from animal",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Unsuccessful DELETE request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfProduct\": \"{{identity_number_of_product}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/fromAnimal",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"fromAnimal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Unsuccessful DELETE request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfTransaction\": \"{{identity_number_of_transaction}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/transaction",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"transaction"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Food - scenario 1",
+			"item": [
+				{
+					"name": "Take all species of foods",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/foods/allSpecies",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"foods",
+								"allSpecies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add new food",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie dodano zakupione pożywienie!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const identity_number_of_purchased_food = _.random(0,10000);\r",
+									"const quantity_of_food = 200;\r",
+									"\r",
+									"const species_name_array = [\"Przenica\", \"Marchewka\"]\r",
+									"const random_number = _.random(0,1);\r",
+									"\r",
+									"const species_name = species_name_array[random_number];\r",
+									"\r",
+									"const take_date = new Date();\r",
+									"const date_of_purchased_food = take_date.getFullYear() + \"-\" + (\"0\" + (take_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_date.getDate()).slice(-2);\r",
+									"\r",
+									"pm.environment.set(\"identity_number_of_purchased_food\", identity_number_of_purchased_food);\r",
+									"pm.environment.set(\"species_name\", species_name);\r",
+									"pm.environment.set(\"quantity_of_food\", quantity_of_food);\r",
+									"pm.environment.set(\"date_of_purchased_food\", date_of_purchased_food);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfPurchasedFood\": \"{{identity_number_of_purchased_food}}\",\r\n    \"speciesOfFoodName\": \"{{species_name}}\",\r\n    \"quantityOfFood\": \"{{quantity_of_food}}\",\r\n    \"dateOfPurchasedFood\": \"{{date_of_purchased_food}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/foods/food",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"foods",
+								"food"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Take food status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/foods/foodStatus",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"foods",
+								"foodStatus"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Take food status by its species",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/foods/foodStatus/:speciesName",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"foods",
+								"foodStatus",
+								":speciesName"
+							],
+							"variable": [
+								{
+									"key": "speciesName",
+									"value": "{{species_name}}",
+									"type": "string"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit species of food",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie zmieniono gatunek pożywienia!\");\r",
+									"});\r",
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const new_species_of_feed_array = [\"Burak\", \"Żyto\"]\r",
+									"const random_number = _.random(0,1);\r",
+									"\r",
+									"const new_species_of_feed = new_species_of_feed_array[random_number];\r",
+									"\r",
+									"pm.environment.set(\"new_species_of_feed\",new_species_of_feed);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfPurchasedFood\": \"{{identity_number_of_purchased_food}}\",\r\n    \"speciesOfFoodName\": \"{{new_species_of_feed}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/foods/species",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"foods",
+								"species"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit quantity of food",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie zaktualizowano ilość zakupionego pokarmu!\");\r",
+									"});\r",
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const new_quantity_of_food = 100;\r",
+									"\r",
+									"pm.environment.set(\"new_quantity_of_food\", new_quantity_of_food);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfPurchasedFood\": \"{{identity_number_of_purchased_food}}\",\r\n    \"quantityOfFood\": \"{{new_quantity_of_food}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/foods/quantity",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"foods",
+								"quantity"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit date of purchased food",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Data została zaktualizowana!\");\r",
+									"});\r",
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const take_new_date = new Date();\r",
+									"const new_date_of_purchased_food = take_new_date.getFullYear() + \"-\" + (\"0\" + (take_new_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_new_date.getDate()).slice(-2);\r",
+									"\r",
+									"pm.environment.set(\"new_date_of_purchased_food\", new_date_of_purchased_food);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfPurchasedFood\": \"{{identity_number_of_purchased_food}}\",\r\n    \"oldDate\": \"{{date_of_purchased_food}}\",\r\n    \"newDate\": \"{{new_date_of_purchased_food}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/foods/dateOfPurchased",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"foods",
+								"dateOfPurchased"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Assign food to herd",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Udało się przypisać pożywienie do stada!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const identity_number_of_food_used_for_herd = _.random(0,10000);\r",
+									"const quantity_of_food_used_for_herd = 50;\r",
+									"\r",
+									"pm.environment.set(\"identity_number_of_food_used_for_herd\", identity_number_of_food_used_for_herd);\r",
+									"pm.environment.set(\"quantity_of_food_used_for_herd\", quantity_of_food_used_for_herd);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"identityNumberOfPurchasedFood\": \"{{identity_number_of_purchased_food}}\",\r\n    \"identityNumberOfFoodUsedForHerd\": \"{{identity_number_of_food_used_for_herd}}\",\r\n    \"quantityOfFoodUsedForHerd\": \"{{quantity_of_food_used_for_herd}}\",\r\n    \"dateWhenFoodWasUsed\": \"{{date}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/foods/assignToHerd",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"foods",
+								"assignToHerd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Take food status in herd",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/foods/statusInHerd",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"foods",
+								"statusInHerd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Take food status in herd by its species",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/foods/statusInHerd/:speciesName",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"foods",
+								"statusInHerd",
+								":speciesName"
+							],
+							"variable": [
+								{
+									"key": "speciesName",
+									"value": "{{new_species_of_feed}}",
+									"type": "string"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit quantity of food used for animals",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Ilość wykorzystywanego pożywienia dla stada została zaktualizowana!\");\r",
+									"});\r",
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const new_quantity_of_food_used_for_herd = 60;\r",
+									"\r",
+									"pm.environment.set(\"new_quantity_of_food_used_for_herd\", new_quantity_of_food_used_for_herd);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"identityNumberOfPurchasedFood\": \"{{identity_number_of_purchased_food}}\",\r\n    \"newQuantityOfFoodUsedForHerd\": \"{{new_quantity_of_food_used_for_herd}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/foods/quantityUsedForAnimals",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"foods",
+								"quantityUsedForAnimals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit date when user used food for herd",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Data została zmieniona pomyślnie!\");\r",
+									"});\r",
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const take_new_date = new Date();\r",
+									"const new_date_of_food_used_for_herd = take_new_date.getFullYear() + \"-\" + (\"0\" + (take_new_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_new_date.getDate()).slice(-2);\r",
+									"\r",
+									"pm.environment.set(\"new_date_of_food_used_for_herd\", new_date_of_food_used_for_herd);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"herdName\": \"{{new_name_of_herd}}\",\r\n    \"identityNumberOfFoodUsedForHerd\": \"{{identity_number_of_food_used_for_herd}}\",\r\n    \"oldDate\": \"{{date}}\",\r\n    \"newDate\": \"{{new_date_of_food_used_for_herd}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/foods/dateWhenUsedForAnimals",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"foods",
+								"dateWhenUsedForAnimals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete purchased food",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Unsuccessful DELETE request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfPurchasedFood\": \"{{identity_number_of_purchased_food}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/foods/purchased",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"foods",
+								"purchased"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete food used for herd",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfFoodUsedForHerd\": \"{{identity_number_of_food_used_for_herd}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/foods/usedForHerd",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"foods",
+								"usedForHerd"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Administrators - scenario 1",
+			"item": [
+				{
+					"name": "Administrator login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});\r",
+									"\r",
+									"let bodyData = JSON.parse(responseBody);\r",
+									"const administrator_token = bodyData.Token;\r",
+									"pm.collectionVariables.set(\"administrator_token\", administrator_token);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const administrator_email = \"administrator@example.com\";\r",
+									"const administrator_password = \"administrator@\";\r",
+									"\r",
+									"pm.environment.set(\"administrator_email\", administrator_email);\r",
+									"pm.environment.set(\"administrator_password\", administrator_password);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userEmail\": \"{{administrator_email}}\",\r\n    \"userPassword\": \"{{administrator_password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/users/login",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Take all types of animals",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{administrator_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/animals/allTypes",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"administrators",
+								"animals",
+								"allTypes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add new type of animal",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie utworzono nowy typ zwierzęcia!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const new_type_of_animal = \"Dzikie\";\r",
+									"\r",
+									"pm.environment.set(\"new_type_of_animal\", new_type_of_animal);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{administrator_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"newTypeOfAnimal\": \"{{new_type_of_animal}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/animals/type",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"administrators",
+								"animals",
+								"type"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete type of animal",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie usunięto wybrany typ zwierzęcia!\");\r",
+									"});\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{administrator_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"typeOfAnimal\": \"{{new_type_of_animal}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/animals/type",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"administrators",
+								"animals",
+								"type"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add new kind of animal",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const type_of_animal = \"Drób\";\r",
+									"const new_kind_of_animal = \"Kaczka\";\r",
+									"\r",
+									"pm.environment.set(\"type_of_animal\", type_of_animal);\r",
+									"pm.environment.set(\"new_kind_of_animal\", new_kind_of_animal);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie utworzono nowy rodzaj zwierzęcia!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{administrator_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"typeOfAnimal\": \"{{type_of_animal}}\",\r\n    \"newKindOfAnimal\": \"{{new_kind_of_animal}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/animals/kind",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"administrators",
+								"animals",
+								"kind"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete kind of animal",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie usunięto wybrany rodzaj zwierzęcia!\");\r",
+									"});\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{administrator_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"kindOfAnimal\": \"{{new_kind_of_animal}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/animals/kind",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"administrators",
+								"animals",
+								"kind"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Take all types of foods",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{administrator_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/food/allTypes",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"administrators",
+								"food",
+								"allTypes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add new type of food",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie utworzono nowy typ pożywienia!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const new_type_of_food = \"Sianokos\";\r",
+									"\r",
+									"pm.environment.set(\"new_type_of_food\", new_type_of_food);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{administrator_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"newTypeOfFood\": \"{{new_type_of_food}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/food/type",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"administrators",
+								"food",
+								"type"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete type of food",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie usunięto wybrany typ pożywienia!\");\r",
+									"});\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{administrator_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"typeOfFood\": \"{{new_type_of_food}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/food/type",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"administrators",
+								"food",
+								"type"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add new species of food",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie utworzono nowy gatunek pożywienia!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const type_of_food = \"Zboże\";\r",
+									"const new_species_of_food = \"Owies\";\r",
+									"\r",
+									"pm.environment.set(\"type_of_food\", type_of_food);\r",
+									"pm.environment.set(\"new_species_of_food\", new_species_of_food);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{administrator_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"typeOfFood\": \"{{type_of_food}}\",\r\n    \"newSpeciesOfFood\": \"{{new_species_of_food}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/food/species",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"administrators",
+								"food",
+								"species"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete species of food",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie usunięto wybrany gatunek pożywienia!\");\r",
+									"});\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{administrator_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"speciesOfFood\": \"{{new_species_of_food}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/food/species",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"administrators",
+								"food",
+								"species"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Take all types of  users roles",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{administrator_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/users/allRoles",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"administrators",
+								"users",
+								"allRoles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add new type of user role",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie utworzono nowy typ użytkownika!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const new_type_of_user_role = \"Rolnik\";\r",
+									"\r",
+									"pm.environment.set(\"new_type_of_user_role\", new_type_of_user_role);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{administrator_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"newTypeOfUserRole\": \"{{new_type_of_user_role}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/users/allRoles",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"administrators",
+								"users",
+								"allRoles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete type of user role",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie usunięto wybrany typ użytkownika!\");\r",
+									"});\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{administrator_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"typeOfUserRole\": \"{{new_type_of_user_role}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/users/allRoles",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"administrators",
+								"users",
+								"allRoles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit user permissions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie zmieniono rodzaj użytkownika!\");\r",
+									"});\r",
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const new_type_of_user_role = \"Hodowca\";\r",
+									"\r",
+									"pm.environment.set(\"new_type_of_user_role\", new_type_of_user_role);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{administrator_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userEmail\": \"{{new_email}}\",\r\n    \"newTypeOfUserRole\": \"{{new_type_of_user_role}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/users/permissions",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"administrators",
+								"users",
+								"permissions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add new reason of animal death",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie dodano nową przyczynę śmierci zwierzęcia!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const new_reason_of_animal_death = \"Zabite przez dzieki zwierzę\";\r",
+									"\r",
+									"pm.environment.set(\"new_reason_of_animal_death\", new_reason_of_animal_death);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{administrator_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"newReasonOfAnimalDeath\": \"{{new_reason_of_animal_death}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/animals/reasonOfDeath",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"administrators",
+								"animals",
+								"reasonOfDeath"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete reason of animal death",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie usunięto wybraną przyczynę śmierci zwierzęcia!\");\r",
+									"});\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{administrator_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"reasonOfAnimalDeath\": \"{{new_reason_of_animal_death}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/animals/reasonOfDeath",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"administrators",
+								"animals",
+								"reasonOfDeath"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add new type of join to herd",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie dodano nowy typ dołączenia do stada!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const new_type_of_join_to_the_herd = \"Otrzymane od osoby trzeciej\";\r",
+									"\r",
+									"pm.environment.set(\"new_type_of_join_to_the_herd\", new_type_of_join_to_the_herd);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{administrator_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"newTypeOfJoinToHerd\": \"{{new_type_of_join_to_the_herd}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/animals/typeOfJoinToHerd",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"administrators",
+								"animals",
+								"typeOfJoinToHerd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete type of join to herd",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie usunięto typ dołączenia do stada!\");\r",
+									"});\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{administrator_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"typeOfJoinToHerd\": \"{{new_type_of_join_to_the_herd}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/animals/typeOfJoinToHerd",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"administrators",
+								"animals",
+								"typeOfJoinToHerd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add new type of product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie dodano nowy typ produktu!\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const new_type_of_product = \"Masło\";\r",
+									"\r",
+									"pm.environment.set(\"new_type_of_product\", new_type_of_product);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{administrator_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"newTypeOfProduct\": \"{{new_type_of_product}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/products/type",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"administrators",
+								"products",
+								"type"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete type of product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).to.eql(\"Pomyślnie usunięto wybrany typ produktu!\");\r",
+									"});\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{administrator_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"typeOfProduct\": \"{{new_type_of_product}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/products/type",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"administrators",
+								"products",
+								"type"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Take list of users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{administrator_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/users/list",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"administrators",
+								"users",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user account",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Unsuccessful DELETE request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const random_number = _.random(0,1000);\r",
+									"const random_user_email = \"user\" +  random_number + \"@example.com\";\r",
+									"\r",
+									"pm.environment.set(\"random_user_email\", random_user_email);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{administrator_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userEmail\": \"{{random_user_email}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/administrators/users/account",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"administrators",
+								"users",
+								"account"
 							]
 						}
 					},
@@ -2208,7 +5644,9 @@
 			"script": {
 				"type": "text/javascript",
 				"exec": [
-					""
+					"const api_version = \"v1.2\";",
+					"",
+					"pm.collectionVariables.set(\"api_version\", api_version);"
 				]
 			}
 		},
@@ -2224,7 +5662,7 @@
 	],
 	"variable": [
 		{
-			"key": "token",
+			"key": "api_version",
 			"value": ""
 		},
 		{
@@ -2236,91 +5674,15 @@
 			"value": ""
 		},
 		{
-			"key": "date",
+			"key": "token",
 			"value": ""
 		},
 		{
-			"key": "name_of_herd",
+			"key": "type_of_product_name",
 			"value": ""
 		},
 		{
-			"key": "type_of_herd",
-			"value": ""
-		},
-		{
-			"key": "animal_gender",
-			"value": ""
-		},
-		{
-			"key": "animal_weight",
-			"value": ""
-		},
-		{
-			"key": "breed_of_animal",
-			"value": ""
-		},
-		{
-			"key": "identityNumberOfAnimal",
-			"value": ""
-		},
-		{
-			"key": "join_type",
-			"value": ""
-		},
-		{
-			"key": "kinds_of_animal_array",
-			"value": ""
-		},
-		{
-			"key": "breeds_of_animal_array",
-			"value": ""
-		},
-		{
-			"key": "new_name_of_herd",
-			"value": ""
-		},
-		{
-			"key": "new_identityNumberOfAnimal",
-			"value": ""
-		},
-		{
-			"key": "new_breeds_of_animal_array",
-			"value": ""
-		},
-		{
-			"key": "new_date",
-			"value": ""
-		},
-		{
-			"key": "new_animal_weight",
-			"value": ""
-		},
-		{
-			"key": "newborn_animal_birth_date",
-			"value": ""
-		},
-		{
-			"key": "temporary_identity_number",
-			"value": ""
-		},
-		{
-			"key": "new_newborn_animal_birth_date",
-			"value": ""
-		},
-		{
-			"key": "description_of_death",
-			"value": ""
-		},
-		{
-			"key": "reason_of_death",
-			"value": ""
-		},
-		{
-			"key": "new_dead_animal_identityNumberOfAnimal",
-			"value": ""
-		},
-		{
-			"key": "new_password",
+			"key": "administrator_token",
 			"value": ""
 		}
 	]

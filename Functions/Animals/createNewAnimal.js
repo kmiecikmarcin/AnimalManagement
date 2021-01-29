@@ -1,8 +1,6 @@
-const Herds = require("../../Models/Herds");
 const TypesOfJoinToTheHerd = require("../../Models/TypesOfJoinToTheHerd");
 const KindsOfAnimals = require("../../Models/KindsOfAnimals");
 const GenderOfAnimal = require("../../Models/GenderOfAnimal");
-const findHerdByName = require("../Herds/findHerdByName");
 const findTypesOfJoinToTheHerd = require("./findTypesOfJoinToTheHerd");
 const findKindOfAnimalsByName = require("./findKindOfAnimalsByName");
 const findAnimalGender = require("./findAnimalGender");
@@ -10,8 +8,7 @@ const findAnimalGender = require("./findAnimalGender");
 async function createNewAnimal(
   res,
   AnimalsInHerd,
-  userId,
-  herdName,
+  herdId,
   joinTypeName,
   kindOfAnimalName,
   animalGender,
@@ -21,55 +18,49 @@ async function createNewAnimal(
   animalBirthDate,
   animalWeight
 ) {
-  const checkHerdName = await findHerdByName(Herds, herdName, userId);
-  if (checkHerdName) {
-    const checkJoinType = await findTypesOfJoinToTheHerd(
-      TypesOfJoinToTheHerd,
-      joinTypeName
+  const checkJoinType = await findTypesOfJoinToTheHerd(
+    TypesOfJoinToTheHerd,
+    joinTypeName
+  );
+  if (checkJoinType) {
+    const checkKindOfAnimal = await findKindOfAnimalsByName(
+      KindsOfAnimals,
+      kindOfAnimalName
     );
-    if (checkJoinType) {
-      const checkKindOfAnimal = await findKindOfAnimalsByName(
-        KindsOfAnimals,
-        kindOfAnimalName
+    if (checkKindOfAnimal) {
+      const checkAnimalGender = await findAnimalGender(
+        GenderOfAnimal,
+        animalGender
       );
-      if (checkKindOfAnimal) {
-        const checkAnimalGender = await findAnimalGender(
-          GenderOfAnimal,
-          animalGender
-        );
-        if (checkAnimalGender) {
-          const addNewAnimal = await AnimalsInHerd.create({
-            identityNumber: identityNumberOfAnimal,
-            breed: breedOfAnimal,
-            joinDate: dateOfJoinToTheHerd,
-            birthDate: animalBirthDate,
-            weight: animalWeight,
-            lifeStatusOfAnimal: true,
-            HerdId: checkHerdName.id,
-            TypesOfJoinToTheHerdId: checkJoinType.id,
-            KindsOfAnimalId: checkKindOfAnimal.id,
-            GenderOfAnimalId: checkAnimalGender.id,
-          });
-          if (addNewAnimal) {
-            return addNewAnimal;
-          }
-          return null;
+      if (checkAnimalGender) {
+        const addNewAnimal = await AnimalsInHerd.create({
+          identityNumber: identityNumberOfAnimal,
+          breed: breedOfAnimal,
+          joinDate: dateOfJoinToTheHerd,
+          birthDate: animalBirthDate,
+          weight: animalWeight,
+          lifeStatusOfAnimal: true,
+          HerdId: herdId,
+          TypesOfJoinToTheHerdId: checkJoinType.id,
+          KindsOfAnimalId: checkKindOfAnimal.id,
+          GenderOfAnimalId: checkAnimalGender.id,
+        });
+        if (addNewAnimal) {
+          return addNewAnimal;
         }
-        return res
-          .status(404)
-          .json({ Error: "Wprowadzona płeć zwierzęcia nie istnieje!" });
+        return null;
       }
       return res
         .status(404)
-        .json({ Error: "Wprowadzony rodzaj zwierzęcia nie istnieje!" });
+        .json({ Error: "Wprowadzona płeć zwierzęcia nie istnieje!" });
     }
-    return res.status(404).json({
-      Error: "Wprowadzony typ dołączenia zwierzęcia do stada nie istnieje!",
-    });
+    return res
+      .status(404)
+      .json({ Error: "Wprowadzony rodzaj zwierzęcia nie istnieje!" });
   }
-  return res
-    .status(404)
-    .json({ Error: "Hodowla o wprowadzonej nazwie nie istnieje!" });
+  return res.status(404).json({
+    Error: "Wprowadzony typ dołączenia zwierzęcia do stada nie istnieje!",
+  });
 }
 
 module.exports = createNewAnimal;

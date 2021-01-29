@@ -1,6 +1,7 @@
 async function findAllReasonDeath(ReasonOfDeath) {
   const search = await ReasonOfDeath.findAll({
-    attributes: ["description"],
+    raw: true,
+    attributes: ["name"],
   });
   if (search !== null && Object.keys(search) !== 0) {
     return search;

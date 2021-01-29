@@ -20,6 +20,7 @@ const findUserById = require("../Functions/Users/findUserById");
 const changeUserEmailAdress = require("../Functions/Users/changeUserEmailAdress");
 const changeUserPassword = require("../Functions/Users/changeUserPassword");
 const deleteUserAccount = require("../Functions/Users/deleteUserAccount");
+const checkUserVerification = require("../Functions/Others/checkUserVerification");
 
 /**
  * @swagger
@@ -33,22 +34,29 @@ const deleteUserAccount = require("../Functions/Users/deleteUserAccount");
  *          in: formData
  *          required: true
  *          type: string
+ *          example: user@gmail.com
  *        - name: userPassword
  *          in: formData
  *          required: true
  *          type: string
+ *          format: password
+ *          example: userpassword#
  *        - name: confirmPassword
  *          in: formData
  *          required: true
  *          type: string
+ *          format: password
+ *          example: userpassword#
  *        - name: userGender
  *          in: formData
  *          required: true
  *          type: string
+ *          example: Kobieta or Mężczyzna
  *        - name: userVerification
  *          in: formData
  *          required: true
  *          type: boolean
+ *          example: true
  *      responses:
  *        201:
  *          description: Successfully registered!
@@ -113,7 +121,7 @@ router.post(
     check("userGender")
       .exists()
       .withMessage("Brak wymaganych danych!")
-      .isLength({ min: 1 })
+      .isLength({ min: 1, max: 20 })
       .withMessage("Nie wprowadzono danych!")
       .custom((value) => {
         if (checkUserGenderInRegister(value) === false) {
@@ -127,9 +135,10 @@ router.post(
       .exists()
       .withMessage("Brak wymaganych danych!")
       .isBoolean()
-      .withMessage("Wprowadzona wartośc jest nieprawidłowa!")
+      .withMessage("Wprowadzona wartość jest nieprawidłowa!")
       .custom((value) => {
-        if (!value) {
+        const verification = checkUserVerification(value);
+        if (verification === false) {
           throw new Error("Nie zatwierdzono weryfikacji użytkownika!");
         } else {
           return value;
@@ -147,7 +156,6 @@ router.post(
           .status(400)
           .json({ Error: "Użytkownik o podanym adresie e-mail już istnieje!" });
       } else {
-        console.log(userEmail);
         const assignUserRole = await findTypeOfUserRoleByName(
           TypesOfUsersRoles,
           "Hodowca"
@@ -189,10 +197,13 @@ router.post(
  *          in: formData
  *          required: true
  *          type: string
+ *          example: user@gmail.com
  *        - name: userPassword
  *          in: formData
  *          required: true
  *          type: string
+ *          format: password
+ *          example: userpassword#
  *      responses:
  *        201:
  *          description: System will return token!
@@ -265,7 +276,7 @@ router.post(
 
 /**
  * @swagger
- * /users/changeAdressEmail:
+ * /users/adressEmail:
  *    put:
  *      tags:
  *      - name: Users
@@ -275,16 +286,20 @@ router.post(
  *          in: formData
  *          required: true
  *          type: string
+ *          example: user@gmail.com
  *        - name: newUserEmailAdress
  *          in: formData
  *          required: true
  *          type: string
+ *          example: newuser@gmail.com
  *        - name: userPassword
  *          in: formData
  *          required: true
  *          type: string
+ *          format: password
+ *          example: userpassword#
  *      responses:
- *        201:
+ *        200:
  *          description: Adress e-mail will be updated!
  *        400:
  *          description: Something went wrong!
@@ -294,7 +309,7 @@ router.post(
  *          description: User doesn't exist!
  */
 router.put(
-  "/changeAdressEmail",
+  "/adressEmail",
   [
     check("oldUserEmailAdress")
       .exists()
@@ -346,7 +361,7 @@ router.put(
                 req.body.userPassword
               );
               if (updateUserEmailAdress) {
-                res.status(201).json({
+                res.status(200).json({
                   Message: "Twój adress e-mail został zaktualizowany!",
                 });
               } else {
@@ -362,7 +377,7 @@ router.put(
 
 /**
  * @swagger
- * /users/changePassword:
+ * /users/password:
  *    put:
  *      tags:
  *      - name: Users
@@ -372,16 +387,22 @@ router.put(
  *          in: formData
  *          required: true
  *          type: string
+ *          format: password
+ *          example: userpassword#
  *        - name: newUserPassword
  *          in: formData
  *          required: true
  *          type: string
+ *          format: password
+ *          example: newuserpassword#
  *        - name: confirmNewPassword
  *          in: formData
  *          required: true
  *          type: string
+ *          format: password
+ *          example: newuserpassword#
  *      responses:
- *        201:
+ *        200:
  *          description: Password will be updated!
  *        400:
  *          description: Something went wrong!
@@ -391,7 +412,7 @@ router.put(
  *          description: User doesn't exist!
  */
 router.put(
-  "/changePassword",
+  "/password",
   [
     check("oldUserPassword")
       .exists()
@@ -469,7 +490,7 @@ router.put(
                 checkUserById.password
               );
               if (updateUserPassword) {
-                res.status(201).json({
+                res.status(200).json({
                   Message: "Twoje hasło zostało zaktualizowane!",
                 });
               } else {
@@ -487,7 +508,7 @@ router.put(
 
 /**
  * @swagger
- * /users/deleteAccount:
+ * /users/account:
  *    put:
  *      tags:
  *      - name: Users
@@ -497,12 +518,16 @@ router.put(
  *          in: formData
  *          required: true
  *          type: string
+ *          format: password
+ *          example: userpassword#
  *        - name: confirmPassword
  *          in: formData
  *          required: true
  *          type: string
+ *          format: password
+ *          example: userpassword#
  *      responses:
- *        201:
+ *        200:
  *          description: Account deleted!
  *        400:
  *          description: Something went wrong!
@@ -512,7 +537,7 @@ router.put(
  *          description: User doesn't exist!
  */
 router.put(
-  "/deleteAccount",
+  "/account",
   [
     check("userPassword")
       .exists()
@@ -561,8 +586,7 @@ router.put(
                 checkUserById.accountDeletedStatus
               );
               if (deleteAccount) {
-                console.log(deleteAccount);
-                res.status(201).json({
+                res.status(200).json({
                   Message: "Twoje konto zostało usunięte!",
                 });
               } else {

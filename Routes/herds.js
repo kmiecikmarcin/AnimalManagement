@@ -17,10 +17,11 @@ const findKindOfAnimalsByName = require("../Functions/Animals/findKindOfAnimalsB
 const changeTypeOfHerd = require("../Functions/Herds/changeTypeOfHerd");
 const deleteHerdByUser = require("../Functions/Herds/deleteHerdByUser");
 const findHerdByAnimalType = require("../Functions/Herds/findHerdByAnimalType");
+const checkEnteredName = require("../Functions/Others/checkEnteredName");
 
 /**
  * @swagger
- * /herds/addNewHerd:
+ * /herds/herd:
  *    post:
  *      tags:
  *      - name: Herds
@@ -30,14 +31,18 @@ const findHerdByAnimalType = require("../Functions/Herds/findHerdByAnimalType");
  *          in: formData
  *          required: true
  *          type: string
- *        - name: herdType
+ *          example: thebestherd
+ *        - name: kindOfAnimalsInHerd
  *          in: formData
  *          required: true
  *          type: string
+ *          example: Kura
  *        - name: creationDate
  *          in: formData
  *          required: true
- *          type: date
+ *          type: string
+ *          format: date
+ *          example: 01-01-2021
  *      responses:
  *        201:
  *          description: New herd has been added!
@@ -49,7 +54,7 @@ const findHerdByAnimalType = require("../Functions/Herds/findHerdByAnimalType");
  *          description: User doesn't exist!
  */
 router.post(
-  "/addNewHerd",
+  "/herd",
   [
     check("herdName")
       .exists()
@@ -58,7 +63,7 @@ router.post(
       .withMessage("Wymagane pole jest puste!")
       .isLength({ min: 3, max: 40 })
       .withMessage("Długość wprowadzonej nazwy jest niezgodna z wymaganiami!"),
-    check("herdType")
+    check("kindOfAnimalsInHerd")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
@@ -90,20 +95,31 @@ router.post(
           } else {
             const checkUser = await findUserById(Users, authData);
             if (checkUser !== null) {
-              const addNewHerd = await createNewHerdForUser(
+              const checkNameOfHerd = await checkEnteredName(
                 Herds,
                 req.body.herdName,
-                req.body.creationDate,
-                authData.id,
-                req.body.herdType
+                authData.id
               );
-              if (addNewHerd) {
-                res
-                  .status(201)
-                  .json({ Message: "Nowa hodowla została dodana!" });
+              if (checkNameOfHerd === null) {
+                const addNewHerd = await createNewHerdForUser(
+                  Herds,
+                  req.body.herdName,
+                  req.body.creationDate,
+                  authData.id,
+                  req.body.kindOfAnimalsInHerd
+                );
+                if (addNewHerd) {
+                  res
+                    .status(201)
+                    .json({ Message: "Nowa hodowla została dodana!" });
+                } else {
+                  res.status(400).json({
+                    Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
+                  });
+                }
               } else {
                 res.status(400).json({
-                  Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
+                  Error: "Posiadasz już hodowlę o wprowadzonej nazwie!",
                 });
               }
             } else {
@@ -118,20 +134,20 @@ router.post(
 
 /**
  * @swagger
- * /herds/findAllHerds:
+ * /herds/all:
  *    get:
  *      tags:
  *      - name: Herds
  *      summary: Take all herds for user
  *      responses:
- *        201:
+ *        200:
  *          description: List of all herds!
  *        403:
  *          description: Authentication failed!
  *        404:
  *          description: User doesn't exist!
  */
-router.get("/findAllHerds", verifyToken, (req, res) => {
+router.get("/all", verifyToken, (req, res) => {
   jwt.verify(
     req.token,
     process.env.S3_SECRETKEY,
@@ -143,7 +159,7 @@ router.get("/findAllHerds", verifyToken, (req, res) => {
         if (checkUser !== null) {
           const findHerds = await findAllUserHerds(Herds, authData.id);
           if (findHerds !== null) {
-            res.status(200).json({ Herds: findHerds });
+            res.status(200).json(findHerds);
           } else {
             res.status(404).json({
               Error: "Użytkownik nie posiada hodowli przypisanych do konta!",
@@ -159,7 +175,7 @@ router.get("/findAllHerds", verifyToken, (req, res) => {
 
 /**
  * @swagger
- * /herds/findHerdByName/{name}:
+ * /herds/{name}:
  *    get:
  *      tags:
  *      - name: Herds
@@ -169,14 +185,14 @@ router.get("/findAllHerds", verifyToken, (req, res) => {
  *          in: path
  *          type: string
  *      responses:
- *        201:
+ *        200:
  *          description: Data about herd!
  *        403:
  *          description: Authentication failed!
  *        404:
  *          description: User doesn't exist!
  */
-router.get("/findHerdByName/:name", verifyToken, (req, res) => {
+router.get("/:name", verifyToken, (req, res) => {
   if (req.params.name) {
     jwt.verify(
       req.token,
@@ -193,7 +209,7 @@ router.get("/findHerdByName/:name", verifyToken, (req, res) => {
               authData.id
             );
             if (findHerd) {
-              res.status(200).json({ Herds: findHerd });
+              res.status(200).json(findHerd);
             } else {
               res.status(404).json({
                 Error: "Użytkownik nie posiada hodowli z podaną nazwą!",
@@ -212,25 +228,25 @@ router.get("/findHerdByName/:name", verifyToken, (req, res) => {
 
 /**
  * @swagger
- * /herds/findHerdByAnimalType/{typeOfAnimal}:
+ * /herds/animals/{type}:
  *    get:
  *      tags:
  *      - name: Herds
  *      summary: Take herd by type of animal
  *      parameters:
- *        - name: typeOfAnimal
+ *        - name: type
  *          in: path
  *          type: string
  *      responses:
- *        201:
+ *        200:
  *          description: Data about herd!
  *        403:
  *          description: Authentication failed!
  *        404:
  *          description: User doesn't exist!
  */
-router.get("/findHerdByAnimalType/:typeOfAnimal", verifyToken, (req, res) => {
-  if (req.params.typeOfAnimal) {
+router.get("/animals/:type", verifyToken, (req, res) => {
+  if (req.params.type) {
     jwt.verify(
       req.token,
       process.env.S3_SECRETKEY,
@@ -243,11 +259,11 @@ router.get("/findHerdByAnimalType/:typeOfAnimal", verifyToken, (req, res) => {
             const findHerd = await findHerdByAnimalType(
               KindsOfAnimals,
               Herds,
-              req.params.typeOfAnimal,
+              req.params.type,
               authData.id
             );
             if (findHerd) {
-              res.status(200).json({ Herds: findHerd });
+              res.status(200).json(findHerd);
             } else {
               res.status(404).json({
                 Error: "Użytkownik nie posiada tego typu hodowli!",
@@ -266,7 +282,7 @@ router.get("/findHerdByAnimalType/:typeOfAnimal", verifyToken, (req, res) => {
 
 /**
  * @swagger
- * /herds/changeHerdName:
+ * /herds/name:
  *    put:
  *      tags:
  *      - name: Herds
@@ -276,12 +292,14 @@ router.get("/findHerdByAnimalType/:typeOfAnimal", verifyToken, (req, res) => {
  *          in: formData
  *          required: true
  *          type: string
+ *          example: thebestherd
  *        - name: newHerdName
  *          in: formData
  *          required: true
  *          type: string
+ *          example: mynewherd
  *      responses:
- *        201:
+ *        200:
  *          description: Name of herd changed successfully!
  *        403:
  *          description: Authentication failed!
@@ -289,7 +307,7 @@ router.get("/findHerdByAnimalType/:typeOfAnimal", verifyToken, (req, res) => {
  *          description: User doesn't exist or herd with entered name doesn't exist!
  */
 router.put(
-  "/changeHerdName",
+  "/name",
   [
     check("oldHerdName")
       .exists()
@@ -327,19 +345,31 @@ router.put(
                 authData.id
               );
               if (findHerd) {
-                const updateHerdName = await changeHerdName(
+                const checkHerdName = await checkEnteredName(
                   Herds,
-                  req.body.oldHerdName,
                   req.body.newHerdName,
                   authData.id
                 );
-                if (updateHerdName) {
-                  res
-                    .status(201)
-                    .json({ Message: "Nazwa hodowli została zaktualizowana!" });
+                if (checkHerdName === null) {
+                  const updateHerdName = await changeHerdName(
+                    Herds,
+                    req.body.oldHerdName,
+                    req.body.newHerdName,
+                    authData.id
+                  );
+                  if (updateHerdName) {
+                    res.status(200).json({
+                      Message: "Nazwa hodowli została zaktualizowana!",
+                    });
+                  } else {
+                    res.status(400).json({
+                      Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
+                    });
+                  }
                 } else {
                   res.status(400).json({
-                    Error: "Coś poszło nie tak! Sprawdź wprowadzone dane!",
+                    Error:
+                      "Posiadasz już hodowlę o wprowadzonej przez Ciebie nazwie!",
                   });
                 }
               } else {
@@ -359,18 +389,19 @@ router.put(
 
 /**
  * @swagger
- * /herds/changeTypeofHerd:
+ * /herds/type:
  *    put:
  *      tags:
  *      - name: Herds
  *      summary: Change type of herd
  *      parameters:
- *        - name: newTypeOfHerd
+ *        - name: newKindsOfAnimalsInHerd
  *          in: formData
  *          required: true
  *          type: string
+ *          example: Królik
  *      responses:
- *        201:
+ *        200:
  *          description: Type of herd changed successfully!
  *        403:
  *          description: Authentication failed!
@@ -378,9 +409,9 @@ router.put(
  *          description: User doesn't exist or entered type doesn't exist!
  */
 router.put(
-  "/changeTypeofHerd",
+  "/type",
   [
-    check("newTypeOfHerd")
+    check("newKindsOfAnimalsInHerd")
       .exists()
       .withMessage("Brak wymaganych danych!")
       .notEmpty()
@@ -405,7 +436,7 @@ router.put(
             if (checkUser !== null) {
               const checkEnteredHerdTypeFromUser = await findKindOfAnimalsByName(
                 KindsOfAnimals,
-                req.body.newTypeOfHerd
+                req.body.newKindsOfAnimalsInHerd
               );
               if (checkEnteredHerdTypeFromUser) {
                 const updateType = await changeTypeOfHerd(
@@ -414,7 +445,7 @@ router.put(
                   authData.id
                 );
                 if (updateType) {
-                  res.status(201).json({
+                  res.status(200).json({
                     Message: "Pomyślnie zaktualizowano typ zwierząt w hodowli!",
                   });
                 } else {
@@ -439,7 +470,7 @@ router.put(
 
 /**
  * @swagger
- * /herds/deleteHerd:
+ * /herds/herd:
  *    delete:
  *      tags:
  *      - name: Herds
@@ -449,16 +480,21 @@ router.put(
  *          in: formData
  *          required: true
  *          type: string
+ *          example: thebestherd
  *        - name: userPassword
  *          in: formData
  *          required: true
  *          type: string
+ *          format: password
+ *          example: userpassword#
  *        - name: confirmPassword
  *          in: formData
  *          required: true
  *          type: string
+ *          format: password
+ *          example: userpassword#
  *      responses:
- *        201:
+ *        200:
  *          description: The herd deleted successfully!
  *        403:
  *          description: Authentication failed!
@@ -466,7 +502,7 @@ router.put(
  *          description: User doesn't exist or herd with entered name doesn't exist!
  */
 router.delete(
-  "/deleteHerd",
+  "/herd",
   [
     check("herdName")
       .exists()

@@ -6,6 +6,7 @@ async function findHerdByAnimalType(KindOfAnimals, Herds, herdType, userId) {
   });
   if (findHerdType != null) {
     const findHerd = await Herds.findOne({
+      raw: true,
       where: { idKindOfAnimals: findHerdType.id, UserId: userId },
       include: { model: KindsOfAnimals, attributes: ["name"] },
       attributes: ["name", "creationDate"],

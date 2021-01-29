@@ -3,8 +3,8 @@ const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../Functions/Database/connectionWithDatabase");
 const Users = require("./Users");
 
-const AddingTransactionForSoldOrderByUser = sequelize.define(
-  "AddingTransactionForSoldOrderByUser",
+const UserTransactions = sequelize.define(
+  "UserTransactions",
   {
     id: {
       type: DataTypes.UUID,
@@ -12,23 +12,28 @@ const AddingTransactionForSoldOrderByUser = sequelize.define(
       primaryKey: true,
       unique: true,
       allowNull: false,
-      field: "idTransactionNumber",
+      field: "idUserTransaction",
+    },
+    identityNumber: {
+      type: DataTypes.BIGINT,
+      allowNull: false,
+      field: "identityNumberOfTransaction",
     },
     date: {
       type: DataTypes.DATEONLY,
       allowNull: false,
-      field: "soldProductDate",
+      field: "dateOfSoldProduct",
     },
   },
   { timestamps: true }
 );
 
-Users.hasMany(AddingTransactionForSoldOrderByUser, {
+Users.hasMany(UserTransactions, {
   foreignKey: {
     allowNull: false,
     field: "idUser",
   },
 });
-AddingTransactionForSoldOrderByUser.belongsTo(Users);
+UserTransactions.belongsTo(Users);
 
-module.exports = AddingTransactionForSoldOrderByUser;
+module.exports = UserTransactions;

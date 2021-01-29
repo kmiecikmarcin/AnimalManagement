@@ -5,7 +5,10 @@ const swaggerJsDoc = require("swagger-jsdoc");
 const sequelize = require("./Functions/Database/connectionWithDatabase");
 const RoutesUsers = require("./Routes/users");
 const RoutesHerds = require("./Routes/herds");
-const RouterAnimals = require("./Routes/animals");
+const RoutesAnimals = require("./Routes/animals");
+const RoutesProducts = require("./Routes/products");
+const RoutesFoods = require("./Routes/foods");
+const RoutesAdministrators = require("./Routes/administrators");
 const Genders = require("./Models/Genders");
 const GenderOfAnimal = require("./Models/GenderOfAnimal");
 const TypesOfUsersRoles = require("./Models/TypesOfUsersRoles");
@@ -13,12 +16,12 @@ const TypesOfAnimals = require("./Models/TypesOfAnimals");
 const TypesOfJoinToTheHerd = require("./Models/TypesOfJoinToTheHerd");
 const ReasonOfDeath = require("./Models/ReasonOfDeath");
 const TypesOfProducts = require("./Models/TypesOfProducts");
-const TypesOfFeed = require("./Models/TypesOfFeed");
+const TypesOfFood = require("./Models/TypesOfFood");
 const fillDataForGenderTable = require("./Functions/Database/fillDataForGenderTable");
 const fillDataForAnimalGender = require("./Functions/Database/fillDataForAnimalGender");
 const fillDataForUsersTypesOfRolesInDatabase = require("./Functions/Database/fillDataForUsersTypesOfRolesInDatabase");
 const fillDataForTypesOfAnimalsTable = require("./Functions/Database/fillDataForTypesOfAnimalsTable");
-const fillDataForTypesOfFeed = require("./Functions/Database/fillDataForTypesOfFeed");
+const fillDataForTypesOfFood = require("./Functions/Database/fillDataForTypesOfFood");
 const fillDataForReasonOfDeath = require("./Functions/Database/fillDataForReasonOfDeath");
 const fillDataForTypesOfJoinToTheHerd = require("./Functions/Database/fillDataForTypesOfJoinToTheHerd");
 const fillDataForTypesOfProducts = require("./Functions/Database/fillDataForTypesOfProducts");
@@ -32,10 +35,10 @@ const swaggerOptions = {
       title: "Animal herds management - API",
       description:
         "API for easy work with documentation which describe data based on life of animals.",
-      version: "0.3.0",
+      version: "v1.2",
     },
     host: "localhost:3000",
-    basePath: "/herdapi/v1",
+    basePath: "/herdapi/v1.2",
     securityDefinitions: {
       bearerAuth: {
         type: "apiKey",
@@ -62,7 +65,7 @@ sequelize
     fillDataForUsersTypesOfRolesInDatabase(TypesOfUsersRoles);
     fillDataForTypesOfAnimalsTable(TypesOfAnimals);
     fillDataForReasonOfDeath(ReasonOfDeath);
-    fillDataForTypesOfFeed(TypesOfFeed);
+    fillDataForTypesOfFood(TypesOfFood);
     fillDataForTypesOfJoinToTheHerd(TypesOfJoinToTheHerd);
     fillDataForTypesOfProducts(TypesOfProducts);
   })
@@ -72,9 +75,12 @@ sequelize
 
 const port = process.env.PORT || 3000;
 
-app.use("/herdapi/v1/users", RoutesUsers);
-app.use("/herdapi/v1/herds", RoutesHerds);
-app.use("/herdapi/v1/animals", RouterAnimals);
+app.use("/herdapi/v1.2/users", RoutesUsers);
+app.use("/herdapi/v1.2/herds", RoutesHerds);
+app.use("/herdapi/v1.2/animals", RoutesAnimals);
+app.use("/herdapi/v1.2/products", RoutesProducts);
+app.use("/herdapi/v1.2/foods", RoutesFoods);
+app.use("/herdapi/v1.2/administrators", RoutesAdministrators);
 
 app.listen(port);
 

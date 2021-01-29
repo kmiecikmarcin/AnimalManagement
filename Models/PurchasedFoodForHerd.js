@@ -1,11 +1,11 @@
 const { Sequelize, DataTypes } = require("sequelize");
 
 const sequelize = require("../Functions/Database/connectionWithDatabase");
-const SpeciesOfFeed = require("./SpeciesOfFeed");
+const SpeciesOfFoods = require("./SpeciesOfFoods");
 const Users = require("./Users");
 
-const PurchasedFeedForHerd = sequelize.define(
-  "PurchasedFeedForHerd",
+const PurchasedFoodForHerd = sequelize.define(
+  "PurchasedFoodForHerd",
   {
     id: {
       type: DataTypes.UUID,
@@ -13,43 +13,46 @@ const PurchasedFeedForHerd = sequelize.define(
       primaryKey: true,
       unique: true,
       allowNull: false,
-      field: "idPurchasedFeed",
+      field: "idPurchasedFood",
+    },
+    identityNumber: {
+      type: DataTypes.BIGINT,
+      allowNull: false,
+      field: "identityNumberOfPurchasedFood",
     },
     quantity: {
       type: DataTypes.FLOAT,
-      unique: true,
       allowNull: false,
-      field: "quantityOfFeed",
+      field: "quantityOfFood",
     },
     currentQuantity: {
       type: DataTypes.FLOAT,
-      unique: true,
       allowNull: false,
-      field: "currentQuantityOfFeed",
+      field: "currentQuantityOfFood",
     },
     date: {
       type: DataTypes.DATEONLY,
       allowNull: false,
-      field: "dateOfPurchasedFeed",
+      field: "dateOfPurchasedFood",
     },
   },
   { timestamps: true }
 );
 
-SpeciesOfFeed.hasMany(PurchasedFeedForHerd, {
+SpeciesOfFoods.hasMany(PurchasedFoodForHerd, {
   foreignKey: {
     allowNull: false,
-    field: "idSpeciesOfFeed",
+    field: "idSpecieOfFood",
   },
 });
-PurchasedFeedForHerd.belongsTo(SpeciesOfFeed);
+PurchasedFoodForHerd.belongsTo(SpeciesOfFoods);
 
-Users.hasMany(PurchasedFeedForHerd, {
+Users.hasMany(PurchasedFoodForHerd, {
   foreignKey: {
     allowNull: false,
     field: "idUser",
   },
 });
-PurchasedFeedForHerd.belongsTo(Users);
+PurchasedFoodForHerd.belongsTo(Users);
 
-module.exports = PurchasedFeedForHerd;
+module.exports = PurchasedFoodForHerd;
