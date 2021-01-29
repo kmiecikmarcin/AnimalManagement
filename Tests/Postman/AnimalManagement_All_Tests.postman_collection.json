@@ -5644,7 +5644,7 @@
 			"script": {
 				"type": "text/javascript",
 				"exec": [
-					"const api_version = \"v1.2\";",
+					"const api_version = \"v1.3\";",
 					"",
 					"pm.collectionVariables.set(\"api_version\", api_version);"
 				]
