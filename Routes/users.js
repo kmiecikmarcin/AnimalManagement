@@ -156,7 +156,6 @@ router.post(
           .status(400)
           .json({ Error: "Użytkownik o podanym adresie e-mail już istnieje!" });
       } else {
-        console.log(userEmail);
         const assignUserRole = await findTypeOfUserRoleByName(
           TypesOfUsersRoles,
           "Hodowca"
@@ -277,7 +276,7 @@ router.post(
 
 /**
  * @swagger
- * /users/changeAdressEmail:
+ * /users/adressEmail:
  *    put:
  *      tags:
  *      - name: Users
@@ -310,7 +309,7 @@ router.post(
  *          description: User doesn't exist!
  */
 router.put(
-  "/changeAdressEmail",
+  "/adressEmail",
   [
     check("oldUserEmailAdress")
       .exists()
@@ -378,7 +377,7 @@ router.put(
 
 /**
  * @swagger
- * /users/changePassword:
+ * /users/password:
  *    put:
  *      tags:
  *      - name: Users
@@ -413,7 +412,7 @@ router.put(
  *          description: User doesn't exist!
  */
 router.put(
-  "/changePassword",
+  "/password",
   [
     check("oldUserPassword")
       .exists()
@@ -509,7 +508,7 @@ router.put(
 
 /**
  * @swagger
- * /users/deleteAccount:
+ * /users/account:
  *    put:
  *      tags:
  *      - name: Users
@@ -538,7 +537,7 @@ router.put(
  *          description: User doesn't exist!
  */
 router.put(
-  "/deleteAccount",
+  "/account",
   [
     check("userPassword")
       .exists()
@@ -587,7 +586,6 @@ router.put(
                 checkUserById.accountDeletedStatus
               );
               if (deleteAccount) {
-                console.log(deleteAccount);
                 res.status(200).json({
                   Message: "Twoje konto zostało usunięte!",
                 });

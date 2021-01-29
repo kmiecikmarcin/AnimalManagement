@@ -2,6 +2,7 @@ const SpeciesOfFoods = require("../../Models/SpeciesOfFoods");
 
 async function findAllUserFoodStatus(PurchasedFoodForHerd, userId) {
   const search = await PurchasedFoodForHerd.findAll({
+    raw: true,
     where: { UserId: userId },
     attributes: ["identityNumber", "quantity", "currentQuantity", "date"],
     include: [{ model: SpeciesOfFoods, attributes: ["name"] }],

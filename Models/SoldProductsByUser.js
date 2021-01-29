@@ -21,12 +21,11 @@ const SoldProductsByUser = sequelize.define(
   { timestamps: true }
 );
 
-AllProductsFromAnimals.belongsToMany(UserTransactions, {
-  through: SoldProductsByUser,
-});
-
 UserTransactions.belongsToMany(AllProductsFromAnimals, {
-  through: SoldProductsByUser,
+  through: { model: "SoldProductsByUser", unique: false },
+});
+AllProductsFromAnimals.belongsToMany(UserTransactions, {
+  through: { model: "SoldProductsByUser", unique: false },
 });
 
 module.exports = SoldProductsByUser;

@@ -16,12 +16,11 @@ const ProductFromAnAnimal = sequelize.define(
   { timestamps: true }
 );
 
-AllProductsFromAnimals.belongsToMany(AnimalsInHerd, {
-  through: ProductFromAnAnimal,
-});
-
 AnimalsInHerd.belongsToMany(AllProductsFromAnimals, {
-  through: ProductFromAnAnimal,
+  through: { model: "ProductFromAnAnimal", unique: false },
+});
+AllProductsFromAnimals.belongsToMany(AnimalsInHerd, {
+  through: { model: "ProductFromAnAnimal", unique: false },
 });
 
 module.exports = ProductFromAnAnimal;

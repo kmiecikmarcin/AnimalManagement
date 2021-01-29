@@ -3,6 +3,7 @@ const Herds = require("../../Models/Herds");
 
 async function findAllNewBornAnimalsInHerd(AnimalsBirths, herdId) {
   const search = await AnimalsBirths.findAll({
+    raw: true,
     where: { idHerd: herdId },
     include: [
       { model: Herds, attributes: ["name"] },

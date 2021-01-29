@@ -5,6 +5,7 @@ async function takeAllSelectedTypesOfData(
 ) {
   if (administratorPermission === process.env.S3_PERMISSION) {
     const takeTypesOfFood = await TypesOfAnimals.findAll({
+      raw: true,
       attributes: { exclude: ["createdAt", "updatedAt", "password"] },
     });
     if (takeTypesOfFood) {
