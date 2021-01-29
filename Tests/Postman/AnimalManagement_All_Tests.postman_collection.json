@@ -308,7 +308,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful Delete request\", function () {\r",
+									"pm.test(\"Unsuccessful Delete request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
 									"});"
 								],
@@ -579,7 +579,8 @@
 							"variable": [
 								{
 									"key": "name",
-									"value": "{{name_of_herd}}"
+									"value": "{{name_of_herd}}",
+									"type": "string"
 								}
 							]
 						}
@@ -641,7 +642,8 @@
 							"variable": [
 								{
 									"key": "type",
-									"value": "{{type_of_herd}}"
+									"value": "{{type_of_herd}}",
+									"type": "string"
 								}
 							]
 						}
@@ -812,7 +814,7 @@
 									"    var jsonData = pm.response.json();\r",
 									"    pm.expect(jsonData.Message).not.eql(null);\r",
 									"});\r",
-									"pm.test(\"Successful DELETE request\", function () {\r",
+									"pm.test(\"Unsuccessful DELETE request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
 									"});"
 								],
@@ -1184,7 +1186,8 @@
 							"variable": [
 								{
 									"key": "herdName",
-									"value": "{{new_name_of_herd}}"
+									"value": "{{new_name_of_herd}}",
+									"type": "string"
 								}
 							]
 						}
@@ -1240,11 +1243,13 @@
 							"variable": [
 								{
 									"key": "herdName",
-									"value": "{{new_name_of_herd}}"
+									"value": "{{new_name_of_herd}}",
+									"type": "string"
 								},
 								{
 									"key": "identityNumber",
-									"value": "{{identityNumberOfAnimal}}"
+									"value": "{{identityNumberOfAnimal}}",
+									"type": "string"
 								}
 							]
 						}
@@ -1715,7 +1720,8 @@
 							"variable": [
 								{
 									"key": "herdName",
-									"value": "{{new_name_of_herd}}"
+									"value": "{{new_name_of_herd}}",
+									"type": "string"
 								}
 							]
 						}
@@ -1892,7 +1898,8 @@
 							"variable": [
 								{
 									"key": "herdName",
-									"value": "{{new_name_of_herd}}"
+									"value": "{{new_name_of_herd}}",
+									"type": "string"
 								}
 							]
 						}
@@ -2151,7 +2158,7 @@
 									"    var jsonData = pm.response.json();\r",
 									"    pm.expect(jsonData.Message).not.eql(null);\r",
 									"});\r",
-									"pm.test(\"Successful DELETE request\", function () {\r",
+									"pm.test(\"Unsuccessful DELETE request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
 									"});"
 								],
@@ -2375,7 +2382,8 @@
 							"variable": [
 								{
 									"key": "typeName",
-									"value": "{{type_of_product_name}}"
+									"value": "{{type_of_product_name}}",
+									"type": "string"
 								}
 							]
 						}
@@ -2549,7 +2557,7 @@
 							"script": {
 								"exec": [
 									"const take_date = new Date();\r",
-									"const new_date_of_added_product = take_date.getFullYear() + \"-\" + (\"0\" + (take_date.getMonth() + 2)).slice(-2) + \"-\" + (\"0\" + take_date.getDate()).slice(-2);\r",
+									"const new_date_of_added_product = take_date.getFullYear() + \"-\" + (\"0\" + (take_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_date.getDate()).slice(-2);\r",
 									"\r",
 									"pm.environment.set(\"new_date_of_added_product\", new_date_of_added_product);"
 								],
@@ -2701,11 +2709,13 @@
 							"variable": [
 								{
 									"key": "identityNumberOfAnimal",
-									"value": "{{new_identityNumberOfAnimal}}"
+									"value": "{{new_identityNumberOfAnimal}}",
+									"type": "string"
 								},
 								{
 									"key": "herdName",
-									"value": "{{new_name_of_herd}}"
+									"value": "{{new_name_of_herd}}",
+									"type": "string"
 								}
 							]
 						}
@@ -2946,7 +2956,8 @@
 							"variable": [
 								{
 									"key": "identityNumberOfTransaction",
-									"value": "{{identity_number_of_transaction}}"
+									"value": "{{identity_number_of_transaction}}",
+									"type": "string"
 								}
 							]
 						}
@@ -3136,7 +3147,7 @@
 					"response": []
 				},
 				{
-					"name": "Product from animal",
+					"name": "Product assigned to transaction",
 					"event": [
 						{
 							"listen": "test",
@@ -3147,7 +3158,64 @@
 									"    pm.expect(jsonData.Message).not.eql(null);\r",
 									"});\r",
 									"pm.test(\"Successful DELETE request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfTransaction\": \"{{identity_number_of_transaction}}\",\r\n    \"identityNumberOfProduct\": \"{{identity_number_of_product}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/assignedToTransaction",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"assignedToTransaction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Product from animal",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Unsuccessful DELETE request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -3187,6 +3255,63 @@
 								"{{api_version}}",
 								"products",
 								"fromAnimal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.Message).not.eql(null);\r",
+									"});\r",
+									"pm.test(\"Unsuccessful DELETE request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identityNumberOfTransaction\": \"{{identity_number_of_transaction}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/herdapi/{{api_version}}/products/transaction",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"herdapi",
+								"{{api_version}}",
+								"products",
+								"transaction"
 							]
 						}
 					},
@@ -3421,7 +3546,8 @@
 							"variable": [
 								{
 									"key": "speciesName",
-									"value": "{{species_name}}"
+									"value": "{{species_name}}",
+									"type": "string"
 								}
 							]
 						}
@@ -3590,7 +3716,7 @@
 							"script": {
 								"exec": [
 									"const take_new_date = new Date();\r",
-									"const new_date_of_purchased_food = take_new_date.getFullYear() + \"-\" + (\"0\" + (take_new_date.getMonth() + 2)).slice(-2) + \"-\" + (\"0\" + take_new_date.getDate()).slice(-2);\r",
+									"const new_date_of_purchased_food = take_new_date.getFullYear() + \"-\" + (\"0\" + (take_new_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_new_date.getDate()).slice(-2);\r",
 									"\r",
 									"pm.environment.set(\"new_date_of_purchased_food\", new_date_of_purchased_food);"
 								],
@@ -3802,7 +3928,8 @@
 							"variable": [
 								{
 									"key": "speciesName",
-									"value": "{{new_species_of_feed}}"
+									"value": "{{new_species_of_feed}}",
+									"type": "string"
 								}
 							]
 						}
@@ -3900,7 +4027,7 @@
 							"script": {
 								"exec": [
 									"const take_new_date = new Date();\r",
-									"const new_date_of_food_used_for_herd = take_new_date.getFullYear() + \"-\" + (\"0\" + (take_new_date.getMonth() + 2)).slice(-2) + \"-\" + (\"0\" + take_new_date.getDate()).slice(-2);\r",
+									"const new_date_of_food_used_for_herd = take_new_date.getFullYear() + \"-\" + (\"0\" + (take_new_date.getMonth() + 1)).slice(-2) + \"-\" + (\"0\" + take_new_date.getDate()).slice(-2);\r",
 									"\r",
 									"pm.environment.set(\"new_date_of_food_used_for_herd\", new_date_of_food_used_for_herd);"
 								],
@@ -3957,7 +4084,7 @@
 									"    var jsonData = pm.response.json();\r",
 									"    pm.expect(jsonData.Message).not.eql(null);\r",
 									"});\r",
-									"pm.test(\"Successful DELETE request\", function () {\r",
+									"pm.test(\"Unsuccessful DELETE request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
 									"});"
 								],
@@ -5448,7 +5575,7 @@
 									"    var jsonData = pm.response.json();\r",
 									"    pm.expect(jsonData.Message).not.eql(null);\r",
 									"});\r",
-									"pm.test(\"Successful DELETE request\", function () {\r",
+									"pm.test(\"Unsuccessful DELETE request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
 									"});\r",
 									""
