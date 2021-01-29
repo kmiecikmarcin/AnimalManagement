@@ -36,6 +36,9 @@ const changePriceOfSoldProductInTransaction = require("../Functions/Products/cha
 const checkIfProductIsAssignedToAnimal = require("../Functions/Products/checkIfProductIsAssignedToAnimal");
 const deleteProductWhichUserAdded = require("../Functions/Products/deleteProductWhichUserAdded");
 const deleteProductAssignedToAnimal = require("../Functions/Products/deleteProductAssignedToAnimal");
+const checkTransactionInSoldProducts = require("../Functions/Products/checkTransactionInSoldProducts");
+const deleteTransactionAddedByUser = require("../Functions/Products/deleteTransactionAddedByUser");
+const deleteAssignedProductToTransaction = require("../Functions/Products/deleteAssignedProductToTransaction");
 
 /**
  * @swagger
@@ -1474,7 +1477,7 @@ router.delete(
                   ProductFromAnAnimal,
                   checkIdentityNumberOfProduct.id
                 );
-                if (checkProduct !== null) {
+                if (checkProduct === null) {
                   const deleteProduct = await deleteProductWhichUserAdded(
                     AllProductsFromAnimals,
                     checkIdentityNumberOfProduct.id,
@@ -1671,7 +1674,79 @@ router.delete(
  *        404:
  *          description: Errors about empty data.
  */
-router.delete("/transaction", verifyToken, () => {});
+router.delete(
+  "/transaction",
+  [
+    check("identityNumberOfTransaction")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isInt()
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
+  ],
+  verifyToken,
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkTransactionIdentityNumber = await checkIdentityNumberForFoodAndProducts(
+                UserTransactions,
+                req.body.identityNumberOfTransaction,
+                authData.id
+              );
+              if (checkTransactionIdentityNumber !== null) {
+                const checkTransaction = await checkTransactionInSoldProducts(
+                  SoldProductsByUser,
+                  checkTransactionIdentityNumber.id
+                );
+                if (checkTransaction === null) {
+                  const deleteTransaction = await deleteTransactionAddedByUser(
+                    UserTransactions,
+                    checkTransactionIdentityNumber.id,
+                    authData.id
+                  );
+                  if (deleteTransaction !== null) {
+                    res
+                      .status(200)
+                      .json({ Message: "Pomyślnie usunięto transakcję!" });
+                  } else {
+                    res.status(400).json({
+                      Error:
+                        "Nie udało się usunąć wbranej transakcji! Sprawdź wprowadzone dane!",
+                    });
+                  }
+                } else {
+                  res.status(400).json({
+                    Error:
+                      "Nie można usunąć transakcji, ponieważ posiada przypisane produkty!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error:
+                    "Transakcja o wprowadzonym numerze identyfikacyjnym nie istnieje!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
+);
 
 /**
  * @swagger
@@ -1703,6 +1778,87 @@ router.delete("/transaction", verifyToken, () => {});
  *        404:
  *          description: Errors about empty data.
  */
-router.delete("/assignedToTransaction", verifyToken, () => {});
+router.delete(
+  "/assignedToTransaction",
+  [
+    check("identityNumberOfTransaction")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isInt()
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
+    check("identityNumberOfProduct")
+      .exists()
+      .withMessage("Brak wymaganych danych!")
+      .notEmpty()
+      .withMessage("Wymagane pole jest puste!")
+      .isInt()
+      .withMessage("Wprowadzona wartość nie jest ciągiem liczbowym!"),
+  ],
+  verifyToken,
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json(error.mapped());
+    } else {
+      jwt.verify(
+        req.token,
+        process.env.S3_SECRETKEY,
+        async (jwtError, authData) => {
+          if (jwtError) {
+            res.status(403).json({ Error: "Błąd uwierzytelniania!" });
+          } else {
+            const checkUser = await findUserById(Users, authData);
+            if (checkUser !== null) {
+              const checkTransactionIdentityNumber = await checkIdentityNumberForFoodAndProducts(
+                UserTransactions,
+                req.body.identityNumberOfTransaction,
+                authData.id
+              );
+              if (checkTransactionIdentityNumber !== null) {
+                const checkProductIdentityNumber = await checkIdentityNumberForFoodAndProducts(
+                  AllProductsFromAnimals,
+                  req.body.identityNumberOfProduct,
+                  authData.id
+                );
+                if (checkProductIdentityNumber !== null) {
+                  const deleteProduct = await deleteAssignedProductToTransaction(
+                    SoldProductsByUser,
+                    checkTransactionIdentityNumber.id,
+                    checkProductIdentityNumber.id
+                  );
+                  if (deleteProduct !== null) {
+                    res.status(200).json({
+                      Message:
+                        "Pomyślnie usunięto produkt przypisany do transakcji!",
+                    });
+                  } else {
+                    res.status(400).json({
+                      Error:
+                        "Nie udało się usunąć produktu przypisanego do transakcji! Sprawdź wprowadzone dane!",
+                    });
+                  }
+                } else {
+                  res.status(404).json({
+                    Error:
+                      "Produkt o wprowadzonym numerze identyfikacyjnym nie istnieje!",
+                  });
+                }
+              } else {
+                res.status(404).json({
+                  Error:
+                    "Transakcja o wprowadzonym numerze identyfikacyjnym nie istnieje!",
+                });
+              }
+            } else {
+              res.status(404).json({ Error: "Użytkownik nie istnieje!" });
+            }
+          }
+        }
+      );
+    }
+  }
+);
 
 module.exports = router;
